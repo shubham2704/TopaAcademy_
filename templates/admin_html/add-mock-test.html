@@ -1,0 +1,611 @@
+{%  load static %}
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="assets/img/logo-fav.png">
+    <title>Beagle</title>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/perfect-scrollbar/css/perfect-scrollbar.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/material-design-icons/css/material-design-iconic-font.min.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/select2/css/select2.min.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/bootstrap-slider/css/bootstrap-slider.min.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/datetimepicker/css/bootstrap-datetimepicker.min.css" %}"/>
+    <link rel="stylesheet" href="{% static "admin/assets/css/app.css" %}" type="text/css"/>
+  </head>
+  <body>
+    <div class="be-wrapper be-fixed-sidebar">
+      <nav class="navbar navbar-expand fixed-top be-top-header">
+        <div class="container-fluid">
+          <div class=""><a class="navbar-brand" href="index-2.html"></a>
+          </div>
+          <div class="page-title"><span><i>Top Academy</i></span></div>
+          <div class="be-right-navbar">
+            <ul class="nav navbar-nav float-right be-user-nav">
+              <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false"><img src="{% static "admin/assets/img/avatar.png"%}" alt="Avatar"><span class="user-name">Túpac Amaru</span></a>
+                <div class="dropdown-menu" role="menu">     
+                  <div class="user-info">
+                    <div class="user-name">Túpac Amaru</div>
+                    <div class="user-position online">Available</div>
+                  </div><a class="dropdown-item" href="pages-profile.html"><span class="icon mdi mdi-face"></span>Account</a><a class="dropdown-item" href="#"><span class="icon mdi mdi-settings"></span>Settings</a><a class="dropdown-item" href="pages-login.html"><span class="icon mdi mdi-power"></span>Logout</a>
+                </div>
+              </li>
+            </ul>
+            <ul class="nav navbar-nav float-right be-icons-nav">
+              <li class="nav-item dropdown"><a class="nav-link be-toggle-right-sidebar" href="#" role="button" aria-expanded="false"><span class="icon mdi mdi-settings"></span></a></li>
+              <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false"><span class="icon mdi mdi-notifications"></span><span class="indicator"></span></a>
+                <ul class="dropdown-menu be-notifications">
+                  <li>
+                    <div class="title">Notifications<span class="badge badge-pill">3</span></div>
+                    <div class="list">
+                      <div class="be-scroller-notifications">
+                        <div class="content">
+                          <ul>
+                            <li class="notification notification-unread"><a href="#">
+                                <div class="image"><img src="assets/img/avatar2.png" alt="Avatar"></div>
+                                <div class="notification-info">
+                                  <div class="text"><span class="user-name">Jessica Caruso</span> accepted your invitation to join the team.</div><span class="date">2 min ago</span>
+                                </div></a></li>
+                            <li class="notification"><a href="#">
+                                <div class="image"><img src="assets/img/avatar3.png" alt="Avatar"></div>
+                                <div class="notification-info">
+                                  <div class="text"><span class="user-name">Joel King</span> is now following you</div><span class="date">2 days ago</span>
+                                </div></a></li>
+                            <li class="notification"><a href="#">
+                                <div class="image"><img src="assets/img/avatar4.png" alt="Avatar"></div>
+                                <div class="notification-info">
+                                  <div class="text"><span class="user-name">John Doe</span> is watching your main repository</div><span class="date">2 days ago</span>
+                                </div></a></li>
+                            <li class="notification"><a href="#">
+                                <div class="image"><img src="assets/img/avatar5.png" alt="Avatar"></div>
+                                <div class="notification-info"><span class="text"><span class="user-name">Emily Carter</span> is now following you</span><span class="date">5 days ago</span></div></a></li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="footer"> <a href="#">View all notifications</a></div>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false"><span class="icon mdi mdi-apps"></span></a>
+                <ul class="dropdown-menu be-connections">
+                  <li>
+                    <div class="list">
+                      <div class="content">
+                        <div class="row">
+                          <div class="col"><a class="connection-item" href="#"><img src="assets/img/github.png" alt="Github"><span>GitHub</span></a></div>
+                          <div class="col"><a class="connection-item" href="#"><img src="assets/img/bitbucket.png" alt="Bitbucket"><span>Bitbucket</span></a></div>
+                          <div class="col"><a class="connection-item" href="#"><img src="assets/img/slack.png" alt="Slack"><span>Slack</span></a></div>
+                        </div>
+                        <div class="row">
+                          <div class="col"><a class="connection-item" href="#"><img src="assets/img/dribbble.png" alt="Dribbble"><span>Dribbble</span></a></div>
+                          <div class="col"><a class="connection-item" href="#"><img src="assets/img/mail_chimp.png" alt="Mail Chimp"><span>Mail Chimp</span></a></div>
+                          <div class="col"><a class="connection-item" href="#"><img src="assets/img/dropbox.png" alt="Dropbox"><span>Dropbox</span></a></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="footer"> <a href="#">More</a></div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div class="be-left-sidebar">
+        <div class="left-sidebar-wrapper"><a class="left-sidebar-toggle" href="#">Dashboard</a>
+          <div class="left-sidebar-spacer">
+            <div class="left-sidebar-scroll">
+              <div class="left-sidebar-content">
+                <ul class="sidebar-elements">
+                  <li class="divider">Menu</li>
+                  
+                  <li class="parent"><a href="#"><i class="icon mdi mdi-face"></i><span>Dashboard</span></a>
+                    <ul class="sub-menu">
+                      <li><a href="ui-alerts.html">My Activity</a>
+                      </li>
+                      <li><a href="ui-alerts.html">Teacher Activity</a>
+                      </li>
+                      <li><a href="ui-buttons.html">Student Activity</a>
+                      </li>
+                     
+                    </ul>
+                  </li>
+
+                  <li class="parent"><a href="charts.html"><i class="icon mdi mdi-chart-donut"></i><span>Question Banks</span></a>
+                    <ul class="sub-menu">
+                      <li><a href="charts-flot.html">Mock Test</a>
+                      </li>
+                      <li><a href="charts-sparkline.html">Practice Test</a>
+                      </li>
+                      <li><a href="charts-sparkline.html">Manage QB</a>
+                      </li>
+                     
+                    </ul>
+                  </li>
+
+                  
+                  <li class="parent"><a href="#"><i class="icon mdi mdi-border-all"></i><span>Manage Users</span></a>
+                    <ul class="sub-menu">
+                      <li><a href="tables-general.html">Students</a>
+                      </li>
+                      <li><a href="tables-datatables.html">Teacher</a>
+                      </li>
+                      <li><a href="tables-filters.html"><span class="badge badge-primary float-right">New</span>Admin</a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="parent"><a href="#"><i class="icon mdi mdi-layers"></i><span>Historic Activity</span></a>
+                    <ul class="sub-menu">
+                      <li><a href="pages-blank.html">Admin</a>
+                      </li>
+                      <li><a href="pages-blank-header.html">Teacher</a>
+                      </li>
+                      <li><a href="pages-login.html">Student</a>
+                      </li>
+                      
+                    </ul>
+                  </li>
+                  <li class="parent"><a href="#"><i class="icon mdi mdi-dot-circle"></i><span>Account</span></a>
+                    <ul class="sub-menu">
+                      <li><a href="form-elements.html">Add Admin</a>
+                      </li>
+                      <li><a href="form-validation.html">Add Teacher</a>
+                      </li>
+                      <li><a href="form-multiselect.html">My Account</a>
+                      </li>
+                      
+                    </ul>
+                  </li>
+                  <li class="divider">Other</li>
+                  <li class="parent"><a href="#"><i class="icon mdi mdi-inbox"></i><span>Announcements</span></a>
+                    <ul class="sub-menu">
+                        <li><a href="email-inbox.html">To All</a>
+                        </li>
+                      <li><a href="email-inbox.html">To Teacher</a>
+                      </li>
+                      <li><a href="email-read.html">To Student</a>
+                      </li>
+                      <li><a href="email-compose.html">To Admins</a>
+                      </li>
+                    </ul>
+                  </li>
+               
+                  <li class="parent"><a href="charts.html"><i class="icon mdi mdi-chart-donut"></i><span>Setup Website</span></a>
+                    <ul class="sub-menu">
+                      <li  class="active"><a href="charts-flot.html">Add Steam</a>
+                      </li>
+                      <li><a href="charts-sparkline.html">Add Branches</a>
+                      </li>
+                      <li><a href="charts-sparkline.html">Subjects</a>
+                      </li>
+                      <li><a href="charts-chartjs.html">Signup Settings</a>
+                      </li>
+                      <li><a href="charts-chartjs.html">SEO Meta</a>
+                      </li>
+                     
+                    </ul>
+                  </li>
+                  <li><a href="documentation.html"><i class="icon mdi mdi-book"></i><span>Admin Manual</span></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      <div class="be-content">
+      <div class="page-head">
+          <h2 class="page-head-title">Mock Test</h2>
+          <nav aria-label="breadcrumb" role="navigation">
+            <ol class="breadcrumb page-head-nav">
+              <li class="breadcrumb-item"><a href="#">Question Banks</a></li>
+              <li class="breadcrumb-item"><a href="#">Mock Test</a></li>
+             </ol>
+          </nav>
+        </div>
+        <div class="main-content container-fluid">
+            {% if messages %}
+
+
+            {% for message in messages %}
+
+            
+            
+            <div class="alert alert-{{message.tags}} alert-dismissible" role="alert">
+                <button class="close" type="button" data-dismiss="alert" aria-label="Close"><span class="mdi mdi-close" aria-hidden="true"></span></button>
+                <div class="icon"><span class="mdi mdi-alert-triangle"></span></div>
+                <div class="message">{{message | safe}}</div>
+              </div>
+
+
+        
+            {% endfor %}
+         {% endif %}
+         
+ <div class="row wizard-row">
+            <div class="col-md-12 fuelux">
+              <div class="block-wizard">
+                <div class="wizard wizard-ux" id="wizard1">
+                  <div class="steps-container">
+                    <ul class="steps">
+                      <li class="active" data-step="1"> Information <span class="chevron"></span></li>
+                      <li data-step="2">Settings<span class="chevron"></span></li>
+                      <li data-step="3">Upload Question Bank<span class="chevron"></span></li>
+                    </ul>
+                  </div>
+                  <div class="actions">
+                    <button class="btn btn-xs btn-prev btn-secondary" type="button"><i class="icon mdi mdi-chevron-left"></i>  Prev</button>
+                    <button class="btn btn-xs btn-next btn-secondary" type="button" data-last="Finish">Next<i class="icon mdi mdi-chevron-right"></i></button>
+                  </div>
+                  <div class="step-content">
+                    <div class="step-pane active" data-step="1">
+                      <div class="container p-0">
+                        <form class="form-horizontal group-border-dashed" action="" data-parsley-namespace="data-parsley-" data-parsley-validate="" novalidate="" method="POST">
+                          {% csrf_token %}
+                          <div class="form-group row">
+                            <div class="col-sm-7">
+                              <h3 class="wizard-title">Test Info</h3>
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label class="col-12 col-sm-3 col-form-label text-left text-sm-right">Test Name</label>
+                            <div class="col-12 col-sm-8 col-lg-6">
+                              <input name="test_name" class="form-control" type="text" placeholder="">
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label class="col-12 col-sm-3 col-form-label text-left text-sm-right">Test Description</label>
+                            <div class="col-12 col-sm-8 col-lg-6">
+                              <textarea name="test_description" class="form-control" type="text" ></textarea>
+                            </div>
+                          </div>
+                         <div class="form-group row">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right">Test Type</label>
+                     <div class="col-12 col-sm-8 col-lg-6 form-check mt-1">
+                        <label class="custom-control custom-radio">
+                          <input class="custom-control-input" type="radio" name="test_type" checked="" value="Quiz"><span class="custom-control-label">Quiz</span>
+                        </label>
+                        <label class="custom-control custom-radio">
+                          <input class="custom-control-input" type="radio" name="test_type"  value="Mock"><span class="custom-control-label">Mock Test</span>
+                        </label>
+                        <label class="custom-control custom-radio">
+                          <input class="custom-control-input" type="radio" name="test_type"  value="Practice"><span class="custom-control-label">Practice Test</span>
+                        </label>
+                      </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right">Options</label>
+                      <div class="col-12 col-sm-8 col-lg-6 mt-1">
+                        <div class="custom-control custom-checkbox">
+                          <input name="isSCT" class="custom-control-input" type="checkbox" onclick="sct()" id="check3">
+                          <label class="custom-control-label"  for="check3">Specific Class Test</label>
+                          <p>If SCT is checked then other branch cannot be able participate on this test.</p>
+                        </div>
+                      
+                     
+                      </div>
+                    </div>
+                    <div class="load_ajax_here"></div>
+                  
+                          <div class="form-group row">
+                            <div class="offset-sm-2 col-sm-10">
+                          
+                              <button class="btn btn-primary btn-space wizard-next" type="button" data-wizard="#wizard1">Next Step</button>
+                            </div>
+                          </div>
+                        
+                      </div>
+                    </div>
+                    <div class="step-pane" data-step="2">
+                       <div class="form-group row">
+                          <div class="col-sm-7">
+                            <h3 class="wizard-title">Category</h3>
+                            <p>For All Student</p>
+                          </div>
+                        </div>
+                      <div class="form-group row">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right">Test Category</label>
+                      <div class="col-12 col-sm-8 col-lg-6">
+                        <input id="sub_cat" type="hidden" name="sub_category">
+                        <input id="second_level" type="hidden" name="second_sub_category">
+                        <select name="category" onchange="steam_select(this)" class="select2 ">
+                        <option value="">Select One </option>
+                        {% for steam in steam_c %}
+                         <option value="{{steam.steam_link_id}}"> {{steam.steam_name}} </option>
+                        {% endfor %}
+                         
+                         
+                        </select>
+                      </div>
+                    </div>
+                    <div class="ajax-steam">
+                    
+                    </div>
+                        <div class="form-group row">
+                          <div class="col-sm-7">
+                            <h3 class="wizard-title">Advanced Settings</h3>
+                          </div>
+                        </div>
+                    <div class="form-group row pt-1">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right">Test Difficulty</label>
+                      <div class="col-12 col-sm-8 col-lg-6 form-check mt-1">
+                        <label class="custom-control custom-radio custom-control-inline">
+                          <input name="difficulty" value="Easy" class="custom-control-input" type="radio"  checked=""><span class="custom-control-label custom-control-color">Easy</span>
+                        </label>
+                        <label class="custom-control custom-radio custom-control-inline">
+                          <input  name="difficulty" value="Medium" class="custom-control-input" type="radio" ><span class="custom-control-label custom-control-color">Medium</span>
+                        </label>
+                        <label class="custom-control custom-radio custom-control-inline">
+                          <input name="difficulty" value="Hard" class="custom-control-input" type="radio" ><span class="custom-control-label custom-control-color">Hard</span>
+                        </label>
+                      </div>
+                    </div>
+                        <div class="form-group row">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right">Advanced Options</label>
+                      <div class="col-12 col-sm-8 col-lg-6 mt-1">
+                        
+                        <div class="custom-control custom-checkbox">
+                          <input name="isDate" class="custom-control-input" id="date-based" value="True" type="checkbox">
+                          <label class="custom-control-label" for="date-based">Available b/w Date</label>
+                        </div>
+                        <div class="custom-control custom-checkbox">
+                          <input name="isTimer"  class="custom-control-input" value="True" id="timer-based" type="checkbox">
+                          <label class="custom-control-label"  for="timer-based">Timer Based Test</label>
+                        </div>
+
+                        <div class="custom-control custom-checkbox">
+                          <input name="resume" value="True"  class="custom-control-input" type="checkbox" id="check6">
+                          <label class="custom-control-label" for="check6">is Test Resumable? </label>
+                        </div>
+                       
+                      </div>
+                    </div>
+                     <div id="date_display" style="display:none;">
+                      <div  class="form-group row">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right">Test Availablity Date</label>
+                      <div class="col-12 col-sm-4 col-lg-3 mt-1">
+                     <div class="input-group date datetimepicker" data-min-view="2" data-date-format="yyyy-mm-dd">
+                          <input name="from-dur" placeholder="From" class="form-control" size="16" type="text" value="">
+                          <div class="input-group-append">
+                            <button class="btn btn-primary"><i class="icon-th mdi mdi-calendar"></i></button>
+                          </div>
+                        </div></div>
+
+                      <div  class="col-12 col-sm-4 col-lg-3 mt-1">
+                     
+                     <div class="input-group date datetimepicker" data-min-view="2" data-date-format="yyyy-mm-dd">
+                          <input  placeholder="To" class="form-control" size="16" name="to-dur" type="text" value="">
+                          <div class="input-group-append">
+                            <button class="btn btn-primary"><i class="icon-th mdi mdi-calendar"></i></button>
+                          </div>
+                        </div> <div class="custom-control custom-checkbox custom-control-inline">
+                      
+                          <input name="dur-forever"  class="custom-control-input" type="checkbox" value="True" checked="" id="dur-forever">
+                          <label class="custom-control-label" for="dur-forever">Available Forever</label>
+                        </div>
+                      </div>
+                    </div>
+
+</div>
+ <div id="timer_display" style="display:none;">
+                        <div class="form-group row pt-1">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right">Timer Duration</label>
+                      <div class="col-12 col-sm-8 col-lg-6">
+                        <select name="timer" class="form-control">
+                          <option value="30" selected="">30 min</option>
+                          <option value="60">1 hr</option>
+                          <option value="90">1 hr 30 min</option>
+                          <option value="120">2 hr</option>
+                          <option value="150">2 hr 30 min</option>
+                          <option value="180">3 hr</option>
+                          <option value="240">3 hr 30 min</option>
+                          <option value="280">4 hr</option>
+                        </select>
+                      </div>
+                    </div>
+                     </div>
+                        <div class="form-group row">
+                          <div class="col-sm-7">
+                            <h3 class="wizard-title">Notifications</h3>
+                          </div>
+                        </div>
+
+                        <div class="form-group row align-items-center">
+                          <div class="col-sm-7">
+                            <label class="col-form-label">E-Mail Notifications</label>
+                            <p>This option allow you to send email notification to all Registered Students.</p>
+                          </div>
+                          <div class="col-sm-3">
+                            <div class="switch-button">
+                              <input type="checkbox"  value="True" name="email" id="swt1"><span>
+                                <label for="swt1"></label></span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group row align-items-center">
+                          <div class="col-sm-7">
+                            <label class="col-form-label">SMS Phone Notifications</label>
+                            <p>Send SMS to Respective Student (If SCT is checked).</p>
+                          </div>
+                          <div class="col-sm-3">
+                            <div class="switch-button">
+                              <input type="checkbox" value="True"  name="sms" id="swt2"><span>
+                                <label for="swt2"></label></span>
+                            </div>
+                          </div>
+                        </div>
+                      
+                        <div class="form-group row">
+                          <div class="col-sm-12">
+                            <button class="btn btn-secondary btn-space wizard-previous" type="button" data-wizard="#wizard1">Previous</button>
+                            <button class="btn btn-primary btn-space wizard-next" type="button" data-wizard="#wizard1">Next Step</button>
+                          </div>
+                        </div>
+                   
+                    </div>
+                    <div class="step-pane" data-step="3">
+                      <div class="form-group row">
+                          <div class="col-sm-7">
+                            <h3 class="wizard-title">Prepare Question Bank</h3>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                       
+                       <div class="col-12 col-sm-6">
+                      
+                     
+                         <p class="" for="file-2">You can upload only .xlsx and .csv is allowed or add Question manually.</p>
+                         <p>Excel Sheet must have 6 colums in same sequence</p>
+                         <ul style="list-style-type:decimal">
+                         <li>Question</li>
+                         <li>Option One</li>
+                         <li>Option Two</li>
+                         <li>Option Three</li>
+                         <li>Option Four</li>
+                         <li>Answer</li>
+                         </ul>
+                         <p class="" for="file-2">Click "Submit" button to create MOCK Test and Upload Question Bank</p>
+                      </div>
+                    </div>
+                
+                        <br> 
+               
+                        <div class="form-group row">
+                          <div class="col-sm-12">
+                            <button class="btn btn-secondary btn-space wizard-previous" type="button" data-wizard="#wizard1">Previous</button>
+                            <input class="btn btn-success btn-space" type="submit" value="Submit & Upload QB">
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+
+    <script src="{% static "admin/assets/lib/jquery/jquery.min.js"%}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/perfect-scrollbar/js/perfect-scrollbar.min.js"%}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/bootstrap/dist/js/bootstrap.bundle.min.js"%}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/js/app.js"%}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/fuelux/js/wizard.js"%}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/select2/js/select2.min.js"%}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/select2/js/select2.full.min.js"%}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/bootstrap-slider/bootstrap-slider.min.js"%}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/datetimepicker/js/bootstrap-datetimepicker.min.js"%}" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        var ques = 1;
+        function addquest(){
+         var quest = "question['"+ques+"']['question']";
+         var op1 = "question['"+ques+"']['op1']";
+         var op2 = "question['"+ques+"']['op2']";
+         var op3 = "question['"+ques+"']['op3']";
+         var op4 = "question['"+ques+"']['op4']";
+         var answer = "question['"+ques+"']['answer']";
+
+         var wrap = '<tr id="ques'+ques+'"> <td> <textarea name="'+quest+'" placeholder="Type Question '+ques+'" class="form-control form-control-xs"></textarea> </td><td style="width:25%"> <input name="'+op1+'" type="text" placeholder="Option One" class="form-control form-control-xs"> <input name="'+op2+'" type="text" placeholder="Option Two" class="form-control form-control-xs"> <input name="'+op3+'" type="text" placeholder="Option Three" class="form-control form-control-xs"> <input name="'+op4+'" type="text" placeholder="Option Four" class="form-control form-control-xs"> </td><td style="width:20%"> <input type="text" name="'+answer+'" class="form-control form-control-xs"> </td><td class="actions"> <a class="icon" onclick="delquest('+ques+')"><i class="mdi mdi-delete"></i></a> </td></tr>';
+         //var wrap = '<tr id="ques'+ques+'"> <td> <textarea name="'+quest+'" placeholder="Type Question '+ques+'" class="form-control form-control-xs"></textarea> </td></tr>';
+         
+         $('#append-here').append(wrap);
+         ques++;
+        }
+        function delquest(e){
+          $('#ques'+e).remove();
+        }
+
+        var currentsct = false;
+        function sct(){
+           if (currentsct == false){currentsct =  true;}else{currentsct = false;}
+        var loader = "<p class='text-center'><img height='60px' src='/static/admin/assets/ajax.gif'/></p>";
+
+        $('.load_ajax_here').html(loader);
+          $.ajax({
+            url: "/admin-panel/add/test/ajax/"+currentsct+"/l/no",
+            context: document.body
+          }).done(function(data) {
+            $('.load_ajax_here').html(data);
+
+            
+          });
+
+        }
+
+        function steam_select(e){
+       
+       var loader = "<p class='text-center'><img height='60px' src='/static/admin/assets/ajax.gif'/></p>";
+
+        $('.ajax-steam').html(loader);
+          $.ajax({
+            url: "/admin-panel/add/test/ajax-steam/"+e.value,
+            context: document.body
+          }).done(function(dataa) {
+            $('.ajax-steam').html(dataa);
+
+            
+          });
+
+
+}
+        
+      $(document).ready(function(){
+        
+      	//-initialize the javascript
+      	App.init();
+      	
+        
+      $(".datetimepicker").datetimepicker({
+            autoclose: !0,
+            componentIcon: ".mdi.mdi-calendar",
+            navIcons: {
+                rightIcon: "mdi mdi-chevron-right",
+                leftIcon: "mdi mdi-chevron-left"
+            }
+        });
+          $('#timer-based').on('change',function(){
+          if ($(this).is(':checked')) {$(this).attr('value', 'true');} else { $(this).attr('value', 'false');}
+
+          if(this.value == 'true'){
+          $('#timer_display').css('display', 'block');
+          }else{
+           
+          $('#timer_display').css('display', 'none');
+
+          }
+
+        });
+         $('#date-based').on('change',function(){
+           
+          if ($(this).is(':checked')) {$(this).attr('value', 'true');} else { $(this).attr('value', 'false');}
+
+          if(this.value == 'true'){
+          $('#date_display').css('display', 'block');
+          }else{
+           
+          $('#date_display').css('display', 'none');
+
+          }
+
+        });
+       
+        
+
+      });
+App.wizard();
+      
+
+        
+    </script>
+  </body>
+</html>

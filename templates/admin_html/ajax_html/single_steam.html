@@ -1,0 +1,51 @@
+<div class="card card-table">
+        <div class="card-header ">Single Level 
+            <div class="tools"><button onclick="add_level()" type="button" class="btn btn-primary">Add Topic</button></div>
+        </div>
+        <div class="card-body">
+                <table class="table table-sm table-striped">
+                        <thead >
+                          <tr>
+                            <th>Name</th>
+                            <th class="number">Label</th>
+                           <th class="actions"></th>
+                          </tr>
+                        </thead>
+                        <thead >
+                                <tbody class="append-here">
+                         
+                       
+                        </tbody>
+                      </table>
+
+                      <div class="col-sm-12 pt-3">
+                                
+                            <div class="">
+                              <p class="">
+                                <button class="btn btn-space btn-primary" type="submit">Submit</button>
+                              </p>
+                            </div>
+                          </div>
+</div>
+</div>
+<script>
+
+      id= 0;
+    function add_level(){
+        name= "'name'";
+        label = "'label'";
+        wrap = ' <tr id="'+id+'"><td><input name="level['+id+']['+name+']" type="text" class="form-control form-control-xs"></td> <td class="number"><input name="level['+id+']['+label+']" type="text" class="form-control form-control-xs"></td><td class="actions"><a class="icon" onclick="del('+id+')"><i class="mdi mdi-delete"></i></a></td></tr>';
+        $('.append-here').append(wrap);
+        id++;
+    }
+
+    function del(e){
+        
+        $('#'+e).remove();
+
+    }
+
+
+
+
+</script>

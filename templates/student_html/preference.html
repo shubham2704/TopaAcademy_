@@ -1,0 +1,430 @@
+{%  load static %}
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="assets/img/logo-fav.png">
+    <title>Beagle</title>
+    <link rel="stylesheet" type="text/css" href="{% static "student/assets/lib/perfect-scrollbar/css/perfect-scrollbar.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "student/assets/lib/material-design-icons/css/material-design-iconic-font.min.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "student/assets/lib/jquery.vectormap/jquery-jvectormap-1.2.2.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "student/assets/lib/jqvmap/jqvmap.min.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "student/assets/lib/datetimepicker/css/bootstrap-datetimepicker.min.css" %}"/>
+    <link rel="stylesheet" href="{% static "student/assets/css/app.css" %}" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="{% static "student/assets/lib/datetimepicker/css/bootstrap-datetimepicker.min.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "student/assets/lib/jquery.gritter/css/jquery.gritter.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "student/assets/lib/mprogress/css/mprogress.min.css" %}"/>
+
+    <style>
+    .image-checkbox
+    {
+        cursor: pointer;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        border: 2px solid transparent;
+        outline: 0;
+    }
+
+        .image-checkbox input[type="checkbox"]
+        {
+            display: none;
+        }
+
+    .image-checkbox-checked
+    {
+        border-color: #2828ff;
+        border-radius: 5px; 
+
+    }
+</style>
+
+
+  </head>
+  <body>
+  
+    <div class="be-wrapper be-fixed-sidebar   {% if email == False %} be-color-header   {% endif %}">
+    
+       <nav class="navbar navbar-expand fixed-top be-top-header">
+        <div class="container-fluid">
+          <div class="be-navbar-header"><a class="navbar-brand" href="index-2.html"></a>
+          </div>
+         
+         {% if email == False %}  <div class="page-title"><span style="font-size:13px;">Email verification is pending please verify your email address or resend verification <a href="#" onclick="send_email()" class="btn btn-warning btn-xs">email</a>.</span></div>
+            {% endif %}
+         
+          <div class="be-right-navbar">
+            <ul class="nav navbar-nav float-right be-user-nav">
+              <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false"><img src="assets/img/avatar.png" alt="Avatar"><span class="user-name">Túpac Amaru</span></a>
+                <div class="dropdown-menu" role="menu">     
+                  <div class="user-info">
+                    <div class="user-name">Túpac Amaru</div>
+                    <div class="user-position online">Available</div>
+                  </div><a class="dropdown-item" href="pages-profile.html"><span class="icon mdi mdi-face"></span>Account</a><a class="dropdown-item" href="#"><span class="icon mdi mdi-settings"></span>Settings</a><a class="dropdown-item" href="pages-login.html"><span class="icon mdi mdi-power"></span>Logout</a>
+                </div>
+              </li>
+            </ul>
+            <ul class="nav navbar-nav float-right be-icons-nav">
+              <li class="nav-item dropdown"><a class="nav-link be-toggle-right-sidebar" href="#" role="button" aria-expanded="false"><span class="icon mdi mdi-settings"></span></a></li>
+              <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false"><span class="icon mdi mdi-notifications"></span><span class="indicator"></span></a>
+                <ul class="dropdown-menu be-notifications">
+                  <li>
+                    <div class="title">Notifications<span class="badge badge-pill">3</span></div>
+                    <div class="list">
+                      <div class="be-scroller-notifications">
+                        <div class="content">
+                          <ul>
+                            <li class="notification notification-unread"><a href="#">
+                                <div class="image"><img src="assets/img/avatar2.png" alt="Avatar"></div>
+                                <div class="notification-info">
+                                  <div class="text"><span class="user-name">Jessica Caruso</span> accepted your invitation to join the team.</div><span class="date">2 min ago</span>
+                                </div></a></li>
+                            <li class="notification"><a href="#">
+                                <div class="image"><img src="assets/img/avatar3.png" alt="Avatar"></div>
+                                <div class="notification-info">
+                                  <div class="text"><span class="user-name">Joel King</span> is now following you</div><span class="date">2 days ago</span>
+                                </div></a></li>
+                            <li class="notification"><a href="#">
+                                <div class="image"><img src="assets/img/avatar4.png" alt="Avatar"></div>
+                                <div class="notification-info">
+                                  <div class="text"><span class="user-name">John Doe</span> is watching your main repository</div><span class="date">2 days ago</span>
+                                </div></a></li>
+                            <li class="notification"><a href="#">
+                                <div class="image"><img src="assets/img/avatar5.png" alt="Avatar"></div>
+                                <div class="notification-info"><span class="text"><span class="user-name">Emily Carter</span> is now following you</span><span class="date">5 days ago</span></div></a></li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="footer"> <a href="#">View all notifications</a></div>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false"><span class="icon mdi mdi-apps"></span></a>
+                <ul class="dropdown-menu be-connections">
+                  <li>
+                    <div class="list">
+                      <div class="content">
+                        <div class="row">
+                          <div class="col"><a class="connection-item" href="#"><img src="assets/img/github.png" alt="Github"><span>GitHub</span></a></div>
+                          <div class="col"><a class="connection-item" href="#"><img src="assets/img/bitbucket.png" alt="Bitbucket"><span>Bitbucket</span></a></div>
+                          <div class="col"><a class="connection-item" href="#"><img src="assets/img/slack.png" alt="Slack"><span>Slack</span></a></div>
+                        </div>
+                        <div class="row">
+                          <div class="col"><a class="connection-item" href="#"><img src="assets/img/dribbble.png" alt="Dribbble"><span>Dribbble</span></a></div>
+                          <div class="col"><a class="connection-item" href="#"><img src="assets/img/mail_chimp.png" alt="Mail Chimp"><span>Mail Chimp</span></a></div>
+                          <div class="col"><a class="connection-item" href="#"><img src="assets/img/dropbox.png" alt="Dropbox"><span>Dropbox</span></a></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="footer"> <a href="#">More</a></div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div class="be-left-sidebar">
+        <div class="left-sidebar-wrapper"><a class="left-sidebar-toggle" href="#">Dashboard</a>
+          <div class="left-sidebar-spacer">
+            <div class="left-sidebar-scroll">
+              <div class="left-sidebar-content">
+                <ul class="sidebar-elements">
+                  <li class="divider">Menu</li>
+                  <li class="active"><a href="index-2.html"><i class="icon mdi mdi-home"></i><span>Dashboard</span></a>
+                  </li>
+                   <li><a href="index-2.html"><i class="icon mdi mdi-search"></i><span>Browse Test</span></a>
+                  </li>
+                  <li class="parent"><a href="#"><i class="icon mdi mdi-code"></i><span>Practice</span></a>
+                    <ul class="sub-menu">
+                      <li ><a href="ui-alerts.html">Mock Test</a>
+                      </li>
+                      <li><a href="ui-alerts.html">Practice Test</a>
+                      </li>
+                     
+                     
+                    </ul>
+                  </li>
+                  <li><a href="index-2.html"><i class="icon mdi mdi-library"></i><span>Learning</span></a>
+                  </li>
+                 
+                  <li class="parent"><a href="#"><i class="icon mdi mdi-layers"></i><span>My Activity</span></a>
+                    <ul class="sub-menu">
+                      <li><a href="pages-blank.html">Mock Test</a>
+                      </li>
+                      <li><a href="pages-blank-header.html">Practice Test</a>
+                      </li>
+                      
+                      
+                    </ul>
+                  </li>
+                  <li class="parent"><a href="#"><i class="icon mdi mdi-account"></i><span>My Account</span></a>
+                    <ul class="sub-menu">
+                      <li><a href="form-elements.html">Personal Info</a>
+                      </li>
+                      <li><a href="form-validation.html">Acadamic Info</a>
+                      </li>
+                      
+                      
+                    </ul>
+                  </li>
+                   <li><a href="#"><i class="icon mdi mdi-notifications-add"></i><span>Notifications </span></li>
+                </ul>
+              </div>
+              
+            </div>
+            
+          </div>
+          <div class="progress-widget primary">
+            <div class="progress-data"><span class="progress-value"><span class="mdi mdi-android"></span> </span><span class="name">Download App</span></div>
+            
+          </div>
+        </div>
+      </div>
+      <div class="be-content">
+        <div class="main-content container-fluid">
+         {% if messages %}
+
+        <div class="alert alert-primary alert-icon alert-dismissible" role="alert">
+                    <div class="icon"><span class="mdi mdi-notifications"></span></div>
+                    <div class="message">
+                      <ul>
+   {% for message in messages %}
+
+   <li class="text-{{message.tags}}"> {{message}} </li>
+   {% endfor %}
+
+                      </ul>
+                      <button class="close" type="button" data-dismiss="alert" aria-label="Close"><span class="mdi mdi-close" aria-hidden="true"></span></button>
+                    </div>
+                  </div>
+       
+       {% endif %}
+         
+<div>
+
+<p class="lead">Set your Goal or Preference based on what we will recokmmand you test. That will help you achieve your goal. </p>
+
+</div>
+<div class="row">
+    <div class="col-md-8">
+        <div class="accordion" id="accordion">
+            <div class="card">
+                <div class="card-header" id="headingFour" role="tab">
+                  <button class="btn" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour"><i class="icon mdi mdi-chevron-right"></i>My Preference</button>
+                </div>
+                <div class="collapse" id="collapseFour" aria-labelledby="headingFour" data-parent="#accordion">
+                    <div class="card-body">
+                        <br>
+                          {%  for key, prefobj in mypref.items %}
+                          <p>
+                          {%  for main_pref in prefobj %}
+                         
+                          <span class="badge badge-success " style="font-weight: 300;font-size: 13px;">{{main_pref}}</span>
+                        
+                          {%  endfor %}
+                          <hr>
+                          </p>
+                          {%  endfor %}
+                          </div></div>
+            </div>
+          
+            
+          </div>
+
+
+    </div>
+<div class="col-md-4">
+<input id="myInput" class="form-control form-control-lg" type="text" placeholder="Search..">
+</div>
+</div>
+
+<form method="POST">
+<div id="steam_body">
+        {% for key, steam in steam_d.items %}
+        
+         <div class="">
+         <h2 class="page-head-title"> {{ steam.steam_name }}</h2>
+         </div>
+
+          
+          {% if steam.steam_data.multilevel_data == 'Double Level' %}
+          
+          <div class="row">
+          
+          {% for keyofdata, steam_data in steam.json.items %}
+             <div class="col-md-12">
+             <br>
+              <div class="row">
+             <p style="font-size:20px;margin-bottom:25px;" class="card-header card-header-divider">{{steam_data.level_name}}</p>
+             
+             </div>
+          </div>
+             {% for data  in steam_data.data.level_name %}
+             
+            <div data-steam="{{steam_data.level_name}}:{{data}}" id="{{steam_data.level_name}}{{keyofdata}}" class="col-sm-2">
+            <label class="image-checkbox" title="{{steam_data.name}}">
+            <img class="card-img-top" src="https://dummyimage.com/300x250/4286f4/ffffff&amp;text={{data}}">
+            <input checeked type="checkbox" name="team['item']" value="{{steam.steam_name}}:{{steam_data.level_name}}:{{data}}">
+            </label>
+            </div>
+          
+             {% endfor %}
+           
+          {% endfor %}
+          </div>
+          
+          
+          {% endif %}
+
+ 
+      
+          {% if steam.steam_data.multilevel_data == 'Single Level' %}
+          <br>
+          <div class="row">
+          
+          {% for keyofdata, steam_data in steam.json.items %}
+           
+            <div data-steam="{{steam_data.name}}" id="{{steam.steam_name}}{{keyofdata}}" class="col-sm-2">
+            <label class="image-checkbox" title="{{steam_data.name}}">
+            <img class="card-img-top" src="https://dummyimage.com/300x250/4286f4/ffffff&amp;text={{steam_data.name}}">
+            <input type="checkbox" name="team['item']" value="{{steam.steam_name}}:{{steam_data.name}}">
+           </label>
+            </div>
+          
+          {% endfor %}
+          
+           </div>
+           <br>
+          
+          {% endif %}
+
+          
+        {% endfor %}
+        {%csrf_token%}
+        <button type="submit" class="form-control">Submit Preference</button>
+      </form>      
+          </div>
+        </div>    
+
+
+    <script src="{% static "student/assets/lib/jquery/jquery.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "student/assets/lib/perfect-scrollbar/js/perfect-scrollbar.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "student/assets/lib/bootstrap/dist/js/bootstrap.bundle.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "student/assets/js/app.js" %}" type="text/javascript"></script>
+    <script src="{% static "student/assets/lib/jquery-flot/jquery.flot.js" %}" type="text/javascript"></script>
+    <script src="{% static "student/assets/lib/jquery-flot/jquery.flot.pie.js" %}" type="text/javascript"></script>
+    <script src="{% static "student/assets/lib/jquery-flot/jquery.flot.time.js" %}" type="text/javascript"></script>
+    <script src="{% static "student/assets/lib/jquery-flot/jquery.flot.resize.js" %}" type="text/javascript"></script>
+    <script src="{% static "student/assets/lib/jquery-flot/plugins/jquery.flot.orderBars.js" %}" type="text/javascript"></script>
+    <script src="{% static "student/assets/lib/jquery-flot/plugins/curvedLines.js" %}" type="text/javascript"></script>
+    <script src="{% static "student/assets/lib/jquery-flot/plugins/jquery.flot.tooltip.js" %}" type="text/javascript"></script>
+    <script src="{% static "student/assets/lib/jquery.sparkline/jquery.sparkline.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "student/assets/lib/countup/countUp.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "student/assets/lib/jquery-ui/jquery-ui.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "student/assets/lib/jqvmap/jquery.vmap.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "student/assets/lib/jqvmap/maps/jquery.vmap.world.js" %}" type="text/javascript"></script>
+  
+    <script src="{% static "student/assets/lib/jquery.niftymodals/js/jquery.niftymodals.js" %}" type="text/javascript"></script>
+    <script src="{% static "student/assets/lib/datetimepicker/js/bootstrap-datetimepicker.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "student/assets/lib/jquery.gritter/js/jquery.gritter.js" %}" type="text/javascript"></script>
+    <script src="{% static "student/assets/lib/mprogress/js/mprogress.min.js" %}" type="text/javascript"></script>
+
+    
+    <script type="text/javascript">
+      $.fn.niftyModal('setDefaults',{
+      	overlaySelector: '.modal-overlay',
+      	contentSelector: '.modal-content',
+      	closeSelector: '.modal-close',
+      	classAddAfterOpen: 'modal-show'
+      });
+    jQuery(function ($) {
+        // init the state from the input
+        $(".image-checkbox").each(function () {
+            if ($(this).find('input[type="checkbox"]').first().attr("checked")) {
+                $(this).addClass('image-checkbox-checked');
+            }
+            else {
+                $(this).removeClass('image-checkbox-checked');
+            }
+        });
+
+        // sync the state to the input
+        $(".image-checkbox").on("click", function (e) {
+            if ($(this).hasClass('image-checkbox-checked')) {
+                $(this).removeClass('image-checkbox-checked');
+                $(this).find('input[type="checkbox"]').first().removeAttr("checked");
+            }
+            else {
+                $(this).addClass('image-checkbox-checked');
+                $(this).find('input[type="checkbox"]').first().attr("checked", "checked");
+            }
+
+            e.preventDefault();
+        });
+    });
+    </script>
+
+
+    <script type="text/javascript">
+
+ 
+      function delay(callback, ms) {
+        var timer = 0;
+        return function() {
+          var context = this, args = arguments;
+          clearTimeout(timer);
+          timer = setTimeout(function () {
+            callback.apply(context, args);
+          }, ms || 0);
+        };
+      }
+
+      $("#myInput").keyup(delay(function (e) {
+        
+        var value = $(this).val().toLowerCase();
+        console.log(value);
+        //var atr = $('#steam_body').attr();
+        var find = $("#steam_body").find("[data-steam]"); 
+       // console.log(find);
+        find.each(function(obj){
+          
+          let ob = find[obj];
+          const steam_name = ob.dataset.steam;
+          let tog = steam_name.toLowerCase().indexOf(value)
+          if(tog > -1){
+            $(ob).show(500);
+          }else{
+            //console.log(steam_name)
+            $(ob).toggle(500);
+          }
+        })
+        
+
+      }, 500));
+
+
+       
+       
+
+
+      $(document).ready(function(){
+        var ar = ["B-Tech:Computer Science & Engineering:Environmental  Studies"];
+      	//-initialize the javascript
+      	App.init();
+      	App.dashboard();
+        $(".datetimepicker").datetimepicker();
+     
+      });
+
+      
+
+    </script>
+  </body>
+</html>

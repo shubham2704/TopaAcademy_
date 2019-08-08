@@ -1,0 +1,365 @@
+{%  load static %}
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="assets/img/logo-fav.png">
+    <title>Beagle</title>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/perfect-scrollbar/css/perfect-scrollbar.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/material-design-icons/css/material-design-iconic-font.min.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/jquery.vectormap/jquery-jvectormap-1.2.2.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/jqvmap/jqvmap.min.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/datetimepicker/css/bootstrap-datetimepicker.min.css" %}"/>
+    <link rel="stylesheet" href="{% static "admin/assets/css/app.css" %}" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/summernote/summernote-bs4.css" %}" />
+  </head>
+  <body>
+    <div class="be-wrapper be-fixed-sidebar">
+      <nav class="navbar navbar-expand fixed-top be-top-header">
+        <div class="container-fluid">
+          <div class=""><a class="navbar-brand" href="index-2.html"></a>
+          </div>
+          <div class="page-title"><span><i>Top Academy</i></span></div>
+          <div class="be-right-navbar">
+            <ul class="nav navbar-nav float-right be-user-nav">
+              <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false"><img src="{% static "admin/assets/img/avatar.png"%}"" alt="Avatar"><span class="user-name">Túpac Amaru</span></a>
+                <div class="dropdown-menu" role="menu">     
+                  <div class="user-info">
+                    <div class="user-name">Túpac Amaru</div>
+                    <div class="user-position online">Available</div>
+                  </div><a class="dropdown-item" href="pages-profile.html"><span class="icon mdi mdi-face"></span>Account</a><a class="dropdown-item" href="#"><span class="icon mdi mdi-settings"></span>Settings</a><a class="dropdown-item" href="pages-login.html"><span class="icon mdi mdi-power"></span>Logout</a>
+                </div>
+              </li>
+            </ul>
+            <ul class="nav navbar-nav float-right be-icons-nav">
+              <li class="nav-item dropdown"><a class="nav-link be-toggle-right-sidebar" href="#" role="button" aria-expanded="false"><span class="icon mdi mdi-settings"></span></a></li>
+              <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false"><span class="icon mdi mdi-notifications"></span><span class="indicator"></span></a>
+                <ul class="dropdown-menu be-notifications">
+                  <li>
+                    <div class="title">Notifications<span class="badge badge-pill">3</span></div>
+                    <div class="list">
+                      <div class="be-scroller-notifications">
+                        <div class="content">
+                          <ul>
+                            <li class="notification notification-unread"><a href="#">
+                                <div class="image"><img src="assets/img/avatar2.png" alt="Avatar"></div>
+                                <div class="notification-info">
+                                  <div class="text"><span class="user-name">Jessica Caruso</span> accepted your invitation to join the team.</div><span class="date">2 min ago</span>
+                                </div></a></li>
+                            <li class="notification"><a href="#">
+                                <div class="image"><img src="assets/img/avatar3.png" alt="Avatar"></div>
+                                <div class="notification-info">
+                                  <div class="text"><span class="user-name">Joel King</span> is now following you</div><span class="date">2 days ago</span>
+                                </div></a></li>
+                            <li class="notification"><a href="#">
+                                <div class="image"><img src="assets/img/avatar4.png" alt="Avatar"></div>
+                                <div class="notification-info">
+                                  <div class="text"><span class="user-name">John Doe</span> is watching your main repository</div><span class="date">2 days ago</span>
+                                </div></a></li>
+                            <li class="notification"><a href="#">
+                                <div class="image"><img src="assets/img/avatar5.png" alt="Avatar"></div>
+                                <div class="notification-info"><span class="text"><span class="user-name">Emily Carter</span> is now following you</span><span class="date">5 days ago</span></div></a></li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="footer"> <a href="#">View all notifications</a></div>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false"><span class="icon mdi mdi-apps"></span></a>
+                <ul class="dropdown-menu be-connections">
+                  <li>
+                    <div class="list">
+                      <div class="content">
+                        <div class="row">
+                          <div class="col"><a class="connection-item" href="#"><img src="assets/img/github.png" alt="Github"><span>GitHub</span></a></div>
+                          <div class="col"><a class="connection-item" href="#"><img src="assets/img/bitbucket.png" alt="Bitbucket"><span>Bitbucket</span></a></div>
+                          <div class="col"><a class="connection-item" href="#"><img src="assets/img/slack.png" alt="Slack"><span>Slack</span></a></div>
+                        </div>
+                        <div class="row">
+                          <div class="col"><a class="connection-item" href="#"><img src="assets/img/dribbble.png" alt="Dribbble"><span>Dribbble</span></a></div>
+                          <div class="col"><a class="connection-item" href="#"><img src="assets/img/mail_chimp.png" alt="Mail Chimp"><span>Mail Chimp</span></a></div>
+                          <div class="col"><a class="connection-item" href="#"><img src="assets/img/dropbox.png" alt="Dropbox"><span>Dropbox</span></a></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="footer"> <a href="#">More</a></div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div class="be-left-sidebar">
+        <div class="left-sidebar-wrapper"><a class="left-sidebar-toggle" href="#">Dashboard</a>
+          <div class="left-sidebar-spacer">
+            <div class="left-sidebar-scroll">
+              <div class="left-sidebar-content">
+                <ul class="sidebar-elements">
+                  <li class="divider">Menu</li>
+                  
+                  <li class="parent"><a href="#"><i class="icon mdi mdi-face"></i><span>Dashboard</span></a>
+                    <ul class="sub-menu">
+                      <li><a href="ui-alerts.html">My Activity</a>
+                      </li>
+                      <li><a href="ui-alerts.html">Teacher Activity</a>
+                      </li>
+                      <li><a href="ui-buttons.html">Student Activity</a>
+                      </li>
+                     
+                    </ul>
+                  </li>
+
+                  <li class="parent"><a href="charts.html"><i class="icon mdi mdi-chart-donut"></i><span>Question Banks</span></a>
+                    <ul class="sub-menu">
+                      <li><a href="charts-flot.html">Mock Test</a>
+                      </li>
+                      <li><a href="charts-sparkline.html">Practice Test</a>
+                      </li>
+                      <li><a href="charts-sparkline.html">Manage QB</a>
+                      </li>
+                     
+                    </ul>
+                  </li>
+
+                  
+                  <li class="parent"><a href="#"><i class="icon mdi mdi-border-all"></i><span>Manage Users</span></a>
+                    <ul class="sub-menu">
+                      <li><a href="tables-general.html">Students</a>
+                      </li>
+                      <li><a href="tables-datatables.html">Teacher</a>
+                      </li>
+                      <li><a href="tables-filters.html"><span class="badge badge-primary float-right">New</span>Admin</a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="parent"><a href="#"><i class="icon mdi mdi-layers"></i><span>Historic Activity</span></a>
+                    <ul class="sub-menu">
+                      <li><a href="pages-blank.html">Admin</a>
+                      </li>
+                      <li><a href="pages-blank-header.html">Teacher</a>
+                      </li>
+                      <li><a href="pages-login.html">Student</a>
+                      </li>
+                      
+                    </ul>
+                  </li>
+                  <li class="parent"><a href="#"><i class="icon mdi mdi-dot-circle"></i><span>Account</span></a>
+                    <ul class="sub-menu">
+                      <li><a href="form-elements.html">Add Admin</a>
+                      </li>
+                      <li><a href="form-validation.html">Add Teacher</a>
+                      </li>
+                      <li><a href="form-multiselect.html">My Account</a>
+                      </li>
+                      
+                    </ul>
+                  </li>
+                  <li class="divider">Other</li>
+                  <li class="parent"><a href="#"><i class="icon mdi mdi-inbox"></i><span>Announcements</span></a>
+                    <ul class="sub-menu">
+                        <li><a href="email-inbox.html">To All</a>
+                        </li>
+                      <li><a href="email-inbox.html">To Teacher</a>
+                      </li>
+                      <li><a href="email-read.html">To Student</a>
+                      </li>
+                      <li><a href="email-compose.html">To Admins</a>
+                      </li>
+                    </ul>
+                  </li>
+               
+                  <li class="parent"><a href="charts.html"><i class="icon mdi mdi-chart-donut"></i><span>Setup Website</span></a>
+                    <ul class="sub-menu">
+                      <li  class="active"><a href="charts-flot.html">Add Steam</a>
+                      </li>
+                      <li><a href="charts-sparkline.html">Add Branches</a>
+                      </li>
+                      <li><a href="charts-sparkline.html">Subjects</a>
+                      </li>
+                      <li><a href="charts-chartjs.html">Signup Settings</a>
+                      </li>
+                      <li><a href="charts-chartjs.html">SEO Meta</a>
+                      </li>
+                     
+                    </ul>
+                  </li>
+                  <li><a href="documentation.html"><i class="icon mdi mdi-book"></i><span>Admin Manual</span></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      <div class="be-content">
+        <div class="main-content container-fluid">
+            {% if messages %}
+
+
+            {% for message in messages %}
+
+            
+            
+            <div class="alert alert-{{message.tags}} alert-dismissible" role="alert">
+                <button class="close" type="button" data-dismiss="alert" aria-label="Close"><span class="mdi mdi-close" aria-hidden="true"></span></button>
+                <div class="icon"><span class="mdi mdi-alert-triangle"></span></div>
+                <div class="message">{{message}}</div>
+              </div>
+
+
+        
+            {% endfor %}
+         {% endif %}
+
+  <div class="row">
+<div class="col-md-8">
+<form method="post">
+    {% csrf_token %}
+    <div class="card">
+        <div class="card-header"><div class="">
+<input name="title" class="form-control form-control-lg" placeholder="Title" id="inputLarge" type="text" value="{{edit.title}}">
+<br>
+<textarea name="desc" class="form-control form-control-xs" placeholder="Description" id="inputExtraSmall" value="" type="text">{{edit.description}}</textarea>
+          </div>
+        
+        </div>
+      
+      </div>
+      <div class="">
+            <div class="card card-border-color card-border-color-primary">
+              <div class="card-header card-header-divider">Post Content</div>
+              <div class="card-body">
+                    <textarea id="post-content" name="content"> {{edit.content}} </textarea>
+                
+                </div>
+            </div>
+          </div>
+</div>
+          <div class="col-md-4">
+
+             <p class="">
+                <button type="submit" name="publish" class="btn btn-space btn-secondary btn-lg">Publish</button>
+                <button type="submit" name="draft" class="btn btn-space btn-primary btn-lg">Draft</button>
+              </p>
+              <div class="card card-border-color card-border-color-success">
+                    
+                    <div class="card-body">
+                            <div class="">
+                                <br>
+                                   
+                                  </div>
+
+                                  <div>
+                                        <div class="form-group row">
+                                                <label class="col-12 col-sm-3 col-form-label text-sm-right">Post Category</label>
+                                                <div class="col-12 col-sm-8 col-lg-6">
+                                                  <input id="sub_cat" type="hidden" name="sub_category">
+                                                  <input id="second_level" type="hidden" name="second_sub_category">
+                                                  <select name="category" onchange="steam_select(this)" class="form-control ">
+                                                        <option value="">Select One </option>
+                                                        {% for steam in steam_c %}
+                                                         <option value="{{steam.steam_link_id}}"> {{steam.steam_name}} </option>
+                                                        {% endfor %}
+                                                         
+                                                         
+                                                        </select>
+                                                </div>
+                                            </div>
+                                        <div class="ajax-steam">
+                    
+                                            </div>
+
+                                  </div>
+                      </div>
+                  </div>
+
+</div>
+</div>
+
+</form>
+        </div>
+      </div>
+      
+    </div>
+    <script src="{% static "admin/assets/lib/jquery/jquery.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/perfect-scrollbar/js/perfect-scrollbar.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/bootstrap/dist/js/bootstrap.bundle.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/js/app.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery-flot/jquery.flot.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery-flot/jquery.flot.pie.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery-flot/jquery.flot.time.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery-flot/jquery.flot.resize.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery-flot/plugins/jquery.flot.orderBars.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery-flot/plugins/curvedLines.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery-flot/plugins/jquery.flot.tooltip.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery.sparkline/jquery.sparkline.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/countup/countUp.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery-ui/jquery-ui.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jqvmap/jquery.vmap.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jqvmap/maps/jquery.vmap.world.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/summernote/summernote-bs4.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/summernote/summernote-ext-beagle.js" %}" type="text/javascript"></script>
+    <script type="text/javascript">
+        var currentsct = false;
+        function sct(){
+           if (currentsct == false){currentsct =  true;}else{currentsct = false;}
+        var loader = "<p class='text-center'><img height='60px' src='/static/admin/assets/ajax.gif'/></p>";
+
+        $('.load_ajax_here').html(loader);
+          $.ajax({
+            url: "/admin-panel/add/test/ajax/"+currentsct+"/l/no",
+            context: document.body
+          }).done(function(data) {
+            $('.load_ajax_here').html(data);
+
+            
+          });
+
+        }
+
+        function steam_select(e){
+       
+            var loader = "<p class='text-center'><img height='60px' src='/static/admin/assets/ajax.gif'/></p>";
+     
+             $('.ajax-steam').html(loader);
+               $.ajax({
+                 url: "/admin-panel/add/test/ajax-steam/"+e.value,
+                 context: document.body
+               }).done(function(dataa) {
+                 $('.ajax-steam').html(dataa);
+               });
+     
+     
+     }
+
+
+        $(document).ready(function(){
+            //-initialize the javascript
+            App.init();
+            App.textEditors();
+            $("#post-content").summernote({height:300,hint: {
+              mentions: ['jayden', 'sam', 'alvin', 'david'],
+              match: /\B@(\w*)$/,
+              search: function (keyword, callback) {
+                callback($.grep(this.mentions, function (item) {
+                  return item.indexOf(keyword) == 0;
+                }));
+              },
+              content: function (item) {
+                return '@' + item;
+              }    
+            }});
+            
+        });
+      </script>
+  </body>
+</html>

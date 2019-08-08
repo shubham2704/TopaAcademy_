@@ -1,0 +1,70 @@
+<div class="card ">
+        <div class="card-header ">Double Level Steam
+            <div class="tools"><button onclick="add_level()" type="button" class="btn btn-primary">Add Level</button></div>
+        </div>
+        <div class="add-here">
+
+          
+                   
+                 
+               
+
+        </div>
+
+
+                      <div class="col-sm-12 pt-3">
+                                
+                            <div class="">
+                              <p class="">
+                                <button class="btn btn-space btn-primary" type="submit">Submit</button>
+                              </p>
+                            </div>
+                          </div>
+
+</div>
+<script>
+
+    id = 0;
+    function add_level(){
+        ds = "'level_name'";
+        es = "'label_name'";
+        name= 'level['+id+']['+ds+']';
+        label = 'level['+id+']['+es+']';
+        wrap = ' <div id="level'+id+'"> <div class="card card-contrast"> <div class="card-header card-header-contrast"> <div class="row"> <div class="col-md-6"> <div class=" form-group pt-2"> <label for="inputEmail">Level Name</label> <input class="form-control form-control-sm" id="inputEmail" type="text" name="'+name+'" placeholder="Computer Science & Eng"> </div></div><div class="col-md-6"> <div class="form-group pt-2"> <label for="inputPassword">Label</label> <input class="form-control form-control-sm" id="inputPassword" name="'+label+'" type="text" placeholder="Dont use whitespace Ex : CSE"> </div><p class="text-right"> <button class="btn btn-space btn-primary" type="button" onclick="add_level_item('+id+')">Add Level Item</button> <button onclick="del_level('+id+')" class="btn btn-space btn-warning" type="button">Remove Level</button> </p></div></div></div><table class="table table-sm table-striped"> <thead > <tr> <th>Level Item Name</th> <th class="number">Level Item Label</th> <th class="actions"></th> </tr></thead> <thead > <tbody class="append-item-here'+id+'"> </tbody> </table> </div></div>';
+        $('.add-here').append(wrap);
+        id++;
+    }
+
+    idd = 0;
+    function add_level_item(id){
+
+
+        ds = "'level_name'";
+        es = "'label_name'";
+        dat = "'data'";
+        name= 'level['+id+']['+dat+']['+ds+']';
+        label = 'level['+id+']['+dat+']['+es+']';
+
+
+        wrap = ' <tr id="item'+idd+'"><td><input name="'+name+'" type="text" class="form-control form-control-xs"></td> <td class="number"><input name="'+label+'" type="text" class="form-control form-control-xs"></td><td class="actions"><a class="icon" onclick="del_item('+idd+')"><i class="mdi mdi-delete"></i></a></td></tr>';
+       $('.append-item-here'+id).append(wrap);
+        idd++;
+    }
+
+
+
+    function del_level(e){
+        
+        $('#level'+e).remove();
+
+    }
+
+   function del_item(e){
+        
+        $('#item'+e).remove();
+
+    }
+
+
+
+</script>

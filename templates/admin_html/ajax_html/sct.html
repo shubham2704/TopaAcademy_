@@ -1,0 +1,77 @@
+
+ {% if  steam == True %}
+ 
+  <div class="form-group row pt-1">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right">Degree</label>
+                      <div class="col-12 col-sm-8 col-lg-6">
+                        <select name="degree_sct" id="steam" class="form-control">
+
+                          <option disabled selected="">Select Degree</option>
+
+                          {% for degree in get_degree %}
+                         <option {% if degree_selected == degree.degree_name  %} selected {% endif %} value="{{degree.degree_name}}">{{degree.degree_name}}</option>
+                          {% endfor %}
+                          
+                        </select>
+                      </div>
+</div>
+
+ {% endif %}
+
+ 
+ {% if  branch == True %}
+ 
+  <div class="form-group row pt-1">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right">Branch</label>
+                      <div class="col-12 col-sm-8 col-lg-6">
+                        <select name="branch_sct" class="form-control">
+
+                          <option disabled selected="">Select Branch</option>
+
+                          {% for branchh in get_branch %}
+                         <option value="{{branchh.branch_name}}">{{branchh.branch_name}}</option>
+                          {% endfor %}
+                          
+                        </select>
+                      </div>
+                    </div>
+   <div class="form-group row pt-1">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right">Semester</label>
+                      <div class="col-12 col-sm-8 col-lg-6">
+                        <select name="semester_sct" class="form-control">
+
+                          <option disabled selected="">Select Semester</option>
+     <option value="1" >1</option>
+    <option value="2" >2</option>
+   <option value="3" >3</option>
+   <option value="4" >4</option>
+   <option value="5" >5</option>
+   <option value="6" >6</option>
+   <option value="7" >7</option>
+   <option value="8" >8</option>
+   <option value="9" >9</option>
+   <option value="10" >10</option>
+            
+                        </select>
+                      </div>
+                    </div>
+ {% endif %}
+
+     
+<div id="dsjkbhds"></div>
+     
+ <script type="text/javascript">
+$('#steam').on('change', function() {
+  var loader = "<p class='text-center'><img height='60px' src='/static/admin/assets/ajax.gif'/></p>";
+ $('.dsjkbhds').html(loader);
+  $.ajax({
+            url: "/admin-panel/add/test/ajax/true/l/"+this.value,
+            context: document.body
+          }).done(function(data) {
+            $('.load_ajax_here').html(data);
+
+            
+          });
+});
+
+ </script>

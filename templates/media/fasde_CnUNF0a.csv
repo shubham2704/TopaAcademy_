@@ -1,0 +1,26 @@
+Question,option1,option 2,option3,option 4,Answer
+"At a game of billiards, A can give B 15 points in 60 and A can give C to 20 points in 60. How many points can B give C in a game of 90?",30 point,20 point,12 point,10 point,4
+"if each of the three nonzero numbers a,b and c is divisible by 3, then abc must be divisible by which one of the following the numbers?",8,27,80,121,1
+"The LCM of two number is 4800 and their HCF is 160. If one number is 480, then the second number is",1500,1200,1600,1800,3
+N is the smallest number that has 5 factors. How many factors does (N - 1) have??,5,2,4,3,3
+"A number when divided by 342 gives a remainder 47. When the same number is divided by 19, what would be the remainder?",4,9,5,0,2
+The number 3072 is divisible by both 6 and 8. Which one of the following is the first integer larger than 3072 that is also divisible by both 6 and 8?,3090,3086,3084,3096,4
+"If n is a positive integer, which one of the following numbers must have a remainder of 3 when divided by any of the numbers 4, 5, and 6?",24n+3,12n+3,90n+2,120n+3,4
+The number 3 divides ‘a’ with a result of ‘b’ and a remainder of 2. The number 3 divides ‘b’ with a result of 2 and a remainder of 1. What is the value of a?,17,23,21,13,2
+The LCM of two numbers is 280 and their ratio is 7:8. The two numbers are,"35,40","28,32","70,80","42,48",1
+The sum of three digit number is subtracted from the number. The resulting number is always,not divisible by 6, not divisible by 9,divisible by 6,divisible by 9,4
+"In a meet, persons from five different places have assembled in Bangalore High School. From the five places the persons come to represent are 42,60,210,90 and 84. What is the minimum number of rooms that would be required to accommodate so that each room has the same number of occupants and occupants are all from the same places?",44,62,96,81,4
+"The number obtained by interchanging the two digits of a two digit number is less than the original number by 27. If the difference between the two digits of the number is 3, what is the original number?",74,85,cannot be determined,63,3
+"When a particular positive number is divided by 5, the remainder is 2. If the same number is divided by 6, the remainder is 1. If the difference between the quotients of division is 3, then find the number.",87,97,67,37,2
+"A certain number when divided by 222 leaves a remainder 35, another number when divided by 407 leaves a remainder 47. What is the remainder when the sum of these two numbers is divided by 37?",17,9,8,12,3
+"If a and b are positive integers, and x=2×3×7×a , and y=2×2×8×b , and the values of both x and y lie between 120 and 130 (not including the two), then a–b=",-2,2,-1,1,3
+Find the remainder when 2^31 is divided by 5. ,5,3,7,4,2
+A set has exactly five consecutive positive integers starting with 1. What is the percentage decrease in the average of the numbers when the greatest one of the numbers is removed from the set?,15.2,16.66,8.5,12.5,2
+"When 242 is divided by a certain divisor the remainder obtained is 8. When 698 is divided by the same divisor the remainder obtained is 9. However, when the sum of the two numbers 242 and 698 is divided by the divisor, the remainder obtained is 4. What is the value of the divisor?",13,11,17,23,1
+How many keystrokes are needed to type numbers from 1 to 1000 on a standard keyboard?,2704,2093,3001,2893,4
+The remainder when the positive integer m is divided by 7 is x. The remainder when m is divided by 14 is x+7. Which one of the following could m equal?,53,45,72,85,1
+What is the remainder let after dividing 1!+2!+3!.....+10! by 7?,21,5,0,14,2
+"Two prime numbers A,B(A<B) are called twin primes if they differ by 2 (e.g. 11,13,or 41,43....)If A and B are twin primes with B>23, then which of the following numbers would always divide A+B?",24,12,8,None of these,2
+Which of the following has most number of divisors?,101,176,99,182,2
+What is the remainder when 7^187 is divided by 800?,143,443,243,343,4
+"What is the value of M and N respectively if M39048458N is divisible by 8 and 11, where M and N are single digit integers?","6,4","8,6","5,4","7,8",`1
