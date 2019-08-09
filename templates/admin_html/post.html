@@ -20,12 +20,12 @@
     <link rel="stylesheet" href="{% static "admin/assets/css/app.css" %}" type="text/css"/>
   </head>
   <body>
-    <div class="be-wrapper be-fixed-sidebar">
+    <div class="be-wrapper be-offcanvas-menu be-fixed-sidebar">
       <nav class="navbar navbar-expand fixed-top be-top-header">
         <div class="container-fluid">
-          <div class=""><a class="navbar-brand" href="index-2.html"></a>
-          </div>
-          <div class="page-title"><span><i>Top Academy</i></span></div>
+            <div class="be-navbar-header"><a class="nav-link be-toggle-left-sidebar" href="#"><span class="icon mdi mdi-menu"></span></a><a class="navbar-brand" href="index-2.html"></a>
+            </div>
+          
           <div class="be-right-navbar">
             <ul class="nav navbar-nav float-right be-user-nav">
               <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false"><img src="{% static "admin/assets/img/avatar.png"%}"" alt="Avatar"><span class="user-name">Túpac Amaru</span></a>
@@ -237,7 +237,7 @@
       </div>
       <div class="">
             <div class="card card-border-color card-border-color-primary">
-              <div class="card-header card-header-divider">Post Content</div>
+              <div class="card-header ">Post Content</div>
               <div class="card-body">
                     <textarea id="post-content" name="content"> {{edit.content}} </textarea>
                 
@@ -248,12 +248,14 @@
           <div class="col-md-4">
 
              <p class="">
-                <button type="submit" name="publish" class="btn btn-space btn-secondary btn-lg">Publish</button>
-                <button type="submit" name="draft" class="btn btn-space btn-primary btn-lg">Draft</button>
+                <button type="submit" name="publish" class="btn btn-space btn-success btn-lg"><i class="icon icon-left mdi mdi-rss"></i> Publish</button>
+                <button type="submit" name="draft" class="btn btn-space btn-primary btn-lg"><i class="icon icon-left mdi mdi-archive"></i> Draft</button>
+                <button type="submit" name="draft" class="btn btn-secondary btn-space btn-lg"> <i class="icon icon-left mdi mdi-timer"></i> Sechudle</button>
+             
               </p>
               <div class="card card-border-color card-border-color-success">
                     
-                    <div class="card-body">
+                    <div id="div_high"  class="card-body">
 
                       {% if edit.status %}
 
@@ -355,6 +357,8 @@
    
       //var myDropzone = new Dropzone("#my-awesome-dropzone", { url: "/file/post"});
 
+   
+
 
         var currentsct = false;
         function sct(){
@@ -393,7 +397,7 @@
             //-initialize the javascript
             App.init();
           
-            $("#post-content").summernote({height:300,hint: {
+            $("#post-content").summernote({height:700,hint: {
               mentions: ['jayden', 'sam', 'alvin', 'david'],
               match: /\B@(\w*)$/,
               search: function (keyword, callback) {
@@ -405,6 +409,11 @@
                 return '@' + item;
               }    
             }});
+
+
+           
+
+
             
         });
       </script>

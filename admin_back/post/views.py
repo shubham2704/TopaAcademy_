@@ -159,6 +159,7 @@ def post_add(request):
         title = request.POST['title']
         desc = request.POST['desc']
         content = request.POST['content']
+        print(content)
         sub_category = request.POST['sub_category']
         second_sub_category = request.POST['second_sub_category']
         category = request.POST['category']
@@ -194,6 +195,7 @@ def post_add(request):
                      description = desc,
                      categoryOne = category,
                      categoryTwo = sub_category,
+                     content=content,
                      categoryThree = second_sub_category,
                      categoryFour = "",
                      isSCP = scp,
