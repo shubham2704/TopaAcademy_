@@ -15,7 +15,11 @@
                        </select>
                      </div>
 </div>
-
+<script>
+    function bsdg(vale){
+      $('#sm').val(vale);
+    }
+  </script>
 {% endif %}
 
 
@@ -24,7 +28,7 @@
  <div class="form-group row pt-1">
         <label class="col-md-12">Branch</label>
         <div class="col-md-12">
-             <select name="branch_sct" class="form-control">
+             <select onchange="bsdg(this.value)" name="branch_sct" class="form-control">
 
                          <option disabled selected="">Select Branch</option>
 
@@ -35,26 +39,26 @@
                        </select>
                      </div>
                    </div>
-  <div class="form-group row pt-1">
-        <label class="col-md-12">Semester</label>
-        <div class="col-md-12">
-          <select name="semester_sct" class="form-control">
+                   <div class="form-group row pt-1">
+                    <label class="col-12 ">{{type_a}}</label>
+                    <div class="col-12">
+                      <select onchange="bsg(this.value)" name="semester_sct" class="form-control">
 
-                         <option disabled selected="">Select Semester</option>
-    <option value="1" >1</option>
-   <option value="2" >2</option>
-  <option value="3" >3</option>
-  <option value="4" >4</option>
-  <option value="5" >5</option>
-  <option value="6" >6</option>
-  <option value="7" >7</option>
-  <option value="8" >8</option>
-  <option value="9" >9</option>
-  <option value="10" >10</option>
-           
-                       </select>
-                     </div>
-                   </div>
+                        <option disabled selected="">Select {{type_a}}</option>
+                        {% for sem in semseter %}
+                        <option value="{{sem}}">{{sem}}</option>
+                         {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <script>
+                      function bsg(vale){
+                        $('#sm').val(vale);
+                      }
+                      function bsdg(vale){
+                        $('#br').val(vale);
+                      }
+                    </script>
 {% endif %}
 
     
@@ -62,6 +66,7 @@
     
 <script type="text/javascript">
 $('#steam').on('change', function() {
+  $('#pr').val(this.value);
  var loader = "<p class='text-center'><img height='60px' src='/static/admin/assets/ajax.gif'/></p>";
 $('.dsjkbhds').html(loader);
  $.ajax({

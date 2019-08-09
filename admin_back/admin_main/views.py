@@ -157,20 +157,42 @@ def sct_ajax(request, sct_bool, steam, branch):
         params = {
 
             'steam': False,
-            'branch':False
+            'branch':False,
+            'type_a':"Semester",
+            'semester' : {}
 
         }
         if steam == 'l':
-            params['get_degree'] = branch_degree.objects.all()
-            print(params['get_degree'])
+            branch_deg = branch_degree.objects.all()
+            params['get_degree'] = branch_deg
+            
             params['steam'] = True
+           
+
+            
+
             
         if branch != 'no':
             params['get_branch'] = branchs.objects.filter(degree_name=branch)
             params['degree_selected'] = branch
-            print(branch)
+            get_degree = branch_degree.objects.get(degree_name=branch)
+            sem_list = []
+            if get_degree.semester == "Yearly":
+                params['type_a'] = "Year"
+                
+                for rb in range(1 ,int(get_degree.duration) + 1):
+                    sem_list.append(rb)
+                    
+            else:
+                for rb in range(1, int(get_degree.semester) + 1):
+                    sem_list.append(rb)
+
+
+
             params['branch'] = True
-            
+            params['semseter'] = sem_list
+
+            print(params)
         
         
         return render(request, "admin_html/ajax_html/sct.html", params)   
