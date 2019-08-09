@@ -1,13 +1,90 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from ..steam.models import Steam, Steam_Data
 from django.contrib import messages
 from .models import content as post_content
 from ..AdminPackage.AdminController import CheckLogin
+from ..branch.models import branch_degree, branchs
+import json
 
 # Create your views here.
 
+
+def steam_dual_ajax(request,id, name):
+    params = {}
+    params['steam_id']= id
+    params['dualevel'] = True
+    params['name'] = name
+
+    get_steam_data = Steam_Data.objects.get(id=id)
+    get_data = get_steam_data.steam_data_json
+    get_level = get_steam_data.multilevel_data
+    decode_json = json.loads(get_data)
+    params['json'] = decode_json
+
+    for looping_steam_data in decode_json:
+        val = decode_json[looping_steam_data]['level_name']
+        print(val, name)
+        
+        if val == name:
+            print("dss")
+            params['dual_data'] = decode_json[looping_steam_data]['data']
+        
+        
+
+    print(params['dual_data'])
+    return render(request, "admin_html/ajax_html/steam_post_ajax.html", params)  
+
+
+def sct_ajax(request, sct_bool, steam, branch):
+
+    if sct_bool == 'true':
+        params = {
+
+            'steam': False,
+            'branch':False
+
+        }
+        if steam == 'l':
+            params['get_degree'] = branch_degree.objects.all()
+            print(params['get_degree'])
+            params['steam'] = True
+            
+        if branch != 'no':
+            params['get_branch'] = branchs.objects.filter(degree_name=branch)
+            params['degree_selected'] = branch
+            print(branch)
+            params['branch'] = True
+            
+        
+        
+        return render(request, "admin_html/ajax_html/post_sct.html", params)   
+    else:
+        return HttpResponse("")
+
+
+def ajax_steam(request,sid):
+    params = {}
+    params['steam_id']= sid
+
+    get_steam_data = Steam_Data.objects.get(id=sid)
+    get_data = get_steam_data.steam_data_json
+    get_level = get_steam_data.multilevel_data
+    decode_json = json.loads(get_data)
+
+    if get_level == 'Single Level':
+        params['single'] = True
+        params['json'] = decode_json
+    if get_level == 'Double Level':
+        params['multiple'] = True   
+        params['json'] = decode_json
+
+
+    return render(request, "admin_html/ajax_html/steam_post_ajax.html", params)   
+
 def post_edit(request, post_id):
     params = {}
+    get_all_steam = Steam.objects.all()
+    params['steam_c'] = get_all_steam
     
     checklogin = CheckLogin(request)
     print(checklogin)

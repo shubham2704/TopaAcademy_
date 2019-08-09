@@ -1,0 +1,90 @@
+
+ {% if  single == True %}
+ 
+ <div class="form-group row pt-1">
+                     <div class="col-md-12">
+                       <select onchange="dsd(this);" name="sub_category" class="form-control">
+
+                         <option selected="All">All</option>
+
+                         {% for key, values in json.items %}
+                          <option value="{{values.name}}">{{values.name}}</option>
+                         {% endfor %}
+                         
+                       </select>
+                     </div>
+</div>
+<script>
+function dsd(e){
+ console.log(e.value);
+ $('#sub_cat').value(e.value);
+}
+
+</script>
+{% endif %}
+
+
+
+{% if  dualevel == True %}
+
+ <div class="form-group row pt-1">
+                    
+                     <div class="col-md-12">
+                       <select onchange="submm(this)" name="second_sub_category" class="form-control">
+
+                         <option selected="All">All</option>
+
+                         {% for values in dual_data.level_name %}
+                        <option value="{{values}}"> {{values}}</option>
+                        
+                        
+                         {% endfor %}
+                         
+                       </select>
+                     </div>
+</div>
+<script>
+function submm(e){
+      $('#second_level').val(e.value);
+  
+
+}
+</script>
+{% endif %}
+ {% if  multiple == True %}
+
+ <div class="form-group row pt-1">
+                     <div class="col-md-12">
+                       <select name="sub_category" onchange="multiplesteamajax(this);" class="form-control">
+
+                         <option selected="All">All</option>
+
+                         {% for key, values in json.items %}
+                          <option value="{{values.level_name}}">{{values.level_name}}</option>
+                         {% endfor %}
+                         
+                       </select>
+                     </div>
+               
+</div>
+<div class="ajax-steam-multiple">
+
+</div>
+
+<script>
+function multiplesteamajax(e){
+      $('#sub_cat').val(e.value);
+      var loader = "<p class='text-center'><img height='60px' src='/static/admin/assets/ajax.gif'/></p>";
+
+       $('.ajax-steam-multiple').html(loader);
+         $.ajax({
+           url: "/admin-panel/post/test/ajax-steam-dual/{{steam_id}}/"+encodeURI(e.value),
+           context: document.body
+         }).done(function(data) {
+           $('.ajax-steam-multiple').html(data);
+         });
+
+
+}
+</script>
+{% endif %}
