@@ -5,6 +5,7 @@ from django.db import models
 class users(models.Model):
 
     first_name = models.CharField(max_length=75)
+    staff_id = models.CharField(max_length=75, default="")
     lastname = models.CharField(max_length=75)
     employe_id = models.CharField(max_length=50)
     department = models.CharField(max_length=100)

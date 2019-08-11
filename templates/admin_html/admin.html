@@ -16,6 +16,7 @@
     <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/jqvmap/jqvmap.min.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/datetimepicker/css/bootstrap-datetimepicker.min.css" %}"/>
     <link rel="stylesheet" href="{% static "admin/assets/css/app.css" %}" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/select2/css/select2.min.css" %}" />
   </head>
   <body>
     <div class="be-wrapper be-fixed-sidebar">
@@ -228,10 +229,23 @@
                   </div>
                   <div class="{%  if edit == True %}  collapse show {% else %} collapse {% endif %}" id="collapseOne" aria-labelledby="headingOne" data-parent="#accordion" style="">
                   
-<br><br>
-                    <form action="{%  if edit == True %}   {% else %} /admin-panel/manage-admin {% endif %}" enctype="multipart/form-data" method="POST" class="col-md-12">
+                    <br><br>
+                    <form action="{%  if edit == True %}   {% else %} /admin-panel/user/admin {% endif %}" enctype="multipart/form-data" method="POST" class="col-md-12">
                     
                     {% csrf_token %}
+
+                    <div class="form-group row">
+                    
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputText3">Select Staff*</label>
+                      <div class="col-12 col-sm-8 col-lg-6">
+                      <select name="staff" class="form-control">
+                        
+                        {% for staff in staffs %}
+                        <option {% if get_all_staff_one.id == staff.id %} selected {% endif %} value="{{staff.id}}">{{staff.first_name}} {{staff.last_name}} ({{staff.department}} )</option>
+                        {% endfor %}
+                      </select>
+                      </div>
+                    </div>
                            
                     <div class="form-group row">
                     
@@ -400,12 +414,13 @@
     <script src="{% static "admin/assets/lib/jquery-ui/jquery-ui.min.js" %}" type="text/javascript"></script>
     <script src="{% static "admin/assets/lib/jqvmap/jquery.vmap.min.js" %}" type="text/javascript"></script>
     <script src="{% static "admin/assets/lib/jqvmap/maps/jquery.vmap.world.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/select2/js/select2.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/select2/js/select2.full.min.js" %}" type="text/javascript"></script>
     <script type="text/javascript">
       $(document).ready(function(){
       	//-initialize the javascript
-      	App.init();
-      	App.dashboard();
-      
+        App.init();
+        
       });
     </script>
   </body>

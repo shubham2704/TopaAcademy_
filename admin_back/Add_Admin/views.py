@@ -7,6 +7,7 @@ from django.db.models import Q
 import os
 from ..AdminPackage.AdminController import CheckLogin, getUser
 from ..websettings.models import settings
+from ..teacher.add.models import add 
 from .models import users
 import json
 
@@ -24,13 +25,14 @@ def admin_view(request):
             lastname = request.POST['lastname']
             employe_id = request.POST['employe_id']
             department = request.POST['department']
+            staff = request.POST['staff']
             email = request.POST['email']
             role = request.POST['role']
             phone = request.POST['phone']
             password = request.POST['password']
             status = request.POST['status']
 
-            if status!='' and first_name!='' and lastname!='' and employe_id!='' and department!='' and email!='' and role!='' and phone!='' and password!='':
+            if staff!='' and status!='' and first_name!='' and lastname!='' and employe_id!='' and department!='' and email!='' and role!='' and phone!='' and password!='':
                 
                 
                 setting_obj = settings.objects.get(~Q(timezone=''))
@@ -40,7 +42,7 @@ def admin_view(request):
                 add_by = getUser(request).email
                 print(getUser)
                
-                insert = users.objects.create(status=status, first_name=first_name, lastname=lastname, employe_id=employe_id, department=department, email=email, role=role, phone_no=phone, password=sign_pwd, added_by_user=add_by)
+                insert = users.objects.create(staff_id=staff, status=status, first_name=first_name, lastname=lastname, employe_id=employe_id, department=department, email=email, role=role, phone_no=phone, password=sign_pwd, added_by_user=add_by)
                 if insert:
                     messages.success(request, "User has been succssfully added.")
  
@@ -48,8 +50,8 @@ def admin_view(request):
             else:
                 messages.info(request, "All fields are required")
 
-
-        return render(request, 'admin_html/admin.html', {'users':get_all_user})
+        get_all_staff = add.objects.all()
+        return render(request, 'admin_html/admin.html', {'users':get_all_user, 'staffs':get_all_staff})
 
 
     else:
@@ -94,6 +96,7 @@ def admin_edit(request, action, user_id):
                 user.employe_id = request.POST['employe_id']
                 user.department = request.POST['department']
                 user.email = request.POST['email']
+                user.staff_id = request.POST['staff']
                 user.role = request.POST['role']
                 user.phone_no = request.POST['phone']
                 user.status = request.POST['status']
@@ -105,8 +108,9 @@ def admin_edit(request, action, user_id):
             
             
             user = users.objects.get(id=user_id)
-            
-            return render(request, 'admin_html/admin.html', {'user':user ,'users':get_all_user, 'edit':True})
+            get_all_staff = add.objects.all()
+            get_all_staff_one = add.objects.get(id=user.staff_id)
+            return render(request, 'admin_html/admin.html', {'get_all_staff_one':get_all_staff_one, 'staffs':get_all_staff, 'user':user ,'users':get_all_user, 'edit':True})
 
                 
 
