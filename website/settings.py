@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'admin_back.session_manager',
     'student_back.index',
     'student_back.signup',
+    'student_back.view_test_info',
     'admin_back.websettings',
     'admin_back.branch',
     'admin_back.Add_Admin',

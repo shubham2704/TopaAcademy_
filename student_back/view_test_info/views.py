@@ -9,6 +9,38 @@ from admin_back.steam.models import Steam, Steam_Data
 from ..GlobalModels.main import login, check_account
 from ..signup.models import student_academic
 from datetime import datetime
+from .models import start_test_details
+
+
+
+def testing_session(request,test_session_id ):
+    pass
+
+
+# Create your views here.
+def startsession(request, test_id):
+    
+    params = {}
+    check_login = login(request)
+
+    if check_login == True:
+        #setting_obj = settings.objects.get(~Q(timezone=''))
+        #email = check_account(request, setting_obj.salt)
+        
+        try:
+            get_test = test_details.objects.get(status='Active', id=test_id)
+            get_test_adv = test_details_advanced.objects.get(test_id=test_id)
+            count_prev_test = start_test_details.objects.filter(TestID=test_id).count()
+            
+            #return redirect("/student/test/session/dasdasd")
+            
+
+        except:
+            return redirect("/student/test/browse?status=TestNotFound")
+
+        
+        
+
 
 
 def test_details_view(request, test_id):
