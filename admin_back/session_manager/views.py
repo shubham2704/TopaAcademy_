@@ -6,7 +6,7 @@ from django.db import connections
 from django.core.signing import Signer
 from django.db.models import Q
 from ..branch.models import branch_degree, branchs
-from .models import details
+from .models import data as ses_dat, data_semseter, details
 import os
 from ..AdminPackage.AdminController import CheckLogin
 from ..AdminPackage.querystring_parser import parser
@@ -16,10 +16,16 @@ import json
 def session_view(request):
     param = {
         'session':True,
+        'Teaching':{},
+        'TimeTable':{},
+        'AcademyCalender':{},
         'session_from' : '',
         'session_to' : '',
+        'session_id' : '',
         'data':{}
     }
+
+    
 
     checklogin = CheckLogin(request)
 
@@ -28,6 +34,7 @@ def session_view(request):
             check_session = details.objects.get(current_session=True)
             param['session_from'] = check_session.session_from
             param['session_to'] = check_session.session_to
+            param['session_id'] = check_session.id
 
             get_branchs = branch_degree.objects.filter(degree_status="Active")
 
@@ -67,7 +74,7 @@ def session_view(request):
            
                 if s_from!='' and s_to!='' and s_to>s_from:
                     insert_session = details.objects.create(
-                     current_session=True,
+                    current_session=True,
                     session_from=s_from,
                     session_to=s_to,
                     status="Incomplete"
@@ -83,10 +90,91 @@ def session_view(request):
             except Exception as e:
                 
                 messages.error(request, "Error Occured: " + str(e), extra_tags="danger")
-            
+                
+        get_all_branch = branchs.objects.all()
+
+        for branchGot in get_all_branch:
+            branch_degree_detail = branch_degree.objects.get(id=branchGot.degree_id)
+            br_name = branchGot.branch_name
+            dr_name = branchGot.degree_name
+            duration = branch_degree_detail.duration
+            sem = branch_degree_detail.semester
+
+            try:
+                check_man_data = ses_dat.objects.get(program=dr_name, branch=br_name)
+           
+            except:
+                insert_get, insert = ses_dat.objects.get_or_create(
+                data_status=False, 
+                program=dr_name,
+                option_txt="NO DATA",
+                branch=br_name,
+                session_id_id=param['session_id']
+                )
+                
+                sem_list = {}
+                list_inc = 0
+                if sem == "Yearly":
+                
+                    for rb in range(1 ,int(duration) + 1):
+
+                        sem_ins, sem_ins_st = data_semseter.objects.get_or_create(
+                            data_status=False, 
+                            duration_type=sem+"|"+sem,
+                            duration_number=rb,
+                            ClassTeacher_ID="",
+                            HOD_ID="",
+                            data_id_id=insert_get['id'],
+                            session_id_id=param['session_id']
+                            )
 
 
+                        sem_list[list_inc] = {}
+                       # sem_list[list_inc]['data'] = {}
+                       # #sem_list[list_inc]['TeachingSatatus'] = False
+                       # sem_list[list_inc]['TimeTable'] = False
+                        #sem_list[list_inc]['data'][rb] = {}
+                        #sem_list[list_inc]['data'][rb]['sem_data_id'] = sem_ins['id']
+                        #sem_list[list_inc]['data'][rb]['status'] = False
+
+
+                        list_inc = 1 + list_inc
+                else:
+
+                    for rb in range(1, int(sem) + 1):
+                        
+                        
+
+                        sem_ins, sem_ins_st = data_semseter.objects.get_or_create(
+                            data_status=False, 
+                            duration_type=sem+"|"+sem,
+                            duration_number=rb,
+                            ClassTeacher_ID="",
+                            HOD_ID="",
+                            data_id_id=insert_get['id'],
+                            session_id_id=param['session_id']
+                            )
+
+
+                        sem_list[list_inc] = {}
+                        sem_list[list_inc]['data'] = dict()
+                        #sem_list[list_inc]['TeachingSatatus'] = False
+                        #sem_list[list_inc]['TimeTable'] = False
+                        #sem_list[list_inc]['data'][rb] = {}
+                        #sem_list[list_inc]['data'][rb]['sem_data_id'] = sem_ins['id']
+                        #sem_list[list_inc]['data'][rb]['status'] = False
+
+
+
+                        list_inc = 1 + list_inc
+
+
+
+
+
+   
     else:
         return redirect("/admin-panel/login")     
     
+    print(sem_list)
     return render(request, "admin_html/session_manager.html", param)

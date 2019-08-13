@@ -90,7 +90,6 @@ def admin_edit(request, action, user_id):
             user = users.objects.get(id=user_id)
             
             if request.method == 'POST':
-
                 user.first_name = request.POST['first_name']
                 user.lastname = request.POST['lastname']
                 user.employe_id = request.POST['employe_id']
