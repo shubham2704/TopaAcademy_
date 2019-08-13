@@ -238,7 +238,6 @@ def steam_dual_ajax(request,id, name):
             print("dss")
             params['dual_data'] = decode_json[looping_steam_data]['data']
         
-        
 
     print(params['dual_data'])
     return render(request, "admin_html/ajax_html/steam_addmock.html", params)  

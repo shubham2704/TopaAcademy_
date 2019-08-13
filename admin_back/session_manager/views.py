@@ -143,8 +143,6 @@ def session_view(request):
 
                     for rb in range(1, int(sem) + 1):
                         
-                        
-
                         sem_ins, sem_ins_st = data_semseter.objects.get_or_create(
                             data_status=False, 
                             duration_type=sem+"|"+sem,

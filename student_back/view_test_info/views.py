@@ -10,7 +10,7 @@ from ..GlobalModels.main import login, check_account
 from ..signup.models import student_academic
 from datetime import datetime
 
-# Create your views here.
+
 def test_details_view(request, test_id):
 
     params = {
@@ -34,6 +34,7 @@ def test_details_view(request, test_id):
             get_test_adv = test_details_advanced.objects.get(test_id=test_id)
         
             params['test_details']['steam'] = get_test.steam
+            params['test_details']['id'] = test_id
             params['test_details']['category_one'] = get_test.category_one
             params['test_details']['category_two'] = get_test.category_two
             params['test_details']['desc'] = get_test.description
