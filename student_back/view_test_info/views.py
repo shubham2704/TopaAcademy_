@@ -10,7 +10,14 @@ from ..GlobalModels.main import login, check_account
 from ..signup.models import student_academic
 from datetime import datetime
 from .models import start_test_details
+import random
+import string
+import json
 
+def randomString(stringLength=10):
+    """Generate a random string of fixed length """
+    letters = string.ascii_lowercase
+    return ''.join(random.choice(letters) for i in range(stringLength))
 
 
 def testing_session(request,test_session_id ):
@@ -27,20 +34,60 @@ def startsession(request, test_id):
         #setting_obj = settings.objects.get(~Q(timezone=''))
         #email = check_account(request, setting_obj.salt)
         
-        try:
+        #try:
             get_test = test_details.objects.get(status='Active', id=test_id)
             get_test_adv = test_details_advanced.objects.get(test_id=test_id)
             count_prev_test = start_test_details.objects.filter(TestID=test_id).count()
+            count_question = test_data.objects.filter(test_id=test_id).count()
+
+            if get_test.TestType == "Mock":
+                count_prev_ques = int(count_prev_test) * int(get_test.AskQuestion) # ques asked
+                avg = count_question - count_prev_ques #question left
+
+                print(count_question, count_prev_ques, avg, int(get_test.AskQuestion))
+
+                if  avg >= int(get_test.AskQuestion):
+
+                    question_offset = str(count_prev_ques) + ", " + str(count_prev_ques + int(get_test.AskQuestion))
+                    test_session_setting = {}
+                    test_session_setting['offset'] = question_offset
+                    ses_id = randomString(10)
+
+                    insert = start_test_details.objects.create(
+
+                        test_session_id=ses_id,
+                        test_useremail="",
+                        test_istimer=get_test_adv.isTimer,
+                        timer_duration=get_test_adv.TimerLength,
+                        test_settings=json.dumps(test_session_setting),
+                        scored="",
+                        total_score=int(get_test.AskQuestion) * 10,
+                        TestType=get_test.TestType,
+                        TestID=test_id,
+                        resumeable=True,
+                        TestStarted=False
+
+                    )
+
+                    if insert:
+                        return redirect("/student/test/session/"+ ses_id)
+
+
+                    
+
+                    
+                else:
+                    return redirect("/student/test/browse?status=TestAlreadyDid")
+
+
             
             #return redirect("/student/test/session/dasdasd")
             
 
-        except:
-            return redirect("/student/test/browse?status=TestNotFound")
+        #except:
+        #    return redirect("/student/test/browse?status=TestNotFound")
 
-        
-        
-
+ 
 
 
 def test_details_view(request, test_id):

@@ -9,6 +9,8 @@ class start_test_details(models.Model):
     test_useremail = models.CharField(max_length=250)
     test_istimer = models.BooleanField()
     timer_duration = models.CharField(max_length=20)
+    test_started = models.DateTimeField(auto_now_add=True)
+    test_settings = models.TextField(default="")
     scored = models.CharField(max_length=20)
     total_score = models.CharField(max_length=20)
     TestType = models.CharField(max_length=20)
