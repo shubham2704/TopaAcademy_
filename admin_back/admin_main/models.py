@@ -10,6 +10,7 @@ class test_details(models.Model):
     SCTBranch = models.CharField(max_length=150, default='')
     SCTSemester = models.CharField(max_length=150, default='')
     TestDifficulty = models.CharField(max_length=75)
+    resumeable = models.BooleanField(default=True)
     category_level = models.CharField(max_length=75)
     steam = models.CharField(max_length=25, default='')
     TestType = models.CharField(max_length=75, default='')

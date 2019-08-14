@@ -105,6 +105,7 @@ def add_mock_test(request):
                 test_name= test_name, 
                 description=test_description, 
                 isSCT_test=isSCT,
+                resumeable=resume,
                 SCTSteam=degree_sct,
                 SCTBranch=branch_sct,
                 SCTSemester=semester_sct,

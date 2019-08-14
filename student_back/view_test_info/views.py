@@ -13,15 +13,96 @@ from .models import start_test_details
 import random
 import string
 import json
+from django.utils import timezone
 
 def randomString(stringLength=10):
-    """Generate a random string of fixed length """
+    
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for i in range(stringLength))
 
 
 def testing_session(request,test_session_id ):
-    pass
+    params = {
+
+        "testView":True,
+        "resumeable":True,
+        "complete":False,
+        "st":"",
+        "icon":"",
+        "st_title":"",
+        "msg_msg":"",
+        "msg_d":False
+
+    }
+    check_login = login(request)
+
+    if check_login == True:
+        setting_obj = settings.objects.get(~Q(timezone=''))
+        email = check_account(request, setting_obj.salt)
+        get_test_stated_session = start_test_details.objects.get(test_session_id=test_session_id, test_useremail=email)
+        istim = get_test_stated_session.test_istimer
+        params['resumeable'] = get_test_stated_session.resumeable
+
+        if get_test_stated_session.TestStatus == "No Completed":
+
+            params['testView'] = False
+            params['st'] = "info"
+            params['st_title'] = "Session Removed"
+            params['icon'] = "mdi mdi-delete"
+            params['msg_d'] = True
+            get_test_stated_session.TestStatus = "No Completed"
+            params['msg_msg'] = "The test session is removed possible reasons may be Test Time Limit exceed, Resumablimity is Disabled by Uploader or Test not submited for long time."
+
+
+        
+        if get_test_stated_session.TestStatus == "Started":
+
+        
+            if istim == True:
+                current_time = timezone.now()
+                test_time = get_test_stated_session.test_started
+                duration = get_test_stated_session.timer_duration
+                time_diff =  (current_time - test_time).seconds / 60
+
+                if time_diff > int(duration):
+                    params['testView'] = False
+                    params['st'] = "warning"
+                    params['st_title'] = "Test Time Limit Exceeded"
+                    params['icon'] = "mdi mdi-timer-off"
+                    params['msg_d'] = True
+                    get_test_stated_session.TestStatus = "No Completed"
+                    params['msg_msg'] = "Sorry test times is expired, You cannot resume the test please start the test from begininmg (if avail)."
+
+        
+            if get_test_stated_session.resumeable == False and get_test_stated_session.TestStarted == True:
+                
+                    params['testView'] = False
+                    params['st'] = "warning"
+                    params['icon'] = "mdi mdi-close-circle-o"
+                    params['msg_d'] = True
+                    params['st_title'] = "Cannot Resume the Test"
+                    params['msg_msg'] = "Sorry test the test cannot be resumed, Please test please start from begininmg(if avail)."
+                    get_test_stated_session.TestStatus = "No Completed"
+
+        if get_test_stated_session.TestStatus == "Completed":
+            params['testView'] = False
+            params['complete'] = True
+            params['st'] = "danger"
+            params['icon'] = "mdi mdi-close-circle-o"
+            params['msg_d'] = False
+            params['msg_msg'] = "Sorry test the test cannot be resumed, Please test please start from begininmg(if avail)."
+
+        print(params) 
+
+        if params['testView'] == True:
+            get_test_stated_session.TestStarted = True
+            
+
+        get_test_stated_session.save()
+        return render(request, "student_html/test_view.html", params)
+
+        
+
 
 
 # Create your views here.
@@ -31,10 +112,10 @@ def startsession(request, test_id):
     check_login = login(request)
 
     if check_login == True:
-        #setting_obj = settings.objects.get(~Q(timezone=''))
-        #email = check_account(request, setting_obj.salt)
+        setting_obj = settings.objects.get(~Q(timezone=''))
+        email = check_account(request, setting_obj.salt)
         
-        #try:
+        try:
             get_test = test_details.objects.get(status='Active', id=test_id)
             get_test_adv = test_details_advanced.objects.get(test_id=test_id)
             count_prev_test = start_test_details.objects.filter(TestID=test_id).count()
@@ -56,7 +137,7 @@ def startsession(request, test_id):
                     insert = start_test_details.objects.create(
 
                         test_session_id=ses_id,
-                        test_useremail="",
+                        test_useremail=email,
                         test_istimer=get_test_adv.isTimer,
                         timer_duration=get_test_adv.TimerLength,
                         test_settings=json.dumps(test_session_setting),
@@ -64,7 +145,7 @@ def startsession(request, test_id):
                         total_score=int(get_test.AskQuestion) * 10,
                         TestType=get_test.TestType,
                         TestID=test_id,
-                        resumeable=True,
+                        resumeable=get_test.resumeable,
                         TestStarted=False
 
                     )
@@ -84,8 +165,8 @@ def startsession(request, test_id):
             #return redirect("/student/test/session/dasdasd")
             
 
-        #except:
-        #    return redirect("/student/test/browse?status=TestNotFound")
+        except:
+            return redirect("/student/test/browse?status=TestNotFound")
 
  
 

@@ -17,3 +17,4 @@ class start_test_details(models.Model):
     TestID = models.CharField(max_length=20)
     resumeable = models.BooleanField()
     TestStarted = models.BooleanField()
+    TestStatus = models.CharField(max_length=20, default="Started")
