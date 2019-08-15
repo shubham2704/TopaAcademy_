@@ -31,7 +31,8 @@ def testing_session(request,test_session_id ):
         "icon":"",
         "st_title":"",
         "msg_msg":"",
-        "msg_d":False
+        "msg_d":False,
+        "test_data": {}
 
     }
     check_login = login(request)
@@ -41,8 +42,10 @@ def testing_session(request,test_session_id ):
         email = check_account(request, setting_obj.salt)
         get_test_stated_session = start_test_details.objects.get(test_session_id=test_session_id, test_useremail=email)
         istim = get_test_stated_session.test_istimer
+        test_det = test_details.objects.get(id=get_test_stated_session.TestID)
         params['resumeable'] = get_test_stated_session.resumeable
-
+        params['test_details'] = test_det
+        
         if get_test_stated_session.TestStatus == "No Completed":
 
             params['testView'] = False
@@ -92,13 +95,37 @@ def testing_session(request,test_session_id ):
             params['msg_d'] = False
             params['msg_msg'] = "Sorry test the test cannot be resumed, Please test please start from begininmg(if avail)."
 
-        print(params) 
+        #print(params) 
 
         if params['testView'] == True:
             get_test_stated_session.TestStarted = True
-            
+            if istim == True:
+                params['test_data']['istimer'] = istim
+                time_left = int(duration) * 60 - time_diff*60
+                params['test_data']['time_left'] = time_left
+            load_test_setting = json.loads(get_test_stated_session.test_settings)
+
+            offset = load_test_setting['offset'].split(", ")
+            get_questions = test_data.objects.filter(test_id=get_test_stated_session.TestID)[int(offset[0]):int(offset[1])]
+            count = get_questions.count()
+            lst_of_qs = {}
+            i = 1
+            for rn in get_questions:
+                lst_of_qs[i] = rn
+
+                i = 1+i
+
+            params['test_data']['questions_count'] = lst_of_qs
+            params['test_data']['questions_counts'] = count
+                
+                #print( params)
+
+        if request.method == "POST" and request.POST['submit_test']=='':
+            print(request.POST)    
 
         get_test_stated_session.save()
+        params['sessionid'] = test_session_id
+        params['TestID'] = get_test_stated_session.TestID
         return render(request, "student_html/test_view.html", params)
 
         
