@@ -213,16 +213,23 @@
                 <div class="row">
                  
                         <div class="col-md-12">
-                            {% if messages_er.msg %}
+                          {% if messages  %}
 
-                            <div class="alert alert-contrast alert-{{messages_er.tags}} alert-dismissible" role="alert">
-                                <div class="icon"><span class=" {{messages_er.icon}}"></span></div>
-                                <div class="message">
-                                  <button class="close" type="button" data-dismiss="alert" aria-label="Close"><span class="mdi mdi-close" aria-hidden="true"></span></button>{{messages_er.msg}}
-                                </div>
-                              </div>
-                           
-                             {% endif %}
+              
+                          {% for message in messages %}
+                       
+                      
+                       <div class="alert alert-{{message.tags}} alert-dismissible" role="alert">
+                         <button class="close" type="button" data-dismiss="alert" aria-label="Close"><span class="mdi mdi-close" aria-hidden="true"></span></button>
+                         <div class="icon"><span class="mdi mdi-alert-triangle"></span></div>
+                         <div class="message"> {{message}}</div>
+                       </div>
+           
+                          {% endfor %}
+                       
+           
+                              
+                        {% endif %}
                           </div>
                           <div class="col-md-4 ">
                             <div class="card card-border-color card-border-color-primary">

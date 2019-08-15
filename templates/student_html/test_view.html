@@ -198,7 +198,23 @@
       <div class="be-content">
 
                   <div class="page-head">
+                    {% if messages and testView == True %}
 
+              
+               {% for message in messages %}
+            
+           
+            <div class="alert alert-{{message.tags}} alert-dismissible" role="alert">
+              <button class="close" type="button" data-dismiss="alert" aria-label="Close"><span class="mdi mdi-close" aria-hidden="true"></span></button>
+              <div class="icon"><span class="mdi mdi-alert-triangle"></span></div>
+              <div class="message"> {{message}}</div>
+            </div>
+
+               {% endfor %}
+            
+
+                   
+             {% endif %}
                 <div class="row">
                     <div class="col-md-6">
                     <h2 class="page-head-title">{{test_details.test_name}}</h2>
@@ -357,7 +373,7 @@
                                             <div class="widget widget-tile">
                                              <div class="data-info">
                                                 <div class="desc">You Scored</div>
-                                                <div class="value"><span class="number" data-toggle="counter" data-end="113">113</span> / <span class="number" >113</span>
+                                                <div class="value"><span class="number" data-toggle="counter" data-end="{{result.pts}}">{{result.pts}}</span> / <span class="number" >{{result.total_pts}}</span>
                                                 </div>
                                               </div>
                                             </div>
@@ -368,7 +384,7 @@
                                         <div class=" card-full-default widget widget-tile">
                                           <div class="data-info">
                                             <div class="desc">You Ranked</div>
-                                            <div class="value"><span class="number" data-toggle="counter" data-end="113">24</span> <small><span class="number" data-toggle="counter" data-end="113">24</span> </small>
+                                            <div class="value"><span class="number" data-toggle="counter" data-end="{{result.class_rank}}">{{result.class_rank}}</span> <small><span class="number" data-toggle="counter" data-end="{{result.clg_rank}}">{{result.clg_rank}}</span> </small>
                                             </div>
                                           </div>
                                         </div>
@@ -384,7 +400,7 @@
                                               </div>
                                     <p class="lead"> Test is Submited! </p>
                                     <div class="col-md-8 offset-md-2">
-                                    <span class=" mt-2" style="font-size:15px;">You scored 10 pts out of 100 pts and 3 answers were correct and rest incorrect.</span>
+                                    <span class=" mt-2" style="font-size:15px;">{{result.msg_body}}</span>
                                 </div>
                                     <p style="padding:25px;" class="mt-2">
                                     <a href="/student/test/report/{{sessionid}}" class="btn btn-lg btn-light">View Report</a>
@@ -499,7 +515,7 @@
        
 
       });
-     {%  if testView == False %}
+     {%  if testView == True %}
     
       window.onbeforeunload = function (e) {
         // Cancel the event

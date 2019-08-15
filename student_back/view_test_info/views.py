@@ -9,11 +9,12 @@ from admin_back.steam.models import Steam, Steam_Data
 from ..GlobalModels.main import login, check_account
 from ..signup.models import student_academic
 from datetime import datetime
-from .models import start_test_details
+from .models import start_test_details, submited_test_report
 import random
 import string
 import json
 from django.utils import timezone
+from admin_back.AdminPackage.querystring_parser import parser
 
 def randomString(stringLength=10):
     
@@ -25,6 +26,7 @@ def testing_session(request,test_session_id ):
     params = {
 
         "testView":True,
+        "result":{},
         "resumeable":True,
         "complete":False,
         "st":"",
@@ -32,7 +34,9 @@ def testing_session(request,test_session_id ):
         "st_title":"",
         "msg_msg":"",
         "msg_d":False,
-        "test_data": {}
+        "test_data": {
+            "questions_counts":0
+        }
 
     }
     check_login = login(request)
@@ -90,10 +94,14 @@ def testing_session(request,test_session_id ):
         if get_test_stated_session.TestStatus == "Completed":
             params['testView'] = False
             params['complete'] = True
-            params['st'] = "danger"
-            params['icon'] = "mdi mdi-close-circle-o"
-            params['msg_d'] = False
-            params['msg_msg'] = "Sorry test the test cannot be resumed, Please test please start from begininmg(if avail)."
+            check = submited_test_report.objects.get(test_session_id = test_session_id)
+            params['result']['class_rank'] = check.class_rnk
+            params['result']['clg_rank'] = check.clg_rnk
+            params['result']['pts'] = check.scored
+            params['result']['total_pts'] = check.total_score
+            params['complete'] = True
+            params['result']['msg_body'] = "You scorred " + str(check.scored) + " pts out of "  + str(check.total_score) + " pts and " + str(check.correct) + " were correct and rest incorrect."
+            
 
         #print(params) 
 
@@ -117,15 +125,96 @@ def testing_session(request,test_session_id ):
 
             params['test_data']['questions_count'] = lst_of_qs
             params['test_data']['questions_counts'] = count
+           
                 
                 #print( params)
 
         if request.method == "POST" and request.POST['submit_test']=='':
-            print(request.POST)    
+            
+            answers = parser.parse(request.POST.urlencode())['ans']
+
+            if len(answers) == params['test_data']['questions_counts']:
+                answers_json = json.dumps(answers)
+                pts_total = get_test_stated_session.total_score
+                pts_scored = 0
+                correct_answ = 0
+                wrong_ans = 0
+                pts_avg = int(pts_total) / params['test_data']['questions_counts']
+                for key, val in answers.items():
+                    get_ansforq = test_data.objects.get(id=key)
+
+                    if get_ansforq.answer == val:
+
+                        correct_answ = 1 + correct_answ
+                        pts_scored = pts_avg + pts_scored
+
+                    else:
+                        wrong_ans = 1 + wrong_ans
+
+                if get_test_stated_session.TestType == "Mock":
+                    get_test_stated_session.scored = pts_scored
+                    
+
+
+                if get_test_stated_session.TestType == "Practice":
+                    get_test_stated_session.scored = 0
+                    
+                try:
+                    
+                    check = submited_test_report.objects.get(test_session_id = test_session_id)
+                    params['result']['class_rank'] = check.class_rnk
+                    params['result']['clg_rank'] = check.clg_rnk
+                    params['result']['pts'] = check.scored
+                    params['result']['total_pts'] = check.total_score
+                    params['complete'] = True
+                    params['result']['msg_body'] = "You scorred " + str(check.scored) + "pts out of "  + str(check.total_score) + " pts and " + str(check.correct) + "were correct and rest incorrect."
+                    
+
+                except:
+                    
+
+                    params['result']['class_rank'] = 10
+                    params['result']['clg_rank'] = 21
+                    params['result']['pts'] = pts_scored
+                    params['result']['total_pts'] = pts_total
+                    params['result']['msg_body'] = "You scorred " + str(pts_scored) + " pts out of "  + str(pts_total) + " pts and " + str(correct_answ) + " were correct and rest incorrect."
+                    
+                   
+
+                    insert = submited_test_report.objects.create(
+                        test_session_id = test_session_id,
+                        test_useremail = email,
+                        test_started = get_test_stated_session.test_started,
+                        submited_det = answers_json,
+                        scored = pts_scored,
+                        total_score = pts_total,
+                        correct = correct_answ,
+                        wrong = wrong_ans,
+                        clg_rnk = params['result']['clg_rank'],
+                        class_rnk = params['result']['class_rank'],
+                        TestStatus = "Submited", 
+                    )
+
+                    if insert:
+                        get_test_stated_session.TestStatus = "Completed"
+                        params['complete'] = True
+                        params['testView'] = True
+
+                
+
+
+
+
+               
+
+                
+            else:
+                messages.warning(request, "Make sure to give anwers to all queston.")
 
         get_test_stated_session.save()
         params['sessionid'] = test_session_id
         params['TestID'] = get_test_stated_session.TestID
+        print(params)
         return render(request, "student_html/test_view.html", params)
 
         
@@ -145,7 +234,7 @@ def startsession(request, test_id):
         try:
             get_test = test_details.objects.get(status='Active', id=test_id)
             get_test_adv = test_details_advanced.objects.get(test_id=test_id)
-            count_prev_test = start_test_details.objects.filter(TestID=test_id).count()
+            count_prev_test = start_test_details.objects.filter(TestID=test_id).exclude(TestStatus="No Completed").count()
             count_question = test_data.objects.filter(test_id=test_id).count()
 
             if get_test.TestType == "Mock":
@@ -185,7 +274,9 @@ def startsession(request, test_id):
 
                     
                 else:
-                    return redirect("/student/test/browse?status=TestAlreadyDid")
+                    #messages.info(request, "You have already gave to all tests of this test.")
+                    return redirect("/student/test/details/"+ str(test_id) +"?er=015")
+                    
 
 
             
@@ -193,7 +284,7 @@ def startsession(request, test_id):
             
 
         except:
-            return redirect("/student/test/browse?status=TestNotFound")
+            return redirect("/student/test/details/"+ str(test_id) +"?er=015")
 
  
 
@@ -216,6 +307,14 @@ def test_details_view(request, test_id):
 
         get_user_account = student_academic.objects.get(student_email = email)
         exp_branch = get_user_account.branch.split(":")
+        
+        
+
+        if request.method == "GET":
+            if request.GET['er'] == "015":
+                
+                messages.warning(request, "You have already attended this Test.")
+
         try:
             get_test = test_details.objects.get(id=test_id)
             get_test_adv = test_details_advanced.objects.get(test_id=test_id)
