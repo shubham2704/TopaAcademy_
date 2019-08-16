@@ -219,25 +219,64 @@
                     <div class="col-md-6">
                     <h2 class="page-head-title">Learning Center</h2>
             </div>
+            <div class="offset-md-2 col-md-4">
+                <form> 
+              <div class="input-group mb-3">
+                  <input value="0" name="p" type="hidden">
+                
+                <input class="form-control form-control-lg" value="{{page.search_term}}" name="q" type="text">
+                <div class="input-group-append">
+                  <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+               </form>
+              </div>  
+            </div>
                </div>
+              
+               <div class="text-right">
+                 
+                 
+                <span class="be-aside-pagination-indicator">Showing {{page.sto}} - {{page.result_offset_count}}  of {{page.result_count}} 
+
+
+                </span>
+                
+              </div>
                   </div>
                 
               <div class="main-content">
+                {% if page.search == True %}
+                  <div class="lead">
+                 
+                 
+                     Search Term : {{page.search_term}}
+      
+                      </span>
+                      
+                    </div>
+                    <br>
+                    {% endif %}
                 <div class="row">
+                  
                     <div class="col-lg-9">
-              
+              {% if page.result_offset_count == 0 %}
+
+              <div class="text-center"> <h1>Not Post Found</h1><p>Please Search with other keywords.</p></div>
+              {% endif %}
                         <div class="row">
-                                <div class="col-md-6">
-                                        <div class="card mb-4 box-shadow">
+                            {% for resultt in result %}
+                                <div onclick="window.location.href='/student/learning/{{resultt.id}}'" class="col-md-6">
+                                        <div  class="card mb-4 box-shadow">
                                           <img class="card-img-top"  src="https://via.placeholder.com/500x100" data-holder-rendered="true" style="height: 100px; width: 100%; display: block;">
                                           <div class="card-body" style="color:black;">
-                                              <p class="" style="font-size:15px;padding-top:10px;"> Greedy Approch in Algorith and design </p>
+                                              <p class="" style="font-size:15px;padding-top:10px;"> {{resultt.title}} </p>
                                                  
-                                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                                            <p class="card-text">{{resultt.description}}</p>
                                             <div class="d-flex justify-content-between align-items-center">
                                                   <small >
-                                                          <span class="badge badge-primary">Computer Sciend and ae</span>
-                                                          <span class="badge badge-primary">Computer Sciend and ae</span>
+                                                          <span class="badge badge-primary">{{resultt.categoryOne}}</span>
+                                                          <span class="badge badge-primary">{{resultt.categoryTwo}}</span>
+                                                          <span class="badge badge-primary">{{resultt.categoryThree}}</span>
                                                          
                                                       </small>
           
@@ -246,31 +285,35 @@
                                           </div>
                                         </div>
                                       </div>
-
-                                      
-                            <div class="col-md-6">
-                              <div class="card mb-4 box-shadow">
-                                <img class="card-img-top"  src="https://via.placeholder.com/500x100" data-holder-rendered="true" style="height: 100px; width: 100%; display: block;">
-                                <div class="card-body" style="color:black;">
-                                    <p class="" style="font-size:15px;padding-top:10px;"> Greedy Approch in Algorith and design </p>
-                                       
-                                  <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                                  <div class="d-flex justify-content-between align-items-center">
-                                        <small >
-                                                <span class="badge badge-primary">Computer Sciend and ae</span>
-                                                <span class="badge badge-primary">Computer Sciend and ae</span>
-                                               
-                                            </small>
-
-                                    <small class="text-muted">9 mins</small>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                           
+{% endfor %}
+                              
                 
                           </div>
+                          <nav>
+                            <ul class="pagination">
+                              {% if page.page_count == 1 or page.number == 1 %}
+                              <li class="page-item disabled"><a class="page-link" href="#" aria-label="Previous"><span class="mdi mdi-chevron-left" aria-hidden="true"></span></a></li>
+                              {% else %}
+                              <li class="page-item "><a class="page-link" href="#" aria-label="Previous"><span class="mdi mdi-chevron-left" aria-hidden="true"></span></a></li>
+                              {% endif %}
 
+                               {% for key, val in pagination.items %}
+                               
+                               {% if page.mid_pag == key  %}
+                               <li class="page-item"><a class="page-link" href="#">...</a></li>
+                               
+                               {% else %}
+                               <li class="page-item  {% if key == page.number  %} active  {% endif %}"><a class="page-link" href="{{val}}">{{key}}</a></li>
+                               {% endif %}
+                              {% endfor %}
+                              
+                              {% if page.page_count == page.number %}
+                              <li class="page-item disabled"><a class="page-link" href="#" aria-label="Next"><span class="mdi mdi-chevron-right" aria-hidden="true"></span></a></li>
+                              {% else %}
+                             <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span class="mdi mdi-chevron-right" aria-hidden="true"></span></a></li>
+                              {% endif %}
+                            </ul>
+                          </nav>
                     </div>
 
                     <div class="col-lg-3">

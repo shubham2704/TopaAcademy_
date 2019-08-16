@@ -21,6 +21,8 @@ from admin_back.AdminPackage.querystring_parser import parser
 
 def view_learn(request):
     params = {
+            "page": {},
+            "pagination": {}
 
     }
     check_login = login(request)
@@ -33,16 +35,138 @@ def view_learn(request):
         sem = get_sem_det.semester
         exp = get_sem_det.branch.split(":")
 
+        page_number = 1
+        per_page = 20
+        build_query = {}
+
+        if request.method=="GET":
+                
+                try:
+                        page_number = int(request.GET['p'])
+                        
+                        offset = [per_page * page_number, per_page * page_number + per_page]
+                        params['page']['number'] = page_number
+                        
+                except:
+                        offset = [0, per_page]
+                        
+                        
+                try:
+                        title_q = request.GET['q']
+                        params['page']['search'] = True
+                except:
+                        params['page']['search'] = False
+
         get_br_post = post_content.objects.filter(status="Published", isSCP=True, SCP_program=exp[0], SCP_branch=exp[1], SCP_semester=sem)
-
-        count_br = get_br_post.count()
-
+        print(offset)
         params['my'] = {}
         params['my'] = get_br_post
+        
+        params['page']['number'] = page_number
+
+        if params['page']['search'] == True:
+                
+                search = post_content.objects.filter((Q(status="Published")) ,
+                               (Q(title__icontains=title_q)) |
+                               (Q(description__icontains=title_q)) | 
+                               (Q(categoryThree__icontains=title_q)) | 
+                               (Q(categoryTwo__icontains=title_q)) 
+                )
+
+                set_offset = search[offset[0]:offset[1]]
+                
+                params['page']['result_count'] = search.count()
+                params['page']['result_offset_count'] = set_offset.count()
+                
+                params['page']['search_term'] = title_q
+                params['result'] = search
+                pag_c = int(float(params['page']['result_count'] / per_page)) + 1
+                params['page']['sto'] = offset[0]
+                params['page']['page_count_range'] = range(1, pag_c + 1)
+                params['page']['page_count'] = pag_c
+
+                
+
+                if pag_c>=10:
+                        params['page']['mid_pag'] = int(pag_c - 6)
+                        i = 1 
+                        for loopnbr in params['page']['page_count_range']:
+
+                                if loopnbr<=5:
+                                        params['pagination'][i] = "/student/learning/?p="+ str(loopnbr - 1) +"&q=" + str(title_q)
+                                
+                                if loopnbr>= pag_c - 5:
+                                        params['pagination'][i] = "/student/learning/?p="+ str(loopnbr - 1) +"&q=" + str(title_q)
+                                
+                                if loopnbr == pag_c - 6:
+
+                                        params['pagination'][i] = ".."
+                                i = 1 + i
+
+                                
+                                
+
+                else:
+                        
+                        for loopnbr in params['page']['page_count_range']:
+                                
+                                params['pagination'][loopnbr] = "/student/learning/?p="+ str(loopnbr - 1) +"&q=" + str(title_q)
+
+
+
+
+
+
+                
+
+                
+
+        else:
+                search = post_content.objects.filter(status="Published")[offset[0]:offset[1]]
+                set_offset = search[offset[0]:offset[1]]
+                params['page']['result_count'] = search.count()
+                params['page']['result_offset_count'] = set_offset.count()
+                params['page']['sto'] = offset[0]
+                params['result'] = search
+                
+                pag_c = int(float(params['page']['result_count'] / per_page)) + 1
+                params['page']['page_count'] = pag_c
+
+                params['page']['page_count_range'] = range(1, pag_c + 1)
+                if pag_c>=10:
+                        params['page']['mid_pag'] = int(pag_c - 6)
+                        i = 1 
+                        for loopnbr in params['page']['page_count_range']:
+
+                                if loopnbr<=5:
+                                        params['pagination'][i] = "/student/learning/?p="+ str(loopnbr - 1)
+                                
+                                if loopnbr>= pag_c - 5:
+                                        params['pagination'][i] = "/student/learning/?p="+ str(loopnbr - 1)
+                                
+                                if loopnbr == pag_c - 6:
+
+                                        params['pagination'][i] = ".."
+                                i = 1 + i
+
+                                
+                                
+
+                else:
+                        
+                        for loopnbr in params['page']['page_count_range']:
+                                
+                                params['pagination'][loopnbr] = "/student/learning/?p="+ str(loopnbr - 1)
+
+
+
+
 
         
 
+        
 
+        print(params)
         return render(request, "student_html/post.html", params)
 
         
