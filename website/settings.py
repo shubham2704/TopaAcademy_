@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'admin_back.admin_main',
     'admin_back.session_manager',
     'student_back.index',
+    'student_back.articles',
     'student_back.signup',
     'student_back.view_test_info',
     'admin_back.websettings',
