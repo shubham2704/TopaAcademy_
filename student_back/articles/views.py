@@ -19,7 +19,6 @@ from admin_back.AdminPackage.querystring_parser import parser
 
 # Create your views here.
 
-
 def view_learn(request):
     params = {
 

@@ -329,71 +329,9 @@
     <script src="{% static "student/assets/lib/mprogress/js/mprogress.min.js" %}" type="text/javascript"></script>
     <script src="{% static "student/assets/lib/sweetalert2/sweetalert2.min.js" %}" type="text/javascript"></script>
     <script src="{% static "student/assets/timer/TimeCircles.js" %}" type="text/javascript"></script>
-    
-    <script type="text/javascript">
-
-
-      $.fn.niftyModal('setDefaults',{
-      	overlaySelector: '.modal-overlay',
-      	contentSelector: '.modal-content',
-      	closeSelector: '.modal-close',
-      	classAddAfterOpen: 'modal-show'
-      });
-    jQuery(function ($) {
-        // init the state from the input
-        $(".image-checkbox").each(function () {
-            if ($(this).find('input[type="checkbox"]').first().attr("checked")) {
-                $(this).addClass('image-checkbox-checked');
-            }
-            else {
-                $(this).removeClass('image-checkbox-checked');
-            }
-        });
-
-        // sync the state to the input
-        $(".image-checkbox").on("click", function (e) {
-            if ($(this).hasClass('image-checkbox-checked')) {
-                $(this).removeClass('image-checkbox-checked');
-                $(this).find('input[type="checkbox"]').first().removeAttr("checked");
-            }
-            else {
-                $(this).addClass('image-checkbox-checked');
-                $(this).find('input[type="checkbox"]').first().attr("checked", "checked");
-            }
-
-            e.preventDefault();
-        });
-    });
-    </script>
 
 
     <script type="text/javascript">
-
-      $('#effect_run').effect("bounce");
-      $("#swal-icon").click(function(){
-        
-         
-        Swal.fire({
-        text:"I have read all the Test Rule and Process to Start Test.",
-        type:"question",
-        confirmButtonText:"Proceed",
-        
-        showCloseButton:!0,
-        showCancelButton:!0,
-        customClass:"content-text-center modal-full-color modal-full-color-primary"}).then(result => {
-          console.log(result.value)
-          if(result.value == true){
-            Swal.fire({title:"<span>Starting test session!</span>",
-            timer:2e3,
-            customClass:"content-actions-center",
-            buttonsStyling:!0,onOpen:function(){swal.showLoading(),e=setInterval(function(){swal.getContent().querySelector("strong").textContent=swal.getTimerLeft()},100)},onClose:function(){clearInterval(e)}}).then(function(e){e.dismiss===swal.DismissReason.timer&&console.log("I was closed by the timer")})
-            window.location.href = "/student/test/start/{{test_details.id}}"; 
-          }
-        
-        });
-      
-      });
-
       $(document).ready(function(){
       	//-initialize the javascript
       	App.init();

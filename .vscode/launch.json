@@ -5,9 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Django",
+            "name": "Python: Django Top Academy",
             "type": "python",
             "request": "launch",
+            "pythonPath": "C:/Users/Lucky/Envs/topacademy/Scripts/python.exe",
             "program": "${workspaceFolder}\\manage.py",
             "args": [
                 "runserver",
