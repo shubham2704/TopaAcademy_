@@ -16,3 +16,4 @@ class content(models.Model):
     SCP_program = models.CharField(max_length=100)
     SCP_branch = models.CharField(max_length=100)
     SCP_semester = models.CharField(max_length=100)
+    date = models.DateTimeField(auto_now_add=True)

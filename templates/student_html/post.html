@@ -224,7 +224,7 @@
                 
               <div class="main-content">
                 <div class="row">
-                    <div class="col-lg-8">
+                    <div class="col-lg-9">
               
                         <div class="row">
                                 <div class="col-md-6">
@@ -271,6 +271,31 @@
                 
                           </div>
 
+                    </div>
+
+                    <div class="col-lg-3">
+                     {% for my_s in my %}
+                  
+                      <div onclick="window.location.href='/student/learning/{{my_s.id}}'" class="card ">
+                        <div class="card-body" style="color:black;">
+                          <p class="" style="font-size:15px;padding-top:10px;">{{my_s.title}} </p>
+                               
+                          <p class="card-text">{{my_s.description}}</p>
+                          <div class="d-flex justify-content-between align-items-center">
+                              
+                              <small >
+                                  <span class="badge badge-success">{{my_s.categoryThree}}</span>
+                                 
+                              </small>
+                            <small class="text-muted">{{my_s.date | date}}</small>
+                          </div>
+                        </div>
+                      </div>
+                
+                   {% endfor %}
+              
+                 
+                      
                     </div>
                   </div> 
          </div>     
