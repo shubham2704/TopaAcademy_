@@ -264,12 +264,15 @@
                                   </tr>
                                 </thead>
                                 <tbody>
+                                    {% for attach in attachment %}
                                   <tr>
-                                    <td><i style="font-size: 18px;" class="fas fa-file-pdf text-danger"> </i> notes.pdf</td>
+                                    <td> <i style="font-size:15px;" {% if attach.extension == "pdf" %} class="fa fa-file-pdf text-danger" {%elif attach.extension == "docx"%} class="fa fa-file-word text-primary" {%elif attach.extension == "pptx" %} class="fa fa-file-powerpoint text-warning"  {%elif attach.extension == "jpg" or attach.extension == "jpeg"%} class="fa fa-image"  {%elif attach.extension == "png"%} class="fa fa-file-pdf" {%elif attach.extension == "js" or attach.extension == "cpp" or attach.extension == "py" or attach.extension == "c"%} class="fa fa-file-code" {%else%} class="fa fa-file" {%endif%}></i> <a href="/media/upload_attachment/{{attach.upload}}"> {{attach.actual_filename}} </a></td>
                                   </tr>
-                                   <tr>
-                                    <td><i style="font-size: 18px;" class="fa fa-file-code"> </i>  Program in Python</td>
-                                   </tr>
+                              
+
+                                  {% endfor %}
+                                   
+                                  
                                   
                                 </tbody>
                               </table>

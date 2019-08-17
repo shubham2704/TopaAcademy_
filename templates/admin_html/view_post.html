@@ -16,6 +16,7 @@
     <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/jqvmap/jqvmap.min.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/datetimepicker/css/bootstrap-datetimepicker.min.css" %}"/>
     <link rel="stylesheet" href="{% static "admin/assets/css/app.css" %}" type="text/css"/>
+    
   </head>
   <body>
     <div class="be-wrapper be-fixed-sidebar">
@@ -261,7 +262,7 @@
                       <td class="text-center">
                             <div class="btn-group btn-hspace">
                               <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">Action <span class="icon-dropdown mdi mdi-chevron-down"></span></button>
-                              <div class="dropdown-menu" role="menu"><a class="dropdown-item" href="/admin-panel/post/edit/{{post.id}}">Edit / QB</a>
+                              <div class="dropdown-menu" role="menu"><a class="dropdown-item" href="/admin-panel/post/edit/{{post.id}}?ses={{post.creation_session}}">Edit / QB</a>
                                 <div class="dropdown-divider"></div><a class="dropdown-item" href="/admin-panel/post/delete/{{post.id}}">Delete</a>
                               </div>
                             </div>

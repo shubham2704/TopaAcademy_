@@ -8,7 +8,7 @@ from admin_back.websettings.models import settings
 from admin_back.steam.models import Steam, Steam_Data
 from ..GlobalModels.main import login, check_account
 from ..signup.models import student_academic
-from admin_back.post.models import content as post_content
+from admin_back.post.models import content as post_content, attachment as attchm
 from datetime import datetime
 import random
 import string
@@ -184,7 +184,8 @@ def view_post(request, post_id):
                 try:
                         get_post = post_content.objects.get(id = post_id)
                         params['post']  = get_post
-                        params['attachment']  = json.dumbs(get_post.attachment)
+                        attach = attchm.objects.filter(creation_session=get_post.creation_session)
+                        params['attachment']  = attach
 
                         recommand = post_content.objects.filter(
                                 (Q(status="Published")) ,
@@ -194,12 +195,15 @@ def view_post(request, post_id):
                                (Q(categoryTwo__icontains=get_post.categoryThree))
 
                         )[0:5]
+
+                        
                         params['recommand']  = recommand
 
 
                         
 
-                except:
+                except Exception as e:
+                        print(e)
                         return redirect("/student/learning/")
                 
                 return render(request, "student_html/view_post.html", params)

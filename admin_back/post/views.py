@@ -116,7 +116,9 @@ def ajax_steam(request,sid):
     return render(request, "admin_html/ajax_html/steam_post_ajax.html", params)   
 
 def post_edit(request, post_id):
-    params = {}
+    params = {
+        "edit_b" : True
+    }
     get_all_steam = Steam.objects.all()
     params['steam_c'] = get_all_steam
     
@@ -127,14 +129,28 @@ def post_edit(request, post_id):
         email = ""
 
         try:
-            get_post = post_content.objects.get(create_by=email, id=post_id)
 
-            if get_post:
-                params['edit'] = get_post
-                
+            get_session = request.GET['ses']
+            #print(get_session)
+        
+
+            try:
+                get_post = post_content.objects.get(create_by=email, id=post_id, creation_session=get_session)
+                attachmentt = post_att.objects.filter(creation_session=get_session, status="Active")
+
+                if get_post:
+                    params['edit'] = get_post
+                    params['attachment'] = attachmentt
+                    
+                    print(get_post)
+                    
+            
+            except:
+                return redirect("/admin-panel/post?er_cd=425")
 
         except:
-            redirect("https://www.google.com")
+            return redirect("/admin-panel/post/")
+
     
     return render(request, "admin_html/post.html", params)
 
@@ -310,6 +326,7 @@ def post_add(request):
                 if start_insert == True:
                     insert = post_content.objects.create(
                         create_by = create_by,
+                        creation_session = get_session,
                         status = status,
                         title = title,
                         description = desc,
