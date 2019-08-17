@@ -319,7 +319,7 @@
                       <div class="card-body">
                           <div class="">
                               <form >
-                                <div id="my-awesome-dropzone" action="https://foxythemes.net/preview/products/beagle/assets/lib/dropzone/upload.php"  class="dropzone">
+                                <div  id="my_drop" class="dropzone">
                                 <div class="dz-message">
                                   <div class="icon" style="font-size:50px;"><span class="mdi mdi-cloud-upload"></span></div>
                                   <h3> Drag & Drop files here</h3>
@@ -327,7 +327,13 @@
                                 </div>
                               </div>
                               </form>
-                            </div> </div>
+                            </div>
+                            <br>
+                            <p>Response Error Codes</p>
+                          <p class="text-danger text-bold">* 499 - Server Error / File Not Uploaded<br>* 488 - File extension is not supported<br>* 487 - File size limit exceed (max 5 mb)</p>
+                          
+                          
+                          </div>
                     </div>   
 </div>
 </div>
@@ -361,7 +367,14 @@
    
       //var myDropzone = new Dropzone("#my-awesome-dropzone", { url: "/file/post"});
 
-   
+      $("#my_drop").dropzone({ 
+        paramName: "file", 
+        maxFilesize: 5,
+        headers: {
+          'X-CSRFToken': "{{ csrf_token }}"
+        },
+        url: "/admin-panel/post/upload/{{session_post}}"
+       });
 
 
         var currentsct = false;

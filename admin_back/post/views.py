@@ -1,12 +1,23 @@
 from django.shortcuts import render, redirect, HttpResponse
 from ..steam.models import Steam, Steam_Data
 from django.contrib import messages
-from .models import content as post_content
+from .models import content as post_content, attachment as post_att
 from ..AdminPackage.AdminController import CheckLogin
 from ..branch.models import branch_degree, branchs
+from django.conf import settings
+from django.core.files.storage import FileSystemStorage
+from django.core.files.base import ContentFile
 import json
+import random
+import string
+import os
 
 # Create your views here.
+
+def randomString(stringLength=10):
+    """Generate a random string of fixed length """
+    letters = string.ascii_lowercase
+    return ''.join(random.choice(letters) for i in range(stringLength))
 
 
 def steam_dual_ajax(request,id, name):
@@ -170,6 +181,65 @@ def post_view(request):
 
     
     return render(request, "admin_html/view_post.html", params)
+def upload_file(request, ses_id):
+    
+    
+
+    try:
+        if request.method == 'POST' and request.FILES['file']:
+            myfile = request.FILES['file']
+            ran = randomString(10)
+            support_ext = ['jpg', 'jpeg']
+            
+            folder = "templates/media/upload_attachment/"
+            SITE_ROOT = os.path.dirname(os.path.realpath(__name__))
+            full_filename = os.path.join(SITE_ROOT, folder, ran + myfile.name)
+            ext = myfile.name.split(".")[-1]
+
+            if ext.lower() in support_ext:
+                
+                fout = open(full_filename, 'wb+')
+                file_content = ContentFile( myfile.read())
+
+                
+
+
+                for chunk in file_content.chunks():
+                        fout.write(chunk)
+                fout.close()
+
+                filesize= os.path.getsize(full_filename)
+                
+                if filesize <= 5242880:
+                
+
+                    insert = post_att.objects.create(
+                        status = "Active",
+                        creation_session = ses_id,
+                        filename = ran + myfile.name,
+                        upload = ran + myfile.name,
+                        actual_filename = myfile.name,
+                        extension = ext
+                    
+                    )
+                    if insert:
+                        
+                        status = 200
+                    else:
+                        status = 499
+                else:
+                    status = 487
+
+            else:
+                status = 488
+        else:
+            status = 499
+
+        
+    except:
+        status = 499
+
+    return HttpResponse(request, "", status)
 
 def post_add(request):
 
@@ -177,86 +247,95 @@ def post_add(request):
     get_all_steam = Steam.objects.all()
     params['steam_c'] = get_all_steam
 
-    if request.method=="POST":
-        
-        title = request.POST['title']
-        desc = request.POST['desc']
-        content = request.POST['content']
-        
-        sub_category = request.POST['sub_category']
-        second_sub_category = request.POST['second_sub_category']
-        category = request.POST['category']
-        print(category)
+    try:
+        get_session = request.GET['ses']
+        params['session_post'] = get_session
 
-        try:
-            degree = Steam.objects.get(steam_link_id = category)
-            category = degree.steam_name
-            print(degree)
-        except:
-            category=""
-
-        scp = False
-        try:
-
-            if request.POST['isSCT'] == "on":
-                scp = True
-        except:
-            pass
-        Program = request.POST['pr']
-        branch = request.POST['br']
-        sem = request.POST['sm']
-        create_by = ""
-        try:
-
-            if request.POST['publish']=='':
-                status = "Published"
-                status_msg = "Post has been succesfully posted"
-        except:
-            pass
-
-
-        try:
-             if request.POST['draft']=='':
-                     status = "Draft"
-                     status_msg = "Post has been succesfully Drafted"
-
-        except:
-            pass
-
-
-        if title!='' and desc!='' and content!='' and category!='' and sub_category!='':
-            start_insert = True
-            if scp == True:
-
-                if Program=='' or branch=='' or sem=='':
-
-                    start_insert = False
-                    messages.error(request, "All fields are mandatory.", extra_tags="danger")
-                
-            if start_insert == True:
-                insert = post_content.objects.create(
-                     create_by = create_by,
-                     status = status,
-                     title = title,
-                     description = desc,
-                     categoryOne = category,
-                     categoryTwo = sub_category,
-                     content=content,
-                     categoryThree = second_sub_category,
-                     categoryFour = "",
-                     isSCP = scp,
-                     SCP_program = Program,
-                     SCP_branch = branch,
-                     SCP_semester = sem,
-                     
-                   )
-                   
-                if insert:
-                    messages.success(request, status_msg)
+        if request.method=="POST":
             
-        else:
-            messages.error(request, "All fields are mandatory.", extra_tags="danger")
+            title = request.POST['title']
+            desc = request.POST['desc']
+            content = request.POST['content']
+            
+            sub_category = request.POST['sub_category']
+            second_sub_category = request.POST['second_sub_category']
+            category = request.POST['category']
+            print(category)
 
+            try:
+                degree = Steam.objects.get(steam_link_id = category)
+                category = degree.steam_name
+                print(degree)
+            except:
+                category=""
+
+            scp = False
+            try:
+
+                if request.POST['isSCT'] == "on":
+                    scp = True
+            except:
+                pass
+            Program = request.POST['pr']
+            branch = request.POST['br']
+            sem = request.POST['sm']
+            create_by = ""
+            try:
+
+                if request.POST['publish']=='':
+                    status = "Published"
+                    status_msg = "Post has been succesfully posted"
+            except:
+                pass
+
+
+            try:
+                if request.POST['draft']=='':
+                        status = "Draft"
+                        status_msg = "Post has been succesfully Drafted"
+
+            except:
+                pass
+
+
+            if title!='' and desc!='' and content!='' and category!='' and sub_category!='':
+                start_insert = True
+                if scp == True:
+
+                    if Program=='' or branch=='' or sem=='':
+
+                        start_insert = False
+                        messages.error(request, "All fields are mandatory.", extra_tags="danger")
+                    
+                if start_insert == True:
+                    insert = post_content.objects.create(
+                        create_by = create_by,
+                        status = status,
+                        title = title,
+                        description = desc,
+                        categoryOne = category,
+                        categoryTwo = sub_category,
+                        content=content,
+                        categoryThree = second_sub_category,
+                        categoryFour = "",
+                        isSCP = scp,
+                        SCP_program = Program,
+                        SCP_branch = branch,
+                        SCP_semester = sem,
+                        
+                    )
+                    
+                    if insert:
+                        messages.success(request, status_msg)
+                
+            else:
+                messages.error(request, "All fields are mandatory.", extra_tags="danger")
+    except:
+
+        sess = randomString(10)
+
+        return redirect("/admin-panel/post/add?ses="+sess)
+        
                
             
 

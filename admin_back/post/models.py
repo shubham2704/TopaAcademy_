@@ -17,3 +17,12 @@ class content(models.Model):
     SCP_branch = models.CharField(max_length=100)
     SCP_semester = models.CharField(max_length=100)
     date = models.DateTimeField(auto_now_add=True)
+    creation_session = models.CharField(max_length=75, default="")
+
+class attachment(models.Model):
+    status = models.CharField(max_length=75)
+    creation_session = models.CharField(max_length=250)
+    filename = models.CharField(max_length=250)
+    upload = models.FileField(upload_to='upload_attachment/')
+    actual_filename = models.CharField(max_length=250)
+    extension = models.CharField(max_length=75)

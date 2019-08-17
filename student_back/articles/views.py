@@ -171,5 +171,36 @@ def view_learn(request):
 
         
 
-def view_post(request, view_post):
-    pass    
+def view_post(request, post_id):
+
+        params = {}
+
+        check_login = login(request)
+
+        if check_login == True:
+                setting_obj = settings.objects.get(~Q(timezone=''))
+                email = check_account(request, setting_obj.salt)
+                
+                try:
+                        get_post = post_content.objects.get(id = post_id)
+                        params['post']  = get_post
+                        params['attachment']  = json.dumbs(get_post.attachment)
+
+                        recommand = post_content.objects.filter(
+                                (Q(status="Published")) ,
+                               (Q(title__icontains=get_post.categoryThree)) |
+                               (Q(description__icontains=get_post.categoryThree)) | 
+                               (Q(categoryThree__icontains=get_post.categoryThree)) | 
+                               (Q(categoryTwo__icontains=get_post.categoryThree))
+
+                        )[0:5]
+                        params['recommand']  = recommand
+
+
+                        
+
+                except:
+                        return redirect("/student/learning/")
+                
+                return render(request, "student_html/view_post.html", params)
+

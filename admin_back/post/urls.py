@@ -10,5 +10,6 @@ urlpatterns = [
     path('admin-panel/post/test/ajax/<sct_bool>/<steam>/<branch>', views.sct_ajax, name='Test'),
     path('admin-panel/post/ajax/steam/<sid>', views.ajax_steam, name='Post Add'),
     path('admin-panel/post/test/ajax-steam-dual/<id>/<name>', views.steam_dual_ajax, name='Test'),
+    path('admin-panel/post/upload/<ses_id>', views.upload_file, name='Upload file'),
 
 ]
