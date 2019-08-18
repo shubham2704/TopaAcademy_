@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, HttpResponse
+from django.http import JsonResponse
 from ..steam.models import Steam, Steam_Data
 from django.contrib import messages
 from .models import content as post_content, attachment as post_att
@@ -115,9 +116,38 @@ def ajax_steam(request,sid):
 
     return render(request, "admin_html/ajax_html/steam_post_ajax.html", params)   
 
+def file_delete(request, file_id, ses_id):
+
+    params = {}
+
+    try:
+        check = post_att.objects.get(id=file_id, creation_session=ses_id)
+
+        if check:
+            rem = check.delete()
+
+            if rem:
+                params['status'] = "Ok"
+                params['msg'] = "File removed!"
+
+
+
+    except:
+        params['status'] = "Error"
+        params['msg'] = "File does not exist."
+
+
+    
+    
+    return JsonResponse(params)
+
 def post_edit(request, post_id):
     params = {
-        "edit_b" : True
+        "edit_b" : True,
+        "scp": False,
+        "scp_det":{},
+        "category":{}
+        
     }
     get_all_steam = Steam.objects.all()
     params['steam_c'] = get_all_steam
@@ -131,11 +161,45 @@ def post_edit(request, post_id):
         try:
 
             get_session = request.GET['ses']
+            params['session_post'] = get_session
             #print(get_session)
+
         
 
             try:
                 get_post = post_content.objects.get(create_by=email, id=post_id, creation_session=get_session)
+                isScp = get_post.isSCP
+                params['scp'] = isScp
+
+                if isScp == True:
+                    get_program = branch_degree.objects.all()
+                    get_program_det = branch_degree.objects.get(degree_name=get_post.SCP_program)
+                    get_branchs = branchs.objects.filter(degree_name=get_post.SCP_program)
+                    sems = []
+
+                    params['scp_det'] = {
+                        'program':get_program,
+                        'branch':get_branchs,
+                        'sems' : sems
+                    }
+
+
+                    if get_program_det.semester == "Yearly":
+                        for rn in range(1, int(get_program_det.duration) + 1):
+                            sems.append(rn)
+                    else:
+                        for rn in range(1, int(get_program_det.semester) + 1):
+                            sems.append(rn)
+
+
+
+
+
+
+
+
+
+
                 attachmentt = post_att.objects.filter(creation_session=get_session, status="Active")
 
                 if get_post:
@@ -145,7 +209,8 @@ def post_edit(request, post_id):
                     print(get_post)
                     
             
-            except:
+            except Exception as e:
+                print(e)
                 return redirect("/admin-panel/post?er_cd=425")
 
         except:

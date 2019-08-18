@@ -309,12 +309,15 @@ def test_details_view(request, test_id):
         exp_branch = get_user_account.branch.split(":")
         
         
+        try:
 
-        if request.method == "GET":
-            if request.GET['er'] == "015":
-                
-                messages.warning(request, "You have already attended this Test.")
-
+            if request.method == "GET":
+                if request.GET['er'] == "015":
+                    
+                    messages.warning(request, "You have already attended this Test.")
+        except:
+            pass
+            
         try:
             get_test = test_details.objects.get(id=test_id)
             get_test_adv = test_details_advanced.objects.get(test_id=test_id)
