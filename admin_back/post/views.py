@@ -177,11 +177,7 @@ def post_edit(request, post_id):
                     get_branchs = branchs.objects.filter(degree_name=get_post.SCP_program)
                     sems = []
 
-                    params['scp_det'] = {
-                        'program':get_program,
-                        'branch':get_branchs,
-                        'sems' : sems
-                    }
+                    
 
 
                     if get_program_det.semester == "Yearly":
@@ -192,9 +188,13 @@ def post_edit(request, post_id):
                             sems.append(rn)
 
 
+                    
 
-
-
+                    params['scp_det'] = {
+                                            'program':get_program,
+                                            'branch':get_branchs,
+                                            'sems' : sems
+                                        }
 
 
 
@@ -206,8 +206,88 @@ def post_edit(request, post_id):
                     params['edit'] = get_post
                     params['attachment'] = attachmentt
                     
-                    print(get_post)
                     
+                if request.method=="POST":
+                    title = request.POST['title']
+                    desc = request.POST['desc']
+                    content = request.POST['content']
+                    
+                    sub_category = request.POST['sub_category']
+                    second_sub_category = request.POST['second_sub_category']
+                    category = request.POST['category']
+                    print(category)
+
+                    try:
+                        degree = Steam.objects.get(steam_link_id = category)
+                        category = degree.steam_name
+                        print(degree)
+                    except:
+                        category=""
+
+                    scp = False
+                    try:
+
+                        if request.POST['isSCT'] == "on":
+                            scp = True
+                    except:
+                        pass
+                    Program = request.POST['pr']
+                    branch = request.POST['br']
+                    sem = request.POST['sm']
+                    try:
+
+                        if request.POST['publish']=='':
+                            status = "Published"
+                            status_msg = "Post has been succesfully updated."
+                    except:
+                        pass
+
+
+                    try:
+                        if request.POST['draft']=='':
+                                status = "Draft"
+                                status_msg = "Post has been succesfully Drafted"
+
+                    except:
+                        pass
+
+                    print(scp)
+                    if title!='' and desc!='' and content!='' and category!='' and sub_category!='':
+                        start_insert = True
+                        if scp == True:
+
+                            if Program=='' or branch=='' or sem=='':
+
+                                start_insert = False
+                                messages.error(request, "All fields are mandatory.", extra_tags="danger")
+                            
+                        if start_insert == True:
+
+                            get_postT = post_content.objects.get(create_by=email, id=post_id, creation_session=get_session)
+                   
+                            get_postT.status = status
+                            get_postT.title = title
+                            get_postT.description = desc
+                            get_postT.categoryOne = category
+                            get_postT.categoryTwo = sub_category
+                            get_postT.content=content
+                            get_postT.categoryThree = second_sub_category
+                            get_postT.categoryFour = ""
+                            get_postT.isSCP = scp
+                            get_postT.SCP_program = Program
+                            get_postT.SCP_branch = branch
+                            get_postT.SCP_semester = sem
+                                
+                            
+                            update = get_postT.save()
+                            print(update)
+                            
+                            if update is None:
+                                messages.success(request, status_msg)
+                        
+                    else:
+                        messages.error(request, "All fields are mandatory.", extra_tags="danger")    
+                            
             
             except Exception as e:
                 print(e)

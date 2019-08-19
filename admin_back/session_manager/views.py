@@ -165,14 +165,9 @@ def session_view(request):
 
 
                         list_inc = 1 + list_inc
-
-
-
-
-
    
     else:
         return redirect("/admin-panel/login")     
     
-    print(sem_list)
+    #print(sem_list)
     return render(request, "admin_html/session_manager.html", param)
