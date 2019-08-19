@@ -94,14 +94,17 @@ def session_view(request):
         get_all_branch = branchs.objects.all()
 
         for branchGot in get_all_branch:
+            
             branch_degree_detail = branch_degree.objects.get(id=branchGot.degree_id)
             br_name = branchGot.branch_name
             dr_name = branchGot.degree_name
             duration = branch_degree_detail.duration
             sem = branch_degree_detail.semester
+            
 
             try:
                 check_man_data = ses_dat.objects.get(program=dr_name, branch=br_name)
+                print("sd", br_name)
            
             except:
                 insert_get, insert = ses_dat.objects.get_or_create(
@@ -109,7 +112,7 @@ def session_view(request):
                 program=dr_name,
                 option_txt="NO DATA",
                 branch=br_name,
-                session_id_id=param['session_id']
+                session_id=check_session
                 )
                 
                 sem_list = {}
@@ -120,22 +123,22 @@ def session_view(request):
 
                         sem_ins, sem_ins_st = data_semseter.objects.get_or_create(
                             data_status=False, 
-                            duration_type=sem+"|"+sem,
+                            duration_type=branch_degree_detail.duration+"|"+sem,
                             duration_number=rb,
                             ClassTeacher_ID="",
                             HOD_ID="",
-                            data_id_id=insert_get['id'],
-                            session_id_id=param['session_id']
+                            data_id=insert_get,
+                            session_id=check_session
                             )
 
 
                         sem_list[list_inc] = {}
-                       # sem_list[list_inc]['data'] = {}
-                       # #sem_list[list_inc]['TeachingSatatus'] = False
-                       # sem_list[list_inc]['TimeTable'] = False
-                        #sem_list[list_inc]['data'][rb] = {}
-                        #sem_list[list_inc]['data'][rb]['sem_data_id'] = sem_ins['id']
-                        #sem_list[list_inc]['data'][rb]['status'] = False
+                        sem_list[list_inc]['dataa'] = {}
+                        sem_list[list_inc]['TeachingSatatus'] = False
+                        sem_list[list_inc]['TimeTable'] = False
+                        sem_list[list_inc]['dataa'][rb] = {}
+                        #sem_list[list_inc]['dataa'][rb]['sem_data_id'] = sem_ins['id']
+                        sem_list[list_inc]['dataa'][rb]['status'] = False
 
 
                         list_inc = 1 + list_inc
@@ -145,22 +148,22 @@ def session_view(request):
                         
                         sem_ins, sem_ins_st = data_semseter.objects.get_or_create(
                             data_status=False, 
-                            duration_type=sem+"|"+sem,
+                            duration_type=branch_degree_detail.duration+"|"+sem,
                             duration_number=rb,
                             ClassTeacher_ID="",
                             HOD_ID="",
-                            data_id_id=insert_get['id'],
-                            session_id_id=param['session_id']
+                            data_id=insert_get,
+                            session_id=check_session
                             )
 
 
                         sem_list[list_inc] = {}
-                        sem_list[list_inc]['data'] = dict()
-                        #sem_list[list_inc]['TeachingSatatus'] = False
-                        #sem_list[list_inc]['TimeTable'] = False
-                        #sem_list[list_inc]['data'][rb] = {}
-                        #sem_list[list_inc]['data'][rb]['sem_data_id'] = sem_ins['id']
-                        #sem_list[list_inc]['data'][rb]['status'] = False
+                        sem_list[list_inc]['dataa'] = {}
+                        sem_list[list_inc]['TeachingSatatus'] = False
+                        sem_list[list_inc]['TimeTable'] = False
+                        sem_list[list_inc]['dataa'][rb] = {}
+                        #sem_list[list_inc]['dataa'][rb]['sem_data_id'] = sem_ins['id']
+                        sem_list[list_inc]['dataa'][rb]['status'] = False
 
 
 
@@ -169,5 +172,5 @@ def session_view(request):
     else:
         return redirect("/admin-panel/login")     
     
-    #print(sem_list)
+    
     return render(request, "admin_html/session_manager.html", param)
