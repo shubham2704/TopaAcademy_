@@ -170,7 +170,22 @@ def session_view(request):
                         list_inc = 1 + list_inc
    
     else:
-        return redirect("/admin-panel/login")     
-    
+        return redirect("/admin-panel/login")  
+
+
+    get_session_sem = ses_dat.objects.all()
+    idv_inc = 0
+    for indv_dt in get_session_sem:
+        param['data'][idv_inc] = {}
+        param['data'][idv_inc]['program'] = indv_dt.program
+        param['data'][idv_inc]['branch'] = indv_dt.branch
+        param['data'][idv_inc]['data'] = {}
+        dhg = data_semseter.objects.filter(session_id = param['session_id'], data_id = indv_dt.id)
+        param['data'][idv_inc]['data'] = dhg
+
+        idv_inc = idv_inc + 1
+
+
+    print(param)
     
     return render(request, "admin_html/session_manager.html", param)
