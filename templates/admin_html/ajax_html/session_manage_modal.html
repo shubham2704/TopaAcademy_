@@ -1,0 +1,33 @@
+<div class="form-group row">
+    <label class="col-12 col-sm-3 col-form-label text-left text-sm-right">Class Teacher</label>
+    <div class="col-12 col-sm-8 col-lg-6">
+        
+      <select class="selectw2" style="min-width:300px;">
+        <option value=""> Select Option </option>
+        
+        {% for staff_class in all_staff %}  
+
+        <option {% if current_det.ClassTeacher_ID == staff_class.id %} {% endif %} value=""> {{staff_class.prefix}} {{staff_class.first_name}} {{staff_class.last_name}}</option>
+        
+        {% endfor %} 
+
+
+        </select> </div>
+  </div>
+  <div class="form-group row">
+      <label class="col-12 col-sm-3 col-form-label text-left text-sm-right">Head of Department</label>
+      <div class="col-12 col-sm-8 col-lg-6">
+            <select class="selectw2" style="min-width:300px;">
+                    <option value=""> Select Option </option>
+                    
+                    {% for staff_class in all_staff %}
+            
+                    <option {% if current_det.HOD_ID == staff_class.id %} {% endif %} value=""> {{staff_class.prefix}} {{staff_class.first_name}} {{staff_class.last_name}}</option>
+                    
+                    {% endfor %} 
+            
+            
+                    </select>  
+                
+                </div>
+    </div>

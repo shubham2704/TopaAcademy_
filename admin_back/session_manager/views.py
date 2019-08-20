@@ -10,8 +10,35 @@ from .models import data as ses_dat, data_semseter, details
 import os
 from ..AdminPackage.AdminController import CheckLogin
 from ..AdminPackage.querystring_parser import parser
+from ..teacher.add.models import add as staff
 import json
 # Create your views here.
+
+
+
+def session_ajax_modal_view(request, id):
+
+    checklogin = CheckLogin(request)
+    param = {}
+
+    if checklogin == True:
+        try:
+
+            check_ses_data_id = data_semseter.objects.get(id = id)
+            get_all_staff = staff.objects.all()
+            param['current_det'] =  check_ses_data_id
+            param['all_staff'] = get_all_staff
+            
+        except:
+            pass
+        print(check_ses_data_id)
+     
+
+    else:
+        pass 
+
+    
+    return render(request, "admin_html/ajax_html/session_manage_modal.html", param)
 
 def session_view(request):
     param = {
