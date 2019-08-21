@@ -26,6 +26,7 @@ urlpatterns = [
     path('', include('admin_back.steam.urls')),
     path('', include('admin_back.admin_main.urls')),
     path('', include('admin_back.post.urls')),
+    path('', include('admin_back.announcement.urls')),
     path('', include('admin_back.Add_Admin.urls')),
     path('', include('admin_back.websettings.urls')),
     path('', include('admin_back.teacher.add.urls')),

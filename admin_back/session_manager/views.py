@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.db import connections
 from django.core.signing import Signer
@@ -14,6 +14,33 @@ from ..teacher.add.models import add as staff
 import json
 # Create your views here.
 
+def session_ajax_modal_update_view(request, id, class_tchr , hod):
+    checklogin = CheckLogin(request)
+    param = {}
+
+    if checklogin == True:
+        if id!='' and class_tchr!='' and hod!='':
+            
+            try:
+                get_i = data_semseter.objects.get(id=id)
+                get_i.ClassTeacher_ID = class_tchr
+                get_i.HOD_ID = hod
+                get_i.save()
+                param['status'] = "Ok"
+                param['css'] = "success"
+                param['msg'] = "Session detail updated" 
+
+            except:
+                param['status'] = "Error"
+                param['css'] = "success"
+                param['msg'] = "Unexpected error! Refresh the page."   
+    
+        else:
+            param['status'] = "Error"
+            param['css'] = "success"
+            param['msg'] = "All fields are mandatory."
+
+    return JsonResponse(param)    
 
 
 def session_ajax_modal_view(request, id):
