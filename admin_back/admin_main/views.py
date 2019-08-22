@@ -9,6 +9,21 @@ from ..websettings.models import settings
 import json
 from ..Add_Admin.models import users
 
+
+def conduct_exam(request):
+
+    params = {}
+    
+    return render(request, "admin_html/exam-conduct.html", params)
+
+
+def test_action(request):
+
+    params = {}
+    
+    return render(request, "admin_html/test-action.html", params)
+
+
 def test_det(request):
     checklogin = CheckLogin(request)
     if checklogin!=True:
@@ -44,6 +59,12 @@ def add_mock_test(request):
         isDate = request.POST.get('isDate', False) # through exceptional
         isTimer = request.POST.get('isTimer', False) # through exceptional
         resume = request.POST.get('resume', False) # through exceptional
+        movetopractice = request.POST.get('movetopractice', False) # through exceptional
+        shuffle = request.POST.get('shuffle', False) # through exceptional
+        sreport = request.POST.get('sreport', False) # through exceptional
+        ranking = request.POST.get('ranking', False)
+        ask = request.POST['ask']
+        ask_number = request.POST['ask_number']
         from_dur = request.POST['from-dur']
         timer_dur = request.POST['timer']
         dur_forever = request.POST.get('dur-forever', False) # through exceptional
@@ -73,6 +94,15 @@ def add_mock_test(request):
                 sub_category = request.POST['sub_category']
                 second_sub_category = request.POST['second_sub_category']
                    
+            if ranking=='True':
+                ranking = True
+            if movetopractice=='True':
+                movetopractice = True
+            if shuffle=='True':
+                shuffle = True
+            if sreport=='True':
+                sreport = True
+            
             if resume=='True':
                 resume = True
             if isDate=='true':
@@ -108,10 +138,17 @@ def add_mock_test(request):
                 resumeable=resume,
                 SCTSteam=degree_sct,
                 SCTBranch=branch_sct,
+                TestType = test_type,
                 SCTSemester=semester_sct,
                 TestDifficulty=test_type,
                 category_level=category_level,
                 steam=category,
+                AskQuestion=ask_number,
+                sreport=sreport,
+                ask=ask,
+                ranking = ranking,
+                movetopractice = movetopractice,
+                shuffle=shuffle,
                 category_one=sub_category,
                 category_two=second_sub_category,
                 category_three="",

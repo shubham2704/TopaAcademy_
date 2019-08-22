@@ -232,17 +232,19 @@
                           <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputText3">Announcement Type</label>
                           <div class="col-12 col-sm-8 col-lg-6">
                                  <div class="custom-control custom-checkbox">
-                                    <input class="custom-control-input" type="checkbox" checked="" id="check3">
+                                    <input class="custom-control-input" type="radio" checked="" id="check3">
                                     <label class="custom-control-label" for="check3">Send Announcement with/to Email </label>
                                   </div>
                                   <div class="custom-control custom-checkbox">
                                     <input class="custom-control-input" type="checkbox" id="check4">
                                     <label class="custom-control-label" for="check4">Send Announcement with/to SMS</label>
                                   </div>
+
                                   <div class="custom-control custom-checkbox">
                                     <input class="custom-control-input" type="checkbox" id="check5">
                                     <label class="custom-control-label" for="check5">Send Announcement with/to SMS and Email</label>
                                   </div>
+
                                   <div class="custom-control custom-checkbox">
                                       <input class="custom-control-input" type="checkbox" id="check5">
                                       <label class="custom-control-label" for="check5">Send Announcement to Account only</label>
@@ -276,8 +278,9 @@
                             <div class="col-12 col-sm-8 col-lg-6">
                               <select id="optgroup" multiple="multiple">
                                 <optgroup label="Click to Select All">
-                                  <option value="1">Yoda</option>
-                                  <option value="2" selected="">Obiwan</option>
+                                  {% for staff in staff %}
+                                  <option value="{{staff.id}}">{{staff.prefix}} {{staff.first_name}} {{staff.last_name}}</option>
+                                  {% endfor %}
                                 </optgroup>
                               </select>
                             </div>
@@ -289,13 +292,12 @@
                             <div class="col-12 col-sm-8 col-lg-6">
                               <select id="optgroup1" multiple="multiple">
                                 <optgroup label="Click to Select All">
-                                  <option value="1">Yoda</option>
-                                  <option value="2" selected="">Obiwan</option>
-                                </optgroup>
+                                  {% for key, hod in hod.items %}
+                                  <option value="{{hod.id}}">{{hod.prefix}} {{hod.first_name}} {{hod.last_name}}</option>
+                                  {% endfor %}</optgroup>
                               </select>
                             </div>
                           </div>
-
 
                           <div style="display: none" id="op3" class="form-group row">
                         
@@ -303,8 +305,11 @@
                             <div class="col-12 col-sm-8 col-lg-6">
                               <select id="optgroup2" multiple="multiple">
                                 <optgroup label="Click to Select All">
-                                  <option value="1">Yoda</option>
-                                  <option value="2" selected="">Obiwan</option>
+                                  <optgroup label="Click to Select All">
+                                    {% for key, classteacher in classteacher.items %}
+                                    <option value="{{classteacher.id}}">{{classteacher.prefix}} {{classteacher.first_name}} {{classteacher.last_name}}</option>
+                                    {% endfor %}
+                                  </optgroup>
                                 </optgroup>
                               </select>
                             </div>
@@ -316,8 +321,9 @@
                             <div class="col-12 col-sm-8 col-lg-6">
                               <select id="optgroup3" multiple="multiple">
                                 <optgroup label="Click to Select All">
-                                  <option value="1">Yoda</option>
-                                  <option value="2" selected="">Obiwan</option>
+                                  {% for student in students %}
+                                  <option value="{{student.id}}">{{student.first_name}} {{student.last_name}}</option>
+                                  {% endfor %}
                                 </optgroup>
                               </select>
                             </div>
