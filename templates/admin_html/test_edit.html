@@ -225,7 +225,9 @@
               <div class="tab-container">
                 <ul class="nav nav-tabs nav-tabs-classic" role="tablist">
                   <li class="nav-item"><a class="nav-link active" href="#classic_home" data-toggle="tab" role="tab" aria-selected="true">Test Details</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#classic_messages" data-toggle="tab" role="tab">Upload Question Bank</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#classic_messages" data-toggle="tab" role="tab">1 . Question Bank</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#classic_messages" data-toggle="tab" role="tab">2 . Marking Settings</a></li>
+               
                 </ul>
                 <div class="tab-content">
                   <div class="tab-pane active" id="classic_home" role="tabpanel">
@@ -391,12 +393,28 @@
                  
                   <div class="tab-pane" id="classic_messages" role="tabpanel">
                   <div class="form-group row">
-                       
-                       <div class="col-12 col-sm-6">
-                      <form method="post" enctype="multipart/form-data">
+                       <div  class="col-md-4" >
+                          <div class="text-center">
+                              <br><br>
+                              <a href="#" class="btn btn-sq-lg btn-primary">
+                                      <p></p>
+                                      <p><i class="mdi mdi-collection-plus " style="font-size: 40px;"></i></p>
+                                      <p class="lead">Add Manually<br>
+                                      <small>MCQ, Fill Up & True/False etc</small>
+                               </p>
+                              </a>
+                  
+                  
+                             
+                             </div>
+                            </div>
+                             <br>
+                      <form method="post" class="col-md-8" enctype="multipart/form-data">
                          {% csrf_token %}
-                       <p class="" for="file-2">You can upload only .xlsx and .csv is allowed or add Question manually.</p>
+                        <p>If you have consistent question like all Single Answer : MCQ then upload it using below Question uploader.</p>
                          <p>Excel Sheet must have 6 colums in same sequence</p>
+                        
+                         
                          <ul style="list-style-type:decimal">
                          <li>Question</li>
                          <li>Option One</li>
@@ -405,7 +423,8 @@
                          <li>Option Four</li>
                          <li>Answer</li>
                          </ul>
-                           <div class="">
+                           <div class=""> <p class="" for="file-2">You can upload only .xlsx(utf-8) and .csv is allowed below or add Question manually.</p>
+                        
                                <input type="file" name="file-2"  >
                                <button name="qb"  class="btn btn-space btn-primary" type="submit"><i class="icon icon-left mdi mdi-plus"></i>Upload Question</button>
                

@@ -87,7 +87,7 @@ def add_mock_test(request):
             get_category_data = Steam_Data.objects.get(steam_id=get_category.id)
             category = get_category.steam_name
             category_level = get_category_data.multilevel_data
-            print(category_level)
+            print(request.POST)
             if category_level =='Single Level':
                 sub_category = request.POST['sub_category']
             elif category_level == 'Double Level':
@@ -96,6 +96,7 @@ def add_mock_test(request):
                    
             if ranking=='True':
                 ranking = True
+           
             if movetopractice=='True':
                 movetopractice = True
             if shuffle=='True':
@@ -114,7 +115,7 @@ def add_mock_test(request):
                 email = True
             if sms=='True':
                 sms = True
-            if isTimer=='True':
+            if isTimer=='true':
                 isTimer = True
 
             if isSCT=='on':

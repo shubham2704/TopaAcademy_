@@ -403,8 +403,8 @@
                       <div  class="form-group row">
                       <label class="col-12 col-sm-3 col-form-label text-sm-right">Test Availablity Date</label>
                       <div class="col-12 col-sm-4 col-lg-3 mt-1">
-                     <div class="input-group date datetimepicker" data-min-view="2" data-date-format="yyyy-mm-dd">
-                          <input name="from-dur" placeholder="From" class="form-control" size="16" type="text" value="">
+                     <div class="input-group" data-min-view="2">
+                          <input  name="from-dur" placeholder="From" class="form-control datetimepicker" size="16" type="text" value="">
                           <div class="input-group-append">
                             <button class="btn btn-primary"><i class="icon-th mdi mdi-calendar"></i></button>
                           </div>
@@ -412,12 +412,14 @@
 
                       <div  class="col-12 col-sm-4 col-lg-3 mt-1">
                      
-                     <div class="input-group date datetimepicker" data-min-view="2" data-date-format="yyyy-mm-dd">
-                          <input  placeholder="To" class="form-control" size="16" name="to-dur" type="text" value="">
+                     <div class="input-group " data-min-view="2">
+                          <input  placeholder="To" class="form-control datetimepicker" size="16" name="to-dur" type="text" value="">
                           <div class="input-group-append">
                             <button class="btn btn-primary"><i class="icon-th mdi mdi-calendar"></i></button>
                           </div>
-                        </div> <div class="custom-control custom-checkbox custom-control-inline">
+                        </div> 
+                        
+                        <div class="custom-control custom-checkbox custom-control-inline">
                       
                           <input name="dur-forever"  class="custom-control-input" type="checkbox" value="True" checked="" id="dur-forever">
                           <label class="custom-control-label" for="dur-forever">Available Forever</label>
