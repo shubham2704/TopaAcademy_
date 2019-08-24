@@ -1,0 +1,399 @@
+{%  load static %}
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="assets/img/logo-fav.png">
+    <title>Beagle</title>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/perfect-scrollbar/css/perfect-scrollbar.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/material-design-icons/css/material-design-iconic-font.min.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/jquery.vectormap/jquery-jvectormap-1.2.2.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/jqvmap/jqvmap.min.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/datetimepicker/css/bootstrap-datetimepicker.min.css" %}"/>
+   <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/select2/css/select2.min.css" %}"/>
+   <link rel="stylesheet" href="{% static "admin/assets/css/app.css" %}" type="text/css"/>
+   <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/multiselect/css/multi-select.css" %}"/>
+    
+  </head>
+  <body>
+    <div class="be-wrapper be-fixed-sidebar">
+      <nav class="navbar navbar-expand fixed-top be-top-header">
+        <div class="container-fluid">
+          <div class=""><a class="navbar-brand" href="#"></a>
+          </div>
+          <div class="page-title"><span><i>Top Academy</i></span></div>
+          <div class="be-right-navbar">
+            <ul class="nav navbar-nav float-right be-user-nav">
+              <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false"><img src="{% static "admin/assets/img/avatar.png"%}"" alt="Avatar"><span class="user-name">Túpac Amaru</span></a>
+                <div class="dropdown-menu" role="menu">     
+                  <div class="user-info">
+                    <div class="user-name">Túpac Amaru</div>
+                    <div class="user-position online">Available</div>
+                  </div><a class="dropdown-item" href="pages-profile.html"><span class="icon mdi mdi-face"></span>Account</a><a class="dropdown-item" href="#"><span class="icon mdi mdi-settings"></span>Settings</a><a class="dropdown-item" href="pages-login.html"><span class="icon mdi mdi-power"></span>Logout</a>
+                </div>
+              </li>
+            </ul>
+            <ul class="nav navbar-nav float-right be-icons-nav">
+              <li class="nav-item dropdown"><a class="nav-link be-toggle-right-sidebar" href="#" role="button" aria-expanded="false"><span class="icon mdi mdi-settings"></span></a></li>
+              <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false"><span class="icon mdi mdi-notifications"></span><span class="indicator"></span></a>
+                <ul class="dropdown-menu be-notifications">
+                  <li>
+                    <div class="title">Notifications<span class="badge badge-pill">3</span></div>
+                    <div class="list">
+                      <div class="be-scroller-notifications">
+                        <div class="content">
+                          <ul>
+                            <li class="notification notification-unread"><a href="#">
+                                <div class="image"><img src="assets/img/avatar2.png" alt="Avatar"></div>
+                                <div class="notification-info">
+                                  <div class="text"><span class="user-name">Jessica Caruso</span> accepted your invitation to join the team.</div><span class="date">2 min ago</span>
+                                </div></a></li>
+                            <li class="notification"><a href="#">
+                                <div class="image"><img src="assets/img/avatar3.png" alt="Avatar"></div>
+                                <div class="notification-info">
+                                  <div class="text"><span class="user-name">Joel King</span> is now following you</div><span class="date">2 days ago</span>
+                                </div></a></li>
+                            <li class="notification"><a href="#">
+                                <div class="image"><img src="assets/img/avatar4.png" alt="Avatar"></div>
+                                <div class="notification-info">
+                                  <div class="text"><span class="user-name">John Doe</span> is watching your main repository</div><span class="date">2 days ago</span>
+                                </div></a></li>
+                            <li class="notification"><a href="#">
+                                <div class="image"><img src="assets/img/avatar5.png" alt="Avatar"></div>
+                                <div class="notification-info"><span class="text"><span class="user-name">Emily Carter</span> is now following you</span><span class="date">5 days ago</span></div></a></li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="footer"> <a href="#">View all notifications</a></div>
+                  </li>
+                </ul>
+              </li>
+              <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false"><span class="icon mdi mdi-apps"></span></a>
+                <ul class="dropdown-menu be-connections">
+                  <li>
+                    <div class="list">
+                      <div class="content">
+                        <div class="row">
+                          <div class="col"><a class="connection-item" href="#"><img src="assets/img/github.png" alt="Github"><span>GitHub</span></a></div>
+                          <div class="col"><a class="connection-item" href="#"><img src="assets/img/bitbucket.png" alt="Bitbucket"><span>Bitbucket</span></a></div>
+                          <div class="col"><a class="connection-item" href="#"><img src="assets/img/slack.png" alt="Slack"><span>Slack</span></a></div>
+                        </div>
+                        <div class="row">
+                          <div class="col"><a class="connection-item" href="#"><img src="assets/img/dribbble.png" alt="Dribbble"><span>Dribbble</span></a></div>
+                          <div class="col"><a class="connection-item" href="#"><img src="assets/img/mail_chimp.png" alt="Mail Chimp"><span>Mail Chimp</span></a></div>
+                          <div class="col"><a class="connection-item" href="#"><img src="assets/img/dropbox.png" alt="Dropbox"><span>Dropbox</span></a></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="footer"> <a href="#">More</a></div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div class="be-left-sidebar">
+        <div class="left-sidebar-wrapper"><a class="left-sidebar-toggle" href="#">Dashboard</a>
+          <div class="left-sidebar-spacer">
+            <div class="left-sidebar-scroll">
+              <div class="left-sidebar-content">
+                <ul class="sidebar-elements">
+                  <li class="divider">Menu</li>
+                  
+                  <li class=" active"><a href="#"><i class="icon mdi mdi-face"></i><span>Dashboards</span></a>
+                   </li>
+
+                  <li class="parent"><a href="charts.html"><i class="icon mdi mdi-chart-donut"></i><span>Question Banks</span></a>
+                    <ul class="sub-menu">
+                      <li><a href="admin-panel/add/test">New Question Bank</a></li>
+                      
+                      <li><a href="/admin-panel/test/">Manage QB</a></li>
+                      <li><a href="admin-panel/account">Test Actions</a></li>
+                     
+                    </ul>
+                  </li>
+
+                  <li class="parent"><a href="#"><i class="icon mdi mdi-dot-circle"></i><span>Learning</span></a>
+                    <ul class="sub-menu">
+                      
+                      <li><a href="/admin-panel/post/add">New Post</a>
+                      </li>
+                      <li><a href="/admin-panel/post/">My Posts</a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="parent"><a href="#"><i class="icon mdi mdi-border-all"></i><span>Manage Users</span></a>
+                    <ul class="sub-menu">
+                      <li><a href="/admin-panel/users/students">Students</a>
+                      </li>
+
+                      <li><a href="/admin-panel/staff/add">Staff</a>
+                      </li>
+
+                      <li><a href="admin-panel/user/admin">Admin</a>
+                      </li>
+                    </ul>
+                  </li>
+
+                  <li class="parent"><a href="#"><i class="icon mdi mdi-dot-circle"></i><span>Reports</span></a>
+                    <ul class="sub-menu">
+                      <li><a href="admin-panel/account">Test Reports</a></li>
+                      
+                      <li><a href="admin-panel/account">Staff Activity</a></li>
+                      
+                    </ul>
+                  </li>
+
+                  
+                  <li class="parent"><a href="#"><i class="icon mdi mdi-dot-circle"></i><span>Account</span></a>
+                    <ul class="sub-menu">
+                      <li><a href="admin-panel/account">My Account</a></li>
+                    </ul>
+                  </li>
+                  <li class="divider">Other</li>
+                  
+                  <li class="parent"><a href="charts.html"><i class="icon mdi mdi-chart-donut"></i><span>Setup Website</span></a>
+                    <ul class="sub-menu">
+                      <li><a href="charts-flot.html">Question Bank Categories</a>
+                      </li>
+                      <li><a href="charts-sparkline.html"> College Programmes</a>
+                      </li>
+                      
+                      <li><a href="charts-chartjs.html">Website Settings</a>
+                      </li>
+                     
+                    </ul>
+                  </li>
+                  <li class="parent"><a href="#"><i class="icon mdi mdi-inbox"></i><span>Announcements</span></a>
+                    <ul class="sub-menu">
+                        <li><a href="email-inbox.html">Create New</a>
+                        </li>
+                      <li><a href="email-inbox.html">View All</a>
+                      </li>
+                     
+                    </ul>
+                  </li>
+               
+                  <li><a href="session/"><i class="icon mdi mdi-assignment-account"></i><span>Session Manager</span></a>
+                  </li>
+                  <li><a href="documentation.html"><i class="icon mdi mdi-book"></i><span>Website Manual</span></a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      
+      <div class="be-content">
+
+            <div class="page-head">
+                    <h2 class="page-head-title">Conduct Exam</h2>
+            </div>
+                 
+              
+              <div class="main-content container-fluid">
+                    {% if messages %}
+
+
+                    {% for message in messages %}
+        
+                     <div class="alert alert-{{message.tags}} alert-dismissible" role="alert">
+                        <button class="close" type="button" data-dismiss="alert" aria-label="Close"><span class="mdi mdi-close" aria-hidden="true"></span></button>
+                        <div class="icon"><span class="mdi mdi-alert-triangle"></span></div>
+                        <div class="message">{{message}}</div>
+                      </div>
+        
+                    {% endfor %}
+                 {% endif %}
+                <div class="row">
+                        <div class="col-lg-8">
+                          <div class="card ">
+                            <div class="card-header card-header-divider"> Question Bank
+                                 </div>
+                            
+                           
+                                  <div class="card-body">
+                                     
+                                       
+                                        <form method="post">
+  {% csrf_token %}
+                                        <div id="tf">
+                                                <div class="form-group">
+                                                        <label>Question*</label>
+                                                       <textarea name="question" class="form-control">
+
+                                                       </textarea>
+                                                
+                                                </div>
+
+                                                <div class="form-group">
+                                                        <label>Explanation</label>
+                                                       <textarea name="explain" class="form-control">
+
+                                                       </textarea>
+                                                </div>
+
+                                                <div class="form-group ">
+                                                        
+                                                        <div class="">
+                                                                <label class="">Options</label>
+                                                                <div class="input-group mb-3">
+                                                                        <div class="input-group-prepend">
+                                                                          <div class="input-group-text">
+                                                                            <div class="custom-control custom-checkbox">
+                                                                              <input name="a1_c" class="custom-control-input" type="checkbox" id="check13">
+                                                                              <label class="custom-control-label" for="check13"></label>
+                                                                            </div>
+                                                                          </div>
+                                                                        </div>
+                                                                        <input name="a1_a" class="form-control" type="text">
+                                                                </div>
+
+                                                                      <div class="input-group mb-3">
+                                                                            <div class="input-group-prepend">
+                                                                              <div class="input-group-text">
+                                                                                <div class="custom-control custom-checkbox">
+                                                                                  <input name="a2_c" class="custom-control-input" type="checkbox" id="check133">
+                                                                                  <label class="custom-control-label" for="check133"></label>
+                                                                                </div>
+                                                                              </div>
+                                                                            </div>
+                                                                            <input name="a2_a" class="form-control" type="text">
+                                                                          </div>
+
+                                                                          <div class="input-group mb-3">
+                                                                                <div class="input-group-prepend">
+                                                                                  <div class="input-group-text">
+                                                                                    <div class="custom-control custom-checkbox">
+                                                                                      <input name="a3_c" class="custom-control-input" type="checkbox" id="check1322">
+                                                                                      <label class="custom-control-label" for="check1322"></label>
+                                                                                    </div>
+                                                                                  </div>
+                                                                                </div>
+                                                                                <input name="a3_a" class="form-control" type="text">
+                                                                          </div>
+
+                                                                              <div class="input-group mb-3">
+                                                                                    <div class="input-group-prepend">
+                                                                                      <div class="input-group-text">
+                                                                                        <div class="custom-control custom-checkbox">
+                                                                                          <input name="a4_c" class="custom-control-input" type="checkbox" id="check143">
+                                                                                          <label class="custom-control-label" for="check143"></label>
+                                                                                        </div>
+                                                                                      </div>
+                                                                                    </div>
+                                                                                    <input name="a4_a" class="form-control" type="text">
+                                                                                  </div>
+                                                                                  <p>Check with Correct Answers</p>
+                                                        </div>
+
+
+                                                      </div>
+                                        </div>
+     
+                                          <button class="btn btn-space btn-primary" type="submit" name="submit"> Add Question</button><p></p>
+                                        </form>
+                                    
+                                    </div>
+                          </div>
+                          
+                    
+                        </div>
+                        
+                        <div class="col-lg-4">
+                            <div class="row">
+                               
+                                <div class="col-lg-12">
+
+
+
+                                    <div class="card card-border-color card-border-color-success">
+                                            <div class="widget-chart-container">
+                                                    <div id="top-sales" style="height: 178px; padding: 0px; position: relative;"><canvas class="flot-base" width="294" height="178" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 294.328px; height: 178px;"></canvas><canvas class="flot-overlay" width="294" height="178" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 294.328px; height: 178px;"></canvas></div>
+                                                    <div class="chart-pie-counter">{{count}}<br><small style="font-size: 16px;"> Question Counter</small></div>
+                                                 
+                                                </div>
+                                                <hr>
+                                        <div class="card-header">Question Type Allowed</div>
+                                       
+                                          <ul class="list-group list-group-flush">
+                                              <li class="list-group-item">
+                                               <a href="#">
+                                                <div style="padding: 0px;" class="icon-container">
+                                                  <div class="icon"><span class="mdi mdi-accounts-add"></span></div><span style="font-size:15px;" class="icon-class">True/False<small></span>
+                                                </div>
+                                              </a>
+                                              </li>
+                                              <li class="list-group-item">
+                                                  <a href="#">
+                                                  <div style="padding: 0px;" class="icon-container">
+                                                    <div class="icon"><span class="mdi mdi-view-list"></span></div><span style="font-size:15px;" class="icon-class">Multiple Choice</span>
+                                                  </div>
+                                                </a>
+                                              </li> 
+
+                                              <li class="list-group-item">
+                                                  <a href="#">
+                                                  <div style="padding: 0px;" class="icon-container">
+                                                    <div class="icon"><span class="mdi mdi-book-image"></span></div><span style="font-size:15px;" class="icon-class">Fill Up</span>
+                                                  </div>
+                                                 
+                                                </a>
+                                              </li> 
+
+                                              </ul>
+                                             
+                                      </div>
+                                      <div class="btn-group btn-primary btn-group-justified mb-2" role="group"><a class="btn btn-primary" href="/admin-panel/edit/test/{{test_detail.id}}">Got to Edit</a><a class="btn btn-secondary" href="#">Add New Test</a></div>    
+
+
+                                </div>
+                                
+                            </div>
+                            
+
+                        </div>
+                      </div>
+                  
+        </div>
+      </div>
+     
+    </div>
+    <script src="{% static "admin/assets/lib/jquery/jquery.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/perfect-scrollbar/js/perfect-scrollbar.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/bootstrap/dist/js/bootstrap.bundle.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/js/app.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery-flot/jquery.flot.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery-flot/jquery.flot.pie.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery-flot/jquery.flot.time.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery-flot/jquery.flot.resize.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery-flot/plugins/jquery.flot.orderBars.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery-flot/plugins/curvedLines.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery-flot/plugins/jquery.flot.tooltip.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery.sparkline/jquery.sparkline.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/countup/countUp.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery-ui/jquery-ui.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jqvmap/jquery.vmap.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jqvmap/maps/jquery.vmap.world.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/select2/js/select2.min.js" %}"  type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/select2/js/select2.full.min.js" %}"  type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/multiselect/js/jquery.multi-select.js" %}" type="text/javascript"></script>
+    <script type="text/javascript">
+     
+      $(document).ready(function(){
+        //$(".select2").select2();
+      	//-initialize the javascript
+      	App.init();
+      });
+    </script>
+  </body>
+</html>

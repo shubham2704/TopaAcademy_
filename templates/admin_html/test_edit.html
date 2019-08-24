@@ -226,10 +226,78 @@
                 <ul class="nav nav-tabs nav-tabs-classic" role="tablist">
                   <li class="nav-item"><a class="nav-link active" href="#classic_home" data-toggle="tab" role="tab" aria-selected="true">Test Details</a></li>
                   <li class="nav-item"><a class="nav-link" href="#classic_messages" data-toggle="tab" role="tab">1 . Question Bank</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#classic_messages" data-toggle="tab" role="tab">2 . Marking Settings</a></li>
-               
+                  {% if test_detail.ranking == True %}
+                  
+                  <li class="nav-item"><a class="nav-link" href="#marking" data-toggle="tab" role="tab">2 . Marking Settings</a></li>
+                  {% endif %}
                 </ul>
                 <div class="tab-content">
+                    {% if test_detail.ranking == True %}
+                    <div class="tab-pane" id="marking" role="tabpanel">
+                        
+
+                      {% if test_detail.QuestionUploaded == True %}
+                      <form method="post">
+                      <div class="">
+                          <div class="form-group row">
+                              <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputText3">Total Test Marks</label>
+                              <div class="col-12 col-sm-8 col-lg-6">
+                                <input name="total" value="{{marking.total}}" class="form-control" id="inputText3" type="number">
+                              </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputText3">Passing Marks</label>
+                                <div class="col-12 col-sm-8 col-lg-6">
+                                  <input name="passing" value="{{marking.passing}}" class="form-control" id="inputText3" type="number">
+                                </div>
+                              </div>
+
+                              <div class="form-group row">
+                                  <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputText3">Mark per Correct Answer</label>
+                                  <div class="col-12 col-sm-8 col-lg-6">
+                                    <input name="positive" value="{{marking.positive}}" class="form-control" id="inputText3" type="number">
+                                  </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputText3">Negative Mark per Wromg Answer</label>
+                                    <div class="col-12 col-sm-8 col-lg-6">
+                                      <input name="negative" value="{{marking.negative}}" class="form-control" id="inputText3" type="number">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputText3"></label>
+                                    <div class="col-12 col-sm-8 col-lg-6">
+                                        <p>If there is muliple answer for same question then positive or negative marks will be distributed after Test Submition </p>
+                                      </div>
+                                </div>
+{%csrf_token%}
+                                <div class="form-group row">
+                                    <div class="offset-sm-2 col-sm-10">
+                                  
+                                      <button  name="marking_update" class="btn btn-primary btn-space wizard-next" type="submit" >Update Marking</button>
+                                    </div>
+                                  </div>
+                                </form>
+            
+                      </div>
+                 
+                      {% else %}
+
+                       <div class="alert alert-warning alert-icon alert-icon-border alert-dismissible" role="alert">
+                          <div class="icon"><span class="mdi mdi-alert-triangle"></span></div>
+                          <div class="message">
+                            <button class="close" type="button" data-dismiss="alert" aria-label="Close"><span class="mdi mdi-close" aria-hidden="true"></span></button><strong>Warning!</strong> Please upload the Question Bank first.
+                          </div>
+                        </div>
+                      
+                      {% endif %}  
+                    
+                    
+                    </div>
+      
+                    
+                    {% endif %}
                   <div class="tab-pane active" id="classic_home" role="tabpanel">
                   <form>
                     <div class="form-group row">
@@ -396,7 +464,8 @@
                        <div  class="col-md-4" >
                           <div class="text-center">
                               <br><br>
-                              <a href="#" class="btn btn-sq-lg btn-primary">
+                              
+                              <a href="/admin-panel/edit/test/{{test_detail.id}}/QuestionBank" class="btn btn-sq-lg btn-primary">
                                       <p></p>
                                       <p><i class="mdi mdi-collection-plus " style="font-size: 40px;"></i></p>
                                       <p class="lead">Add Manually<br>
@@ -404,8 +473,6 @@
                                </p>
                               </a>
                   
-                  
-                             
                              </div>
                             </div>
                              <br>

@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'admin_back.steam',
     'admin_back.announcement',
     'admin_back.teacher.add',
+    'admin_back.test_main',
     'admin_back.post',
     'admin_back.admin_main',
     'admin_back.session_manager',
