@@ -36,6 +36,7 @@ urlpatterns = [
     path('', include('student_back.index.urls')),
     path('', include('student_back.articles.urls')),
     path('', include('student_back.login.urls')),
+    path('', include('student_back.exam.urls')),
     path('', include('student_back.preference.urls')),
     path('', include('student_back.view_test_info.urls')),
     path('', include('student_back.browse_test.urls')),

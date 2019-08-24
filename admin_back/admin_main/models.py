@@ -4,10 +4,13 @@ from django.db import models
 class exam(models.Model):
     test_id = models.CharField(max_length=75)
     status  = models.CharField(max_length=100)
+    test_name  = models.CharField(max_length=100, default="")
+    start_time  = models.DateTimeField(auto_now_add=True)
     sem  = models.CharField(max_length=100, default="")
     branch  = models.CharField(max_length=100, default="")
     program  = models.CharField(max_length=100, default="")
     exam_session  = models.CharField(max_length=250)
+    outside_allowed  = models.BooleanField(default=False)
     InformedStudents  = models.BooleanField(default=False)
 
 class test_details(models.Model):

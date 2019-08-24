@@ -10,7 +10,7 @@ from ..websettings.models import settings
 import json
 from ..Add_Admin.models import users
 
-def exam_eligability_create(request, test_id):
+def exam_eligability_create(request, test_id, outside_s):
     
     params = {}
     checklogin = CheckLogin(request)
@@ -19,13 +19,19 @@ def exam_eligability_create(request, test_id):
     else:
 
         get_all_test = test_details.objects.get(id=test_id)
+        get_all_adv = test_details_advanced.objects.get(test_id=test_id)
         data = {}
 
         if request.method == "POST":
             count = exam.objects.filter(test_id=test_id).count()
+            outside = False
+
+            if outside_s=='allow':
+                outside = True
+            
             
             if count==0:
-                creat = exam.objects.create(sem=get_all_test.SCTSemester,branch=get_all_test.SCTBranch,program=get_all_test.SCTSteam,test_id=test_id, status="Start", exam_session="dssd", InformedStudents=True)
+                creat = exam.objects.create(outside_allowed=outside, test_name=get_all_test.test_name, start_time=get_all_adv.DurationFrom, sem=get_all_test.SCTSemester,branch=get_all_test.SCTBranch,program=get_all_test.SCTSteam,test_id=test_id, status="Created", exam_session="dssd", InformedStudents=True)
 
                 if creat:
                     data['status'] = "Ok"
@@ -147,7 +153,13 @@ def test_det(request):
     else:
         params = {}
         get_test = test_details.objects.all()
+        get_exam = exam.objects.all()
         params['tests'] = get_test
+        params['exams'] = get_exam
+        params['exam_count'] = get_exam.count()
+
+        print(params)
+
         return render(request, 'admin_html/test.html', params)
 
 

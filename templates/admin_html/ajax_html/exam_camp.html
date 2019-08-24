@@ -17,8 +17,8 @@
         {% endif %}
 
         <p >Marking and Ranking : {% if cam.ranking == True %} <span class="text-success">Enabled</span> {% else %} <span class="text-danger">Not Enabled</span> {% endif %}   {% if cam.ranking == True %}{% if cam.ranking_set == True %} & <span class="text-success">Configured</span> {% else %} <span class="text-danger">Not Configured</span> {% endif %} {% endif %}</p>
-       <p >Question Uploaded : {% if cam.ques == True %} <span class="text-success">YES</span> {% else %} <span class="text-danger">NO</span> {% endif %} </p>
-          
+        <p >Question Uploaded : {% if cam.ques == True %} <span class="text-success">YES</span> {% else %} <span class="text-danger">NO</span> {% endif %} </p>
+        
 
         
       
@@ -38,13 +38,35 @@
         </div>  
         
       {% endif %}  
-      {% if cam.button == True %} <button onclick="createtest()" class="btn btn-space btn-primary"> Schedule and Start Exam</button> <p class="">All respected students will be notified about the Test and Exam notification will be visible on Students Account. </p>
+      {% if cam.button == True %} 
+      
+      <div class="form-group row">
+         
+          <div class="col-12 col-sm-2 col-lg-6 mt-1">
+            <div class="custom-control custom-checkbox">
+              <input class="custom-control-input" type="checkbox" id="check3">
+              <label class="custom-control-label" for="check3">Allow students from outside campus</label>
+            </div>
+            
+          </div>
+        </div>
+
+
+      <button onclick="createtest()" class="btn btn-space btn-primary"> Schedule and Start Exam</button> <p class="">All respected students will be notified about the Test and Exam notification will be visible on Students Account. </p>
       <script>
 
           function createtest(){
-        $.gritter.add({title:"Creating Exam",text:"Please wait we are creating exam.",class_name:"clean"});
+
+            if(document.getElementById('check3').checked) {
+              var ch = "allow";
+          } else {
+            var ch = "disallow";
+          }
+
+
+          $.gritter.add({title:"Creating Exam",text:"Please wait we are creating exam.",class_name:"clean"});
           $.post({
-            url: "/admin-panel/test/action/exam_eligability_create/{{test_det.id}}" ,
+            url: "/admin-panel/test/action/exam_eligability_create/{{test_det.id}}/"+ch ,
             context: document.body,
             headers: {
                 'X-CSRFToken': "{{ csrf_token }}"

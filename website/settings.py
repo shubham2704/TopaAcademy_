@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'student_back.index',
     'student_back.articles',
     'student_back.signup',
+    'student_back.exam',
     'student_back.view_test_info',
     'admin_back.websettings',
     'admin_back.branch',

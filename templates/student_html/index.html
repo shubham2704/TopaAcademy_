@@ -189,6 +189,54 @@
       </div>
       <div class="be-content">
         <div class="main-content container-fluid">
+            {% for exam in exam %}
+            <div class="card card-full-primary">
+              
+              
+              
+               <div class="card-body">
+                
+                  <div class="row col-md-12">
+                  <div class="col-md-9"> <h2> {{exam.test_name}}</h2> </div>
+                  <div class="col-md-3"> <h2 id="demo{{exam.id}}"></h2> </div>
+
+                  <script>
+                      
+    // Set the date we're counting down to
+    var countDownDate = new Date("{{exam.start_time | safe}}").getTime();
+    
+    // Update the count down every 1 second
+    var x = setInterval(function() {
+    
+      // Get today's date and time
+      var now = new Date().getTime();
+    
+      // Find the distance between now and the count down date
+      var distance = countDownDate - now;
+    
+      // Time calculations for days, hours, minutes and seconds
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+      // Display the result in the element with id="demo"
+      document.getElementById("demo{{exam.id}}").innerHTML = days + "d " + hours + "h "
+      + minutes + "m " + seconds + "s ";
+    
+      // If the count down is finished, write some text 
+      if (distance < 0) {
+        clearInterval(x);
+        document.getElementById("demo{{exam.id}}").innerHTML = "<a href='/student/exam/details/{{exam.id}}' class=' float-right btn btn-warning btn-md btn-space'> Start Exam</a>";
+      }
+    }, 1000);
+                  </script>
+                  </div>
+                
+               </div>
+              </div>
+
+              {% endfor %}
          {% if messages %}
 
         <div class="alert alert-primary alert-icon alert-dismissible" role="alert">
@@ -702,6 +750,9 @@
 
     
     <script type="text/javascript">
+
+    
+
       $.fn.niftyModal('setDefaults',{
       	overlaySelector: '.modal-overlay',
       	contentSelector: '.modal-content',

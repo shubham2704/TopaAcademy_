@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponse
 from ..signup.models import student_user, student_academic, student_dashboard_metrices
 from ..GlobalModels.main import login, send_sms, email_connect, check_account
+from admin_back.admin_main.models import exam
 from admin_back.websettings.models import settings
 from admin_back.branch.models import branchs
 from django.core.signing import Signer
@@ -78,6 +79,8 @@ def index(request):
     pass_args = {}
     branch_array = {}
     get_branch = branchs.objects.all()
+    
+
     #print(get_branch)
     
     for branch in get_branch:
@@ -218,7 +221,15 @@ def index(request):
            get_user.save()
            get_user_aca.save()
        pass_args['user'] = get_user
-       print(pass_args)
+       sem = get_user_aca.semester
+       exp = get_user_aca.branch.split(":")
+       get_exam = exam.objects.filter(program=exp[0],branch=exp[1],sem=sem, status='Created')
+       pass_args['exam'] = get_exam
+
+       print(get_exam)
+
+
+       
        return render(request, "student_html/index.html", pass_args)
     
 
