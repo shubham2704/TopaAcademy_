@@ -1,0 +1,69 @@
+<div class="card card-border">
+        <div class="card-header"><span class="title">Test Details</span></div>
+        <div class="card-body offset-md-1">
+           
+          <p >Is Exam Campatiable : {% if cam.button == True %} <strong class="text-success">YES</strong> {% else %} <span class="text-danger">NO</span> {% endif %} </p>
+      
+          <p >Is SCT Enabled : {% if cam.sct == True %} <span class="text-success">Enabled</span> {% else %} <span class="text-danger">Not Enabled</span> {% endif %} </p>
+        
+          {% if cam.sct == True %} 
+          <p >SCT Details : {{test_det.SCTSemester}} Sem/Year, {{test_det.SCTBranch}}, {{test_det.SCTSteam}}  </p>
+        {% endif %}
+        <p >Test Type (Mock) : {% if cam.test_type == True %} <span class="text-success">Checked</span> {% else %} <span class="text-danger">{{test_det.TestType}} Test</span> {% endif %} </p>
+          
+          <p >Test Timing : {% if cam.isAvailDuration == True %} <span class="text-success">Checked</span> {% else %} <span class="text-danger">Not Enabled</span> {% endif %} </p>
+          {% if cam.isAvailDuration == True %} 
+          <p >Timing Details : {{test_det_adv.DurationFrom}} - {{test_det_adv.DurationTo}}  </p>
+        {% endif %}
+
+        <p >Marking and Ranking : {% if cam.ranking == True %} <span class="text-success">Enabled</span> {% else %} <span class="text-danger">Not Enabled</span> {% endif %}   {% if cam.ranking == True %}{% if cam.ranking_set == True %} & <span class="text-success">Configured</span> {% else %} <span class="text-danger">Not Configured</span> {% endif %} {% endif %}</p>
+       <p >Question Uploaded : {% if cam.ques == True %} <span class="text-success">YES</span> {% else %} <span class="text-danger">NO</span> {% endif %} </p>
+          
+
+        
+      
+        </div>
+      </div>
+      {% if cam.ranking == True %}
+      <div class="card card-border">
+          <div class="card-header"><span class="title">Marking Details</span></div>
+          <div class="card-body offset-md-1">
+            <p>Total Marks : <strong>{{cam.ranking_det.total}}</strong> </p>
+            <p>Passing Marks : <strong>{{cam.ranking_det.passing}}</strong> </p>
+            <p>Positive Marking : <strong>{{cam.ranking_det.positive}}</strong> </p>
+            <p>Negative Marking : <strong>{{cam.ranking_det.negative}}</strong> </p>
+        
+        
+          </div>
+        </div>  
+        
+      {% endif %}  
+      {% if cam.button == True %} <button onclick="createtest()" class="btn btn-space btn-primary"> Schedule and Start Exam</button> <p class="">All respected students will be notified about the Test and Exam notification will be visible on Students Account. </p>
+      <script>
+
+          function createtest(){
+        $.gritter.add({title:"Creating Exam",text:"Please wait we are creating exam.",class_name:"clean"});
+          $.post({
+            url: "/admin-panel/test/action/exam_eligability_create/{{test_det.id}}" ,
+            context: document.body,
+            headers: {
+                'X-CSRFToken': "{{ csrf_token }}"
+              }
+          }).done(function(dataa) {
+            if(dataa.status == "Ok"){
+                $.gritter.add({title:"Success",text:dataa.msg,class_name:"success"});
+            }else{
+                $.gritter.add({title:"Error",text:dataa.msg,class_name:"danger"});
+            }
+
+            
+          });
+
+          }
+
+
+      </script>
+      
+      {% endif %}<p></p>
+     
+    </div>

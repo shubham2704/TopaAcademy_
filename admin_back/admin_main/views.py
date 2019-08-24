@@ -1,7 +1,8 @@
 from django.shortcuts import render, HttpResponse,redirect
+from django.http import JsonResponse
 from ..branch.models import branchs, branch_degree
 from ..steam.models import Steam, Steam_Data
-from .models import test_details, test_details_advanced
+from .models import test_details, test_details_advanced, exam
 from ..AdminPackage.AdminController import CheckLogin, getUser
 from ..AdminPackage.querystring_parser import parser
 from django.contrib import messages
@@ -9,10 +10,125 @@ from ..websettings.models import settings
 import json
 from ..Add_Admin.models import users
 
+def exam_eligability_create(request, test_id):
+    
+    params = {}
+    checklogin = CheckLogin(request)
+    if checklogin!=True:
+        return redirect('/admin-panel/login')
+    else:
+
+        get_all_test = test_details.objects.get(id=test_id)
+        data = {}
+
+        if request.method == "POST":
+            count = exam.objects.filter(test_id=test_id).count()
+            
+            if count==0:
+                creat = exam.objects.create(sem=get_all_test.SCTSemester,branch=get_all_test.SCTBranch,program=get_all_test.SCTSteam,test_id=test_id, status="Start", exam_session="dssd", InformedStudents=True)
+
+                if creat:
+                    data['status'] = "Ok"
+                    data['msg'] = "Exam created"
+                else:
+                    data['status'] = "Error"
+                    data['msg'] = "Error occured please try again later"
+            else:
+                data['status'] = "Error"
+                data['msg'] = "Exam already exist for this test."
+
+
+                    
+
+        return JsonResponse(data)
+
+
+def exam_eligability(request, test_id):
+    
+
+    params = {}
+    checklogin = CheckLogin(request)
+    if checklogin!=True:
+        return redirect('/admin-panel/login')
+    else:
+
+        get_all_test = test_details.objects.get(id=test_id)
+        get_all_adv = test_details_advanced.objects.get(test_id=test_id)
+
+         
+        params['cam'] = {}
+        params['cam']['button'] = True
+
+        if get_all_test.TestType == "Mock":
+            params['cam']['test_type'] = True
+            
+        else:
+            params['cam']['test_type'] = False
+            params['cam']['button'] = False
+        
+        if get_all_test.isSCT_test == True:
+            params['cam']['sct'] = True
+            
+        else:
+            params['cam']['sct'] = False
+            params['cam']['button'] = False
+
+        if get_all_test.ranking == True:
+            params['cam']['ranking'] = True
+            params['cam']['ranking_det'] = json.loads(get_all_test.MarkingSetting)
+
+            
+        else:
+            params['cam']['ranking'] = False
+            params['cam']['button'] = False
+
+        if get_all_test.MarkingSetting != "":
+            params['cam']['ranking_set'] = True
+            
+        else:
+            params['cam']['ranking_set'] = False
+            params['cam']['button'] = False
+
+        if get_all_test.QuestionUploaded != "":
+            params['cam']['ques'] = True
+            
+        else:
+            params['cam']['ques'] = False
+            params['cam']['button'] = False
+
+
+        if get_all_adv.isAvailDuration == True:
+            
+            params['cam']['isAvailDuration'] = True
+            
+        else:
+            params['cam']['isAvailDuration'] = False
+            params['cam']['button'] = False    
+        
+        
+
+        
+   
+    params['test_det'] = get_all_test
+    params['test_det_adv'] = get_all_adv
+    print(params)
+    
+    return render(request, "admin_html/ajax_html/exam_camp.html", params)
+
+    
+
 
 def conduct_exam(request):
 
     params = {}
+    checklogin = CheckLogin(request)
+    if checklogin!=True:
+        return redirect('/admin-panel/login')
+    else:
+        get_all_test = test_details.objects.all()
+        params['test'] = get_all_test
+
+
     
     return render(request, "admin_html/exam-conduct.html", params)
 

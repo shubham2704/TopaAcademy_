@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 class question(models.Model):
-    test_id = models.IntegerField(max_length=75)
+    test_id = models.IntegerField()
     question  = models.TextField()
     explanation = models.TextField()
     a1 = models.BooleanField(default=False)
