@@ -24,6 +24,7 @@ urlpatterns = [
     path('', include('admin_back.students.urls')),
     path('', include('admin_back.login.urls')),
     path('', include('admin_back.steam.urls')),
+    path('', include('admin_back.report.urls')),
     path('', include('admin_back.admin_main.urls')),
     path('', include('admin_back.post.urls')),
     path('', include('admin_back.announcement.urls')),

@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from admin_back.admin_main.models import test_data, test_details_advanced, test_details
+from admin_back.admin_main.models import test_data, test_details_advanced, test_details, exam
 from admin_back.websettings.models import settings
 from django.core.signing import Signer
 from admin_back.admin_main.models import exam
@@ -11,12 +11,91 @@ from admin_back.steam.models import Steam, Steam_Data
 from ..GlobalModels.main import login, check_account
 from ..signup.models import student_academic
 from datetime import datetime
-from ..view_test_info.models import start_test_details, submited_test_report
+from ..view_test_info.models import start_test_details, submited_test_report, start_exam_details
 import random
 import string
 import json
 from django.utils import timezone
 from admin_back.AdminPackage.querystring_parser import parser
+
+def exam_started(request, exam_session):
+      
+    params = {
+        "AllowTest" : True,
+        "questions": {},
+        "test_details": {},
+        "timer_end": '',
+        "test_data":{},
+        "sessionid":exam_session,
+        "msg_bool" : False,
+        "msg":{}
+
+    }
+    check_login = login(request)
+
+    if check_login == True:
+
+        setting_obj = settings.objects.get(~Q(timezone=''))
+        email = check_account(request, setting_obj.salt)
+        get_exam = start_exam_details.objects.get(test_session_id=exam_session, TestStatus = "Started")
+        get_test = test_details.objects.get(id=get_exam.TestID)
+        get_test_adv = test_details_advanced.objects.get(test_id=get_exam.TestID)
+
+        if get_exam.resumeable == False  and get_exam.test_started == True:
+            params['AllowTest'] = False
+            params['msg_bool'] = True
+            params['msg']['title'] = "Test is not resumable"
+            params['msg']['content'] = "Test is not resumable"
+
+        if get_test_adv.isAvailDuration == True:
+                from_date = get_test_adv.DurationFrom
+                today = datetime.today().strftime("%Y-%m-%d %H:%M")
+                to_date = get_test_adv.DurationTo
+                
+                
+                if today < from_date:
+                    
+                    params['AllowTest'] = False
+                    params['msg']['msg'] = "This test is not available now it will live on " + str(from_date)
+                    params['msg']['tags'] = "warning"
+                    params['msg']['icon'] = "mdi mdi-timer-off" 
+
+                #from_time = datetime.fromtimestamp(from_date)
+                
+                if to_date!='Forever':
+                    
+                    if today > to_date:
+                        params['AllowTest'] = False
+                        params['msg']['msg'] = "Exam time is over. You can not attend this Exam now."
+                        params['msg']['tags'] = "warning"
+                        params['msg']['icon'] = "mdi mdi-timer-off"
+
+                if params['AllowTest'] == True:
+                    quest_ar = {}
+                    test_settings = json.loads(get_exam.test_settings)
+                    i = 0
+                    for ques in test_settings['question_array']:
+                        quest_ar[i] = question.objects.get(id=ques)
+                        i = i + 1
+                    params['questions'] = quest_ar
+
+                    if get_exam.test_istimer == True:
+
+                        current_time = timezone.now()
+                        test_time = get_exam.test_started
+                        duration = get_exam.timer_duration
+
+                        time_diff =  (current_time - test_time).seconds / 60
+                        params['test_data']['istimer'] = get_exam.test_istimer
+                        time_left = int(duration) * 60 - time_diff*60
+                        params['test_data']['time_left'] = time_left
+
+                        
+        print(params)
+        params['test_details'] = get_test
+        return render(request, "student_html/exam_start.html", params)
+
+
 
 
 # Create your views here.
@@ -135,7 +214,7 @@ def exam_details(request, test_id):
                     
                     if today > to_date:
                         params['test_button'] = False
-                        params['messages_er']['msg'] = "This test is not available."
+                        params['messages_er']['msg'] = "Exam time is over. You can not attend this Exam now."
                         params['messages_er']['tags'] = "warning"
                         params['messages_er']['icon'] = "mdi mdi-timer-off"
                 

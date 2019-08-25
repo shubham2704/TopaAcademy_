@@ -25,7 +25,7 @@ SECRET_KEY = '#d-t)11cqysrb2a#0^6=($z^)vfm*%@)6-b+p!(109g1npdzdh'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', 'academy.tonzinnovation.com']
+ALLOWED_HOSTS = ['localhost', 'academy.tonzinnovation.com', '*']
 
 
 # Application definition
@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'admin_back.teacher.add',
     'admin_back.test_main',
     'admin_back.post',
+    'admin_back.report',
     'admin_back.admin_main',
     'admin_back.session_manager',
     'student_back.index',
