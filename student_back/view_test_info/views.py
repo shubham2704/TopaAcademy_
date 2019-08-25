@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from admin_back.admin_main.models import test_data, test_details_advanced, test_details
+from admin_back.admin_main.models import test_data, test_details_advanced, test_details, exam
+from admin_back.test_main.models import question as ques_model
 from admin_back.websettings.models import settings
 from django.core.signing import Signer
 from django.db.models import Q
@@ -9,12 +10,116 @@ from admin_back.steam.models import Steam, Steam_Data
 from ..GlobalModels.main import login, check_account
 from ..signup.models import student_academic
 from datetime import datetime
-from .models import start_test_details, submited_test_report
+from .models import start_test_details, submited_test_report, start_exam_details, submited_exam_individual, submited_exam_report
 import random
 import string
 import json
 from django.utils import timezone
 from admin_back.AdminPackage.querystring_parser import parser
+
+def startsession_exam(request, test_id):
+     
+    params = {}
+    check_login = login(request)
+
+    if check_login == True:
+        setting_obj = settings.objects.get(~Q(timezone=''))
+        email = check_account(request, setting_obj.salt)
+        
+        try:
+            get_exam = exam.objects.get(id=test_id)
+            
+            
+            test_id = get_exam.test_id
+            get_test = test_details.objects.get(id=test_id)
+            mark = json.loads(get_test.MarkingSetting)
+            total_mark = mark['total']
+            
+            if get_test.status !='Active':
+                return redirect("/student/exam/details/"+ str(get_exam.id) +"?er=014")
+
+            get_test_adv = test_details_advanced.objects.get(test_id=test_id)
+            count_prev_test = start_exam_details.objects.filter(TestID=test_id, ExamID=get_exam.id).exclude(TestStatus="No Completed").count()
+            count_question = ques_model.objects.filter(test_id=test_id).count()
+            take_exam = True
+            ses_id = randomString(10)
+            if get_test_adv.isAvailDuration == True:
+                start_time = get_test_adv.DurationFrom
+                end_time = get_test_adv.DurationTo
+                today = datetime.today().strftime("%Y-%m-%d %H:%M")
+
+                if start_time <= today and end_time >= today:
+                    take_exam = True
+                else:
+                    return redirect("/student/exam/details/"+ str(get_exam.id) +"?er=013")
+            
+             
+
+            if get_test.ask == "All":
+                if count_prev_test > 0:
+                    return redirect("/student/exam/details/"+ str(get_exam.id) +"?er=015")
+                    #Exam already given
+                else:
+                    test_session_setting = {}
+                    test_session_setting['offset'] = "0, "+ str(count_question)
+                    test_session_setting['question_array'] = []
+                    if get_test.shuffle == True:
+                        question = ques_model.objects.filter(test_id=test_id).order_by('?')
+                    else:
+                        question = ques_model.objects.filter(test_id=test_id)
+
+
+                    for ques in question:
+                        test_session_setting['question_array'].append(ques.id)
+
+
+            else:
+                if count_prev_test * int(get_test.AskQuestion) >= int(get_test.AskQuestion):
+                    return redirect("/student/exam/details/"+ str(get_exam.id) +"?er=015")
+
+                else:
+                    count_prev_ques = int(count_prev_test) * int(get_test.AskQuestion) # ques asked
+                    avg = count_question - count_prev_ques #question left
+                    question_offset = str(count_prev_ques) + ", " + str(count_prev_ques + int(get_test.AskQuestion))
+                    test_session_setting = {}
+                    
+                    
+                    test_session_setting['offset'] = question_offset
+                    test_session_setting['question_array'] = [] 
+
+                    if get_test.shuffle == True:
+                        quess = ques_model.objects.filter(test_id=test_id).order_by('?')[count_prev_ques:count_prev_ques + int(get_test.AskQuestion)]
+                    else:
+                        quess = ques_model.objects.filter(test_id=test_id)[count_prev_ques:count_prev_ques + int(get_test.AskQuestion)]
+
+                    for ques in quess:
+                        test_session_setting['question_array'].append(ques.id)
+
+                
+            insert = start_exam_details.objects.create(
+
+                        test_session_id=ses_id,
+                        test_useremail=email,
+                        test_istimer=get_test_adv.isTimer,
+                        timer_duration=get_test_adv.TimerLength,
+                        test_settings=json.dumps(test_session_setting),
+                        scored="",
+                        total_score= total_mark,
+                        TestType=get_test.TestType,
+                        TestID=test_id,
+                        ExamID=get_exam.id,
+                        resumeable=get_test.resumeable,
+                        TestStarted=False
+
+            )
+            if insert:
+                return redirect("/student/exam/session/"+ str(ses_id))
+        except Exception as e:
+            print(e)
+            return redirect("/student/exam/details/"+ str(get_exam.id) +"?er=015")
+
+ 
+
 
 def randomString(stringLength=10):
     

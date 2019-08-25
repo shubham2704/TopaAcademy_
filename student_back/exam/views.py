@@ -51,6 +51,14 @@ def exam_details(request, test_id):
                 if request.GET['er'] == "015":
                     
                     messages.warning(request, "You have already attended this Test.")
+
+                if request.GET['er'] == "014":
+                    
+                    messages.warning(request, "Exam is Not Active for your academic year.")
+
+                if request.GET['er'] == "012":
+                    
+                    messages.warning(request, "Exam time is Over.")
         except:
             pass
             
