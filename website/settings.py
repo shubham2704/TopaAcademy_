@@ -94,8 +94,8 @@ DATABASES = {
 'default': {
 'ENGINE': 'django.db.backends.mysql',
 'NAME': 'topacademy',
-'USER': 'root',
-'PASSWORD': "",
+'USER': 'topaca',
+'PASSWORD': "top123",
 'HOST': "localhost",
 'PORT': "",
 'OPTIONS': {
