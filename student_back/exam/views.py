@@ -11,7 +11,7 @@ from admin_back.steam.models import Steam, Steam_Data
 from ..GlobalModels.main import login, check_account
 from ..signup.models import student_academic
 from datetime import datetime
-from ..view_test_info.models import start_test_details, submited_test_report, start_exam_details
+from ..view_test_info.models import start_test_details, submited_test_report, start_exam_details, submited_exam_report
 import random
 import string
 import json
@@ -70,35 +70,163 @@ def exam_started(request, exam_session):
                         params['msg']['tags'] = "warning"
                         params['msg']['icon'] = "mdi mdi-timer-off"
 
-                if params['AllowTest'] == True:
-                    quest_ar = {}
-                    test_settings = json.loads(get_exam.test_settings)
-                    i = 0
-                    for ques in test_settings['question_array']:
-                        quest_ar[i] = question.objects.get(id=ques)
-                        i = i + 1
-                    params['questions'] = quest_ar
+        if params['AllowTest'] == True:
+            quest_ar = {}
+            test_settings = json.loads(get_exam.test_settings)
+            i = 0
+            for ques in test_settings['question_array']:
+                quest_ar[i] = question.objects.get(id=ques)
+                i = i + 1
+            params['questions'] = quest_ar
 
-                    if get_exam.test_istimer == True:
+            if get_exam.test_istimer == True:
 
-                        current_time = timezone.now()
-                        test_time = get_exam.test_started
-                        duration = get_exam.timer_duration
+                current_time = timezone.now()
+                test_time = get_exam.test_started
+                duration = get_exam.timer_duration
 
-                        time_diff =  (current_time - test_time).seconds / 60
-                        params['test_data']['istimer'] = get_exam.test_istimer
-                        time_left = int(duration) * 60 - time_diff*60
-                        params['test_data']['time_left'] = time_left
+                time_diff =  (current_time - test_time).seconds / 60
+                params['test_data']['istimer'] = get_exam.test_istimer
+                time_left = int(duration) * 60 - time_diff*60
+                params['test_data']['time_left'] = time_left
 
-                        if time_left < 0:
-                            params['test_details'] = get_test
-                            params['AllowTest'] = False
+                if time_left < 0:
+                    params['test_details'] = get_test
+                    params['AllowTest'] = False
+            #print(params)
+            if request.method=="POST":
+                marking = json.loads(get_test.MarkingSetting)
+                buil_dic = {}
+                answers = parser.parse(request.POST.urlencode())['op']
+                ie = 0
+                for ques_ar_count in range(0, i):
+                    buil_dic[ques_ar_count] = {}
+                    for ques_ar_countt in range(1, 5):
+                        if ques_ar_count in answers:
+                            if ques_ar_countt in answers[ques_ar_count]:
+                                buil_dic[ques_ar_count][ques_ar_countt] = True
+                            else:
+                                buil_dic[ques_ar_count][ques_ar_countt] = False    
+                        else:
+                            buil_dic[ques_ar_count][ques_ar_countt] = False    
+                and_inc = 0
+                marks_scored = 0
+                correct_ans = 0
+                wrong_ans = 0
+                for key, che_ans in params['questions'].items():
+                    sub = buil_dic[and_inc]
+                    my1 = sub[1]
+                    my2 = sub[2]
+                    my3 = sub[3]
+                    my4 = sub[4]
+
+                    #print(sub, che_ans.a4)
+                    
+                    op1 = che_ans.a1
+                    op2 = che_ans.a2
+                    op3 = che_ans.a3
+                    op4 = che_ans.a4
+                    correct_count = 0
+                    if op1 == True:
+                        correct_count = 1 + correct_count
+
+                    if op2 == True:
+                        correct_count = 1 + correct_count
+
+                    if op3 == True:
+                        correct_count = 1 + correct_count
+
+                    if op4 == True:
+                        correct_count = 1 + correct_count
+
+                    
+                    if my1 != False:
+                        if op1 == my1:
+                            marks_scored = marks_scored + float(marking['positive'])/correct_count
+                            #print(float(marking['positive'])/correct_count, che_ans.id, correct_count)
+                            correct_ans = correct_ans + 1
+
+                        else:
+                            marks_scored = marks_scored - float(marking['negative'])/correct_count
+                            wrong_ans = wrong_ans + 1
+                            #print(float(marking['negative'])/correct_count, che_ans.id, correct_count)
+
+                    if my2 != False:
+                            if op2 == my2:
+                                marks_scored = marks_scored + float(marking['positive'])/correct_count
+                                correct_ans = correct_ans + 1
+                                #print(float(marking['positive'])/correct_count, che_ans.id, correct_count)
+
+                            else:
+                                marks_scored = marks_scored - float(marking['negative'])/correct_count
+                                wrong_ans = wrong_ans + 1
+                                #print(float(marking['negative'])/correct_count, che_ans.id, correct_count)
 
 
+                    if my3 != False:
+                            if op3 == my3:
+                                marks_scored = marks_scored + float(marking['positive'])/correct_count
+                                correct_ans = correct_ans + 1
+                                #print(float(marking['positive'])/correct_count, che_ans.id, correct_count)
 
+                            else:
+                                marks_scored = marks_scored - float(marking['negative'])/correct_count
+                                wrong_ans = wrong_ans + 1
+                                #print(float(marking['negative'])/correct_count, che_ans.id, correct_count)
+
+
+                    if my4 != False:
+                            if op4 == my4:
+                                marks_scored = marks_scored + float(marking['positive'])/correct_count
+                                correct_ans = correct_ans + 1
+                                #print(float(marking['positive'])/correct_count, che_ans.id, correct_count)
+
+                            else:
+                                marks_scored = marks_scored - float(marking['negative'])/correct_count
+                                wrong_ans = wrong_ans + 1
+                                #print(float(marking['negative'])/correct_count, che_ans.id, correct_count)
+
+
+                    and_inc = 1 + and_inc
+
+                count_subm = submited_exam_report.objects.filter(test_session_id=exam_session).count()
+                if  marks_scored >= int(marking['passing']):
+                    result="Pass"
+                else:
+                    result="Fail"
+                if count_subm == 0:
+                    insert = submited_exam_report.objects.create(
+                        test_session_id=exam_session,
+                        test_useremail=email,
+                        test_started=get_exam.test_started,
+                        submited_det=json.dumps(buil_dic),
+                        scored=marks_scored,
+                        total_score=marking['total'],
+                        correct=correct_ans,
+                        wrong=wrong_ans,
+                        clg_rnk="0",
+                        class_rnk="0",
+                        TestStatus="Submited",
+                        ResultStatus=result
                         
-        print(params)
+                    )
+                
+
+
+
+                
+                
+                
+
+            
+               
+                        
+        
         params['test_details'] = get_test
+        params['question_count'] = i - 1
+
+        #print(params)
+
         return render(request, "student_html/exam_start.html", params)
 
 

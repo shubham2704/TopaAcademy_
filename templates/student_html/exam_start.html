@@ -197,7 +197,7 @@
       </div>
       <div class="be-content">
 
-                  <div class="page-head">
+            <div class="page-head">
                     {% if messages and AllowTest == True %}
 
               
@@ -247,7 +247,7 @@
                   <div class="col-md-2">
                     <p>
                     
-                      <h1  style="margin-top: 35px;">1 of 5</h1>
+                      <h1  style="margin-top: 35px;"> <span data-toggle="counter" data-end="0" id="cr_q"> 0 </span> of <span data-toggle="counter" data-end="0" id="tot_q"> 0 </span></h1>
                     </p>
                     </div>
                   {% if test_data.istimer == True %}
@@ -259,16 +259,20 @@
 
                 </div>
                   </div>
-                
+                  <form method="POST">
+                  {%csrf_token%}>
+
               <div class="main-content container-fluid">
                 <div>
                   
                   </div>
 
                 {% if AllowTest == True %}
+                
+                
                 {% for key, ques in questions.items %}
                 <div class="row">
-                <div style="display:block;" data-li-q-v = "1" class="col-md-8">
+                <div style="display:none;" id = "q{{key}}" class="col-md-8">
                      
                     <div class="card card-default card-contrast">
                         <div class="card-header">QUESTION
@@ -285,30 +289,30 @@
 
                 </div>
 
-                <div style="display:block;" data-li-q-a = "1" class="col-md-4">
+                <div style="display:none;" id = "o{{key}}" class="col-md-4">
                     <div class="card card-default card-contrast">
                         <div class="card-header">OPTIONS
                         </div>
                         <div class="card-body card-body-contrast" style="font-size:20px;">
                             <div class=" form-check mt-1">
                                 <div class="custom-control custom-checkbox">
-                                    <input class="custom-control-input" type="checkbox" checked="" id="check3">
-                                    <label class="custom-control-label" for="check3">{{ques.o1}}</label>
+                                    <input name="op[{{key}}][1]" class="custom-control-input" type="checkbox" id="check3{{key}}{{key}}">
+                                    <label class="custom-control-label" for="check3{{key}}{{key}}">{{ques.o1}}</label>
                                   </div>
 
                                   <div class="custom-control custom-checkbox">
-                                      <input class="custom-control-input" type="checkbox" checked="" id="check3">
-                                      <label class="custom-control-label" for="check3">{{ques.o2}}</label>
+                                      <input name="op[{{key}}][2]" class="custom-control-input" type="checkbox"  id="check3{{key}}{{key}}{{key}}">
+                                      <label class="custom-control-label" for="check3{{key}}{{key}}{{key}}">{{ques.o2}}</label>
                                     </div>
                                 
                                     <div class="custom-control custom-checkbox">
-                                        <input class="custom-control-input" type="checkbox" checked="" id="check3">
-                                        <label class="custom-control-label" for="check3">{{ques.o3}}</label>
+                                        <input name="op[{{key}}][3]" class="custom-control-input" type="checkbox"  id="check3{{key}}{{key}}{{key}}{{key}}">
+                                        <label class="custom-control-label" for="check3{{key}}{{key}}{{key}}{{key}}">{{ques.o3}}</label>
                                       </div>
 
                                       <div class="custom-control custom-checkbox">
-                                          <input class="custom-control-input" type="checkbox" checked="" id="check3">
-                                          <label class="custom-control-label" for="check3">{{ques.o4}}</label>
+                                          <input name="op[{{key}}][4]" class="custom-control-input" type="checkbox"  id="check3{{key}}{{key}}{{key}}{{key}}{{key}}">
+                                          <label class="custom-control-label" for="check3{{key}}{{key}}{{key}}{{key}}{{key}}">{{ques.o4}}</label>
                                         </div>
 
                               </div>
@@ -318,10 +322,17 @@
 
                                   
 
+                                  {% if key != 0 %}
+                                  <button type="button" onclick="displayQuestion('Prev', {{key}})" class="btn btn-space btn-info btn-lg ">Previous </button>
+                                  {% endif %}
+
+                                 
+                                  {% ifequal  key question_count %}
+                                  <button type="submit"  class="btn btn-space btn-success btn-lg ">Submit </button>
+                                  {% else %}
+                                  <button type="button" onclick="displayQuestion('Next', {{key}})" class="btn btn-space btn-success btn-lg ">Next </button>
                                   
-                                  <button type="button" onclick="view_quest('next', 1)" class="btn btn-space btn-info btn-lg ">Next </button>
-                                  <button type="button" onclick="view_quest('next', 1)" class="btn btn-space btn-success btn-lg ">Finish </button>
-                                  
+                                  {% endifequal  %}
 
                                  
                                 
@@ -329,6 +340,7 @@
                         </div>
                       </div>
                 </div>
+    </form>
             </div>
             {% endfor %}
               {% endif %}
@@ -366,6 +378,9 @@
     
   
     <script>
+
+        var question = 0;
+        var total = {{question_count}} + 1 ;
         
         $("#CountDownTimer").TimeCircles({ "count_past_zero":false, "animation": "ticks", time: { Days: { show: false }, Hours: { show: true } }});
       
@@ -375,6 +390,71 @@
   
         });
 
+        function count_update(){
+          $('[data-toggle="counter"]').each(function(e, t) {
+            var i = $(this),
+                o = "",
+                n = "",
+                a = 0,
+                r = 0,
+                l = 0,
+                s = 2.5;
+            i.data("prefix") && (o = i.data("prefix")), i.data("suffix") && (n = i.data("suffix")), i.data("start") && (a = i.data("start")), i.data("end") && (r = i.data("end")), i.data("decimals") && (l = i.data("decimals")), i.data("duration") && (s = i.data("duration")), new CountUp(i.get(0), a, r, l, s, {
+                suffix: n,
+                prefix: o
+            }).start()
+         })
+        }
+
+
+
+        function displayQuestion(action ,key){
+
+          
+
+          if(action == 'Next'){
+            var ques = $('#q'+(key+1));
+            var op = $('#o'+(key+1));
+            question++;
+            $('#cr_q').data('end', question);
+            count_update();
+
+            $('#q'+key).css('display', 'none');
+            $('#o'+key).css('display', 'none');
+
+
+            ques.css('display', 'block');
+            op.css('display', 'block');
+
+          }else{
+            question--;
+            $('#cr_q').data('end', question);
+            count_update();
+            var ques = $('#q'+(key-1));
+            var op = $('#o'+(key-1));
+            $('#q'+key).css('display', 'none');
+            $('#o'+key).css('display', 'none');
+            ques.css('display', 'block');
+            op.css('display', 'block');
+          }
+
+          
+
+
+
+        }
+
+        displayQuestion('Next', -1);
+        $('#cr_q').data('end', question);
+        $('#tot_q').data('end', total);
+
+        count_update();
+
+
+        
+
+
+        
     </script>       
 
 
