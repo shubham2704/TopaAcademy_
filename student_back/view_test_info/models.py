@@ -19,6 +19,7 @@ class start_exam_details(models.Model):
     resumeable = models.BooleanField()
     TestStarted = models.BooleanField()
     TestStatus = models.CharField(max_length=20, default="Started")
+    
 
 class real_time(models.Model):
     
@@ -46,6 +47,7 @@ class submited_exam_report(models.Model):
     clg_rnk = models.CharField(max_length=20, default="")
     class_rnk = models.CharField(max_length=20, default="")
     TestStatus = models.CharField(max_length=20, default="Submited")
+    ResultStatus = models.CharField(max_length=20, default="")
 
 class submited_exam_individual(models.Model):
     
