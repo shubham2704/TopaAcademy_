@@ -90,6 +90,12 @@ def exam_started(request, exam_session):
                         time_left = int(duration) * 60 - time_diff*60
                         params['test_data']['time_left'] = time_left
 
+                        if time_left < 0:
+                            params['test_details'] = get_test
+                            params['AllowTest'] = False
+
+
+
                         
         print(params)
         params['test_details'] = get_test

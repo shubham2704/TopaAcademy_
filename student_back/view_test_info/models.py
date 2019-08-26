@@ -13,12 +13,25 @@ class start_exam_details(models.Model):
     scored = models.CharField(max_length=20)
     total_score = models.CharField(max_length=20)
     TestType = models.CharField(max_length=20)
-    TestID = models.CharField(max_length=20)
+    HallAttendence = models.BooleanField(default=True)
+    TestID = models.CharField(max_length=20, default="")
     ExamID = models.CharField(max_length=20, default="")
     resumeable = models.BooleanField()
     TestStarted = models.BooleanField()
     TestStatus = models.CharField(max_length=20, default="Started")
 
+class real_time(models.Model):
+    
+    test_session_id = models.CharField(max_length=250)
+    test_useremail = models.CharField(max_length=250)
+    TestID = models.CharField(max_length=20)
+    ExamID = models.CharField(max_length=20, default="")
+    TotalQuestion = models.CharField(max_length=20, default="")
+    QuestionChecked = models.CharField(max_length=20, default="")
+    QuestionNumber = models.CharField(max_length=20, default="")
+    TestStatus = models.CharField(max_length=20, default="")
+    started_time = models.DateTimeField(auto_now_add=True)
+  
 class submited_exam_report(models.Model):
     
     test_session_id = models.CharField(max_length=250)

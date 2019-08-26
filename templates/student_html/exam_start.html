@@ -216,7 +216,7 @@
                    
              {% endif %}
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                     <h2 class="page-head-title">{{test_details.test_name}}</h2>
                     <nav aria-label="breadcrumb" role="navigation">
                       <ol class="breadcrumb page-head-nav">
@@ -239,9 +239,20 @@
                     </small>
 
                   </div>
+
+                  <div class="col-md-2">
+                    
+                      </div>
+                  
+                  <div class="col-md-2">
+                    <p>
+                    
+                      <h1  style="margin-top: 35px;">1 of 5</h1>
+                    </p>
+                    </div>
                   {% if test_data.istimer == True %}
                       
-                  <div class="offset-md-2 col-md-2 text-right">  <div id="CountDownTimer" class="text-right" data-timer="{{test_data.time_left}}" style="width: 500px; height: 100px;"></div>
+                  <div class="col-md-2 text-right">  <div id="CountDownTimer" class="text-right" data-timer="{{test_data.time_left}}" style="width: 500px; height: 100px;"></div>
                   </div>
 
                   {% endif %}
@@ -250,41 +261,55 @@
                   </div>
                 
               <div class="main-content container-fluid">
-                 <div class="row">
-                <div style="display:block;" data-li-q-v = "1" class="col-md-6">
+                <div>
+                  
+                  </div>
+
+                {% if AllowTest == True %}
+                {% for key, ques in questions.items %}
+                <div class="row">
+                <div style="display:block;" data-li-q-v = "1" class="col-md-8">
                      
                     <div class="card card-default card-contrast">
                         <div class="card-header">QUESTION
                         </div>
                         <div class="card-body card-body-contrast" style="font-size:20px;">
+{{ques.question}}
+<br><br>
+{{ques.explanation}}
 
-                        What is the remainder let after dividing 1!+2!+3!.....+10! by 7?
-                        </div>
+
+</div>
                         
                       </div>
 
                 </div>
 
-                <div style="display:block;" data-li-q-a = "1" class="col-md-5">
+                <div style="display:block;" data-li-q-a = "1" class="col-md-4">
                     <div class="card card-default card-contrast">
                         <div class="card-header">OPTIONS
                         </div>
                         <div class="card-body card-body-contrast" style="font-size:20px;">
                             <div class=" form-check mt-1">
-                                <label class="custom-control custom-radio">
-                                  <input class="custom-control-input" name="ans[46]" value="1" type="radio" ><span class="custom-control-label">21</span>
-                                </label>
-                                <label class="custom-control custom-radio">
-                                  <input class="custom-control-input" type="radio" value="2" name="ans[46]"><span class="custom-control-label">5</span>
-                                </label>
-                                <label class="custom-control custom-radio">
-                                  <input class="custom-control-input" type="radio" value="3" name="ans[46]"><span class="custom-control-label">0</span>
-                                </label>
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input" type="checkbox" checked="" id="check3">
+                                    <label class="custom-control-label" for="check3">{{ques.o1}}</label>
+                                  </div>
 
-                                <label class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" value="4" name="ans[46]"><span class="custom-control-label">14</span>
-                                  </label>
+                                  <div class="custom-control custom-checkbox">
+                                      <input class="custom-control-input" type="checkbox" checked="" id="check3">
+                                      <label class="custom-control-label" for="check3">{{ques.o2}}</label>
+                                    </div>
+                                
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input" type="checkbox" checked="" id="check3">
+                                        <label class="custom-control-label" for="check3">{{ques.o3}}</label>
+                                      </div>
 
+                                      <div class="custom-control custom-checkbox">
+                                          <input class="custom-control-input" type="checkbox" checked="" id="check3">
+                                          <label class="custom-control-label" for="check3">{{ques.o4}}</label>
+                                        </div>
 
                               </div>
                               <br>
@@ -305,7 +330,8 @@
                       </div>
                 </div>
             </div>
-              
+            {% endfor %}
+              {% endif %}
               </div>     
                
                       </div>
