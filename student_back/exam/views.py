@@ -41,11 +41,18 @@ def exam_started(request, exam_session):
         get_test = test_details.objects.get(id=get_exam.TestID)
         get_test_adv = test_details_advanced.objects.get(test_id=get_exam.TestID)
 
+        if get_exam.TestStatus == "Submitted":
+            params['AllowTest'] = False
+            params['msg']['msg'] = "Exam is already submited"
+            params['msg']['tags'] = "success"
+            params['msg']['icon'] = "mdi mdi-timer-off"
+            params['msg_bool'] = True
+            
+
+        
         if get_exam.resumeable == False  and get_exam.test_started == True:
             params['AllowTest'] = False
-            params['msg_bool'] = True
-            params['msg']['title'] = "Test is not resumable"
-            params['msg']['content'] = "Test is not resumable"
+            
 
         if get_test_adv.isAvailDuration == True:
                 from_date = get_test_adv.DurationFrom
@@ -210,6 +217,12 @@ def exam_started(request, exam_session):
                         ResultStatus=result
                         
                     )
+
+                    if insert:
+                        get_exam.TestStatus = "Submitted"
+                        get_exam.save();
+
+                    
                 
 
 
