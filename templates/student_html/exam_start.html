@@ -215,6 +215,7 @@
 
                    
              {% endif %}
+             {% if AllowTest == True  %}
                 <div class="row">
                     <div class="col-md-5">
                     <h2 class="page-head-title">{{test_details.test_name}}</h2>
@@ -258,22 +259,102 @@
                   {% endif %}
 
                 </div>
+
+                {% endif %}
                   </div>
-                  <form method="POST">
-                  {%csrf_token%}>
+                 
 
               <div class="main-content container-fluid">
                 <div>
-                  
+                  {% if AllowTest == False and Result == True %}
+                  <div id="effect_run"  class="col-md-6 offset-md-3">
+                      
+                    <div class="text-center">
+                            <div class="row">
+                            <div class="col-md-6">
+                                    <div class="widget widget-tile">
+                                     <div class="data-info">
+                                        <div class="desc">You Scored</div>
+                                        <div class="value"><span class="number" data-toggle="counter" data-end="{{result_data.scored}}">{{result_data.scored}}</span> / <span class="number" >{{result_data.total_score}}</span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    
+                        </div>
+
+                        <div class="col-md-6">
+                                <div class=" card-full-default widget widget-tile">
+                                  <div class="data-info">
+                                    <div class="desc">You Ranked</div>
+                                    <div class="value"><span class="number" data-toggle="counter" data-end="{{result_data.class_rnk}}">{{result_data.class_rnk}}</span> <small><span class="number" data-toggle="counter" data-end="{{result_data.clg_rnk}}">{{result_data.clg_rnk}}</span> </small>
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                    </div>
+
+
+                    </div>
+                        <div class="card card-full-success">
+                          <div style="color:white;"  class="card-body">
+                                <div class="icon-container card-full-success">
+                                        <div class="icon"><span class="mdi mdi-check-all"></span></div>
+                                      </div>
+                            <p class="lead" class=" mt-2" style="color: white;"> Test is Submited! </p>
+                            <div class="col-md-8 offset-md-2">
+                            <span class=" mt-2" style="font-size:15px;    color: white;">
+                              Exam is Submitted on {{result_data.test_submited}} and<br> started {{result_data.test_started}} and You are {{result_data.ResultStatus}}.
+                            </span>
+                        </div>
+                            <p style="padding:25px;" class="mt-2">
+                            <a href="/student/test/exam/{{sessionid}}" class="btn btn-lg btn-light">View Report</a>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
+
+                    {% if AllowTest == False and Result == False %}
+                  <div id="effect_run"  class="col-md-6 offset-md-3">
+                      
+                    <div class="text-center">
+                            <div class="row">
+                   
+
+
+                    </div>
+                        <div class="card card-full-{{msg.tags}}">
+                          <div style="color:white;"  class="card-body">
+                                <div class="icon-container card-full-{{msg.tags}}">
+                                        <div class="icon"><span class="{{msg.icon}}"></span></div>
+                                      </div>
+                            <p class="lead" class=" mt-2" style="color: white;"> Error Occured</p>
+                            <div class="col-md-8 offset-md-2">
+                            <span class=" mt-2" style="font-size:15px;    color: white;">
+                              {{msg.msg}}
+                            </span>
+                        </div>
+                            <p style="padding:25px;" class="mt-2">
+                            <button href="/student/test/exam/{{sessionid}}" class="btn btn-lg btn-light" disabled>View Report</button>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
+
+
                   </div>
 
                 {% if AllowTest == True %}
                 
-                
+                <form method="POST">
                 {% for key, ques in questions.items %}
                 <div class="row">
                 <div style="display:none;" id = "q{{key}}" class="col-md-8">
-                     
+                  
+                    {%csrf_token%}
                     <div class="card card-default card-contrast">
                         <div class="card-header">QUESTION
                         </div>
@@ -340,9 +421,10 @@
                         </div>
                       </div>
                 </div>
-    </form>
+
             </div>
             {% endfor %}
+          </form>
               {% endif %}
               </div>     
                

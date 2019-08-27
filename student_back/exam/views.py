@@ -22,6 +22,7 @@ def exam_started(request, exam_session):
       
     params = {
         "AllowTest" : True,
+        "Result" : False,
         "questions": {},
         "test_details": {},
         "timer_end": '',
@@ -37,12 +38,15 @@ def exam_started(request, exam_session):
 
         setting_obj = settings.objects.get(~Q(timezone=''))
         email = check_account(request, setting_obj.salt)
-        get_exam = start_exam_details.objects.get(test_session_id=exam_session, TestStatus = "Started")
+        get_exam = start_exam_details.objects.get(test_session_id=exam_session)
         get_test = test_details.objects.get(id=get_exam.TestID)
         get_test_adv = test_details_advanced.objects.get(test_id=get_exam.TestID)
 
         if get_exam.TestStatus == "Submitted":
+            get_result = submited_exam_report.objects.get(test_session_id=exam_session)
             params['AllowTest'] = False
+            params['Result'] = True
+            params['result_data'] = get_result
             params['msg']['msg'] = "Exam is already submited"
             params['msg']['tags'] = "success"
             params['msg']['icon'] = "mdi mdi-timer-off"
@@ -50,8 +54,12 @@ def exam_started(request, exam_session):
             
 
         
-        if get_exam.resumeable == False  and get_exam.test_started == True:
+        if get_exam.resumeable == False  and get_exam.TestStarted == True:
             params['AllowTest'] = False
+            params['msg']['msg'] = "Test is Not Resuamable."
+            params['msg']['tags'] = "danger"
+            params['msg']['icon'] = "mdi mdi-timer-off"
+           
             
 
         if get_test_adv.isAvailDuration == True:
@@ -78,6 +86,10 @@ def exam_started(request, exam_session):
                         params['msg']['icon'] = "mdi mdi-timer-off"
 
         if params['AllowTest'] == True:
+            if get_exam.TestStarted == False:
+                get_exam.TestStarted = True
+                get_exam.save()
+
             quest_ar = {}
             test_settings = json.loads(get_exam.test_settings)
             i = 0
@@ -100,145 +112,149 @@ def exam_started(request, exam_session):
                 if time_left < 0:
                     params['test_details'] = get_test
                     params['AllowTest'] = False
+                    params['msg']['msg'] = "Time is Over"
+                    params['msg']['tags'] = "warning"
+                    params['msg']['icon'] = "mdi mdi-timer-off"
+                    params['msg_bool'] = True
             #print(params)
-            if request.method=="POST":
-                marking = json.loads(get_test.MarkingSetting)
-                buil_dic = {}
-                answers = parser.parse(request.POST.urlencode())['op']
-                ie = 0
-                for ques_ar_count in range(0, i):
-                    buil_dic[ques_ar_count] = {}
-                    for ques_ar_countt in range(1, 5):
-                        if ques_ar_count in answers:
-                            if ques_ar_countt in answers[ques_ar_count]:
-                                buil_dic[ques_ar_count][ques_ar_countt] = True
+            if params['AllowTest'] == True:
+                if request.method=="POST":
+                    
+                    marking = json.loads(get_test.MarkingSetting)
+                    buil_dic = {}
+                    answers = parser.parse(request.POST.urlencode())['op']
+                    ie = 0
+                    for ques_ar_count in range(0, i):
+                        buil_dic[ques_ar_count] = {}
+                        for ques_ar_countt in range(1, 5):
+                            if ques_ar_count in answers:
+                                if ques_ar_countt in answers[ques_ar_count]:
+                                    buil_dic[ques_ar_count][ques_ar_countt] = True
+                                else:
+                                    buil_dic[ques_ar_count][ques_ar_countt] = False    
                             else:
                                 buil_dic[ques_ar_count][ques_ar_countt] = False    
-                        else:
-                            buil_dic[ques_ar_count][ques_ar_countt] = False    
-                and_inc = 0
-                marks_scored = 0
-                correct_ans = 0
-                wrong_ans = 0
-                for key, che_ans in params['questions'].items():
-                    sub = buil_dic[and_inc]
-                    my1 = sub[1]
-                    my2 = sub[2]
-                    my3 = sub[3]
-                    my4 = sub[4]
+                    and_inc = 0
+                    marks_scored = 0
+                    correct_ans = 0
+                    wrong_ans = 0
+                    for key, che_ans in params['questions'].items():
+                        sub = buil_dic[and_inc]
+                        my1 = sub[1]
+                        my2 = sub[2]
+                        my3 = sub[3]
+                        my4 = sub[4]
 
-                    #print(sub, che_ans.a4)
-                    
-                    op1 = che_ans.a1
-                    op2 = che_ans.a2
-                    op3 = che_ans.a3
-                    op4 = che_ans.a4
-                    correct_count = 0
-                    if op1 == True:
-                        correct_count = 1 + correct_count
-
-                    if op2 == True:
-                        correct_count = 1 + correct_count
-
-                    if op3 == True:
-                        correct_count = 1 + correct_count
-
-                    if op4 == True:
-                        correct_count = 1 + correct_count
-
-                    
-                    if my1 != False:
-                        if op1 == my1:
-                            marks_scored = marks_scored + float(marking['positive'])/correct_count
-                            #print(float(marking['positive'])/correct_count, che_ans.id, correct_count)
-                            correct_ans = correct_ans + 1
-
-                        else:
-                            marks_scored = marks_scored - float(marking['negative'])/correct_count
-                            wrong_ans = wrong_ans + 1
-                            #print(float(marking['negative'])/correct_count, che_ans.id, correct_count)
-
-                    if my2 != False:
-                            if op2 == my2:
-                                marks_scored = marks_scored + float(marking['positive'])/correct_count
-                                correct_ans = correct_ans + 1
-                                #print(float(marking['positive'])/correct_count, che_ans.id, correct_count)
-
-                            else:
-                                marks_scored = marks_scored - float(marking['negative'])/correct_count
-                                wrong_ans = wrong_ans + 1
-                                #print(float(marking['negative'])/correct_count, che_ans.id, correct_count)
-
-
-                    if my3 != False:
-                            if op3 == my3:
-                                marks_scored = marks_scored + float(marking['positive'])/correct_count
-                                correct_ans = correct_ans + 1
-                                #print(float(marking['positive'])/correct_count, che_ans.id, correct_count)
-
-                            else:
-                                marks_scored = marks_scored - float(marking['negative'])/correct_count
-                                wrong_ans = wrong_ans + 1
-                                #print(float(marking['negative'])/correct_count, che_ans.id, correct_count)
-
-
-                    if my4 != False:
-                            if op4 == my4:
-                                marks_scored = marks_scored + float(marking['positive'])/correct_count
-                                correct_ans = correct_ans + 1
-                                #print(float(marking['positive'])/correct_count, che_ans.id, correct_count)
-
-                            else:
-                                marks_scored = marks_scored - float(marking['negative'])/correct_count
-                                wrong_ans = wrong_ans + 1
-                                #print(float(marking['negative'])/correct_count, che_ans.id, correct_count)
-
-
-                    and_inc = 1 + and_inc
-
-                count_subm = submited_exam_report.objects.filter(test_session_id=exam_session).count()
-                if  marks_scored >= int(marking['passing']):
-                    result="Pass"
-                else:
-                    result="Fail"
-                if count_subm == 0:
-                    insert = submited_exam_report.objects.create(
-                        test_session_id=exam_session,
-                        test_useremail=email,
-                        test_started=get_exam.test_started,
-                        submited_det=json.dumps(buil_dic),
-                        scored=marks_scored,
-                        total_score=marking['total'],
-                        correct=correct_ans,
-                        wrong=wrong_ans,
-                        clg_rnk="0",
-                        class_rnk="0",
-                        TestStatus="Submited",
-                        ResultStatus=result
+                        #print(sub, che_ans.a4)
                         
-                    )
+                        op1 = che_ans.a1
+                        op2 = che_ans.a2
+                        op3 = che_ans.a3
+                        op4 = che_ans.a4
+                        correct_count = 0
+                        if op1 == True:
+                            correct_count = 1 + correct_count
 
-                    if insert:
-                        get_exam.TestStatus = "Submitted"
-                        get_exam.save();
+                        if op2 == True:
+                            correct_count = 1 + correct_count
 
-                    
-                
+                        if op3 == True:
+                            correct_count = 1 + correct_count
+
+                        if op4 == True:
+                            correct_count = 1 + correct_count
+
+                        
+                        if my1 != False:
+                            if op1 == my1:
+                                marks_scored = marks_scored + float(marking['positive'])/correct_count
+                                #print(float(marking['positive'])/correct_count, che_ans.id, correct_count)
+                                correct_ans = correct_ans + 1
+
+                            else:
+                                marks_scored = marks_scored - float(marking['negative'])/correct_count
+                                wrong_ans = wrong_ans + 1
+                                #print(float(marking['negative'])/correct_count, che_ans.id, correct_count)
+
+                        if my2 != False:
+                                if op2 == my2:
+                                    marks_scored = marks_scored + float(marking['positive'])/correct_count
+                                    correct_ans = correct_ans + 1
+                                    #print(float(marking['positive'])/correct_count, che_ans.id, correct_count)
+
+                                else:
+                                    marks_scored = marks_scored - float(marking['negative'])/correct_count
+                                    wrong_ans = wrong_ans + 1
+                                    #print(float(marking['negative'])/correct_count, che_ans.id, correct_count)
 
 
+                        if my3 != False:
+                                if op3 == my3:
+                                    marks_scored = marks_scored + float(marking['positive'])/correct_count
+                                    correct_ans = correct_ans + 1
+                                    #print(float(marking['positive'])/correct_count, che_ans.id, correct_count)
 
-                
-                
-                
+                                else:
+                                    marks_scored = marks_scored - float(marking['negative'])/correct_count
+                                    wrong_ans = wrong_ans + 1
+                                    #print(float(marking['negative'])/correct_count, che_ans.id, correct_count)
 
+
+                        if my4 != False:
+                                if op4 == my4:
+                                    marks_scored = marks_scored + float(marking['positive'])/correct_count
+                                    correct_ans = correct_ans + 1
+                                    #print(float(marking['positive'])/correct_count, che_ans.id, correct_count)
+
+                                else:
+                                    marks_scored = marks_scored - float(marking['negative'])/correct_count
+                                    wrong_ans = wrong_ans + 1
+                                    #print(float(marking['negative'])/correct_count, che_ans.id, correct_count)
+
+
+                        and_inc = 1 + and_inc
+
+                    print(buil_dic)
+                    count_subm = submited_exam_report.objects.filter(test_session_id=exam_session).count()
+                    if  marks_scored >= int(marking['passing']):
+                        result="Pass"
+                    else:
+                        result="Fail"
+                    if count_subm == 0:
+                        insert = submited_exam_report.objects.create(
+                            test_session_id=exam_session,
+                            test_useremail=email,
+                            test_started=get_exam.test_started,
+                            submited_det=json.dumps(buil_dic),
+                            scored=marks_scored,
+                            total_score=marking['total'],
+                            correct=correct_ans,
+                            wrong=wrong_ans,
+                            clg_rnk="0",
+                            class_rnk="0",
+                            TestStatus="Submited",
+                            ResultStatus=result
+                            
+                        )
+
+                        if insert:
+                            get_exam.TestStatus = "Submitted"
+                            get_exam.scored = marks_scored
+                            get_exam.save();
+                            get_result = submited_exam_report.objects.get(test_session_id=exam_session)
+                            params['AllowTest'] = False
+                            params['Result'] = True
+                            params['result_data'] = get_result
+                            params['msg']['msg'] = "Exam is already submited"
+                            params['msg']['tags'] = "success"
+                            params['msg']['icon'] = "mdi mdi-timer-off"
+                            params['msg_bool'] = True
+                                    
             
-               
-                        
-        
-        params['test_details'] = get_test
-        params['question_count'] = i - 1
+                params['test_details'] = get_test
+                params['question_count'] = i - 1
 
-        #print(params)
+        print(params)
 
         return render(request, "student_html/exam_start.html", params)
 
