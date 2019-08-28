@@ -15,6 +15,8 @@ import json
 from ..Add_Admin.models import users
 import os
 import pandas as pd
+from datetime import datetime
+from django.utils import timezone
 # Create your views here.
 
 
@@ -46,14 +48,17 @@ def monitor_exam_realtime(request, exam_id):
             get_currect_question = exam_realtime_each_question.objects.filter(test_session_id=active_user.test_session_id, ExamID=exam_id,test_useremail=ative_user.test_useremail).count()
             get_user_details = student_user.objects.get(email=ative_user.test_useremail)
             get_user_academic = student_academic.objects.get(student_email=ative_user.test_useremail)
-           
-            params['submission_data'][i] = {
+            current_time = timezone.now()
+            test_time = active_user.test_started
+            time_diff =  (current_time - test_time).seconds / 60
+            params['active_data'][i] = {
                 'FullName':get_user_details.first_name + "" + get_user_details.last_name,
                 'Enroll-No': get_user_academic.EnrollNo,
                 'Current':get_currect_question,
                 'ExamSession':active_user.test_session_id,
                 'Total':count_question,
-                'Started':active_user.test_started,
+                'Taken':time_diff,
+                'Started':test_time.strftime("%d %b, %Y %H:%I %p"),
                 'Attendance':active_user.HallAttendence
             }
 
