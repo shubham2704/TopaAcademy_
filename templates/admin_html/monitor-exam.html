@@ -217,56 +217,70 @@
                  {% endif %}
                 <div class="row">
                         <div class="col-lg-8">
+                            <ul class="nav nav-tabs nav-tabs-classic" role="tablist">
+                                <li class="nav-item"><a class="nav-link active" href="#classic_home" data-toggle="tab" role="tab">Real Time</a></li>
+                                <li class="nav-item"><a class="nav-link" href="#classic_profile" data-toggle="tab" role="tab">Submissions</a></li>
+                              </ul>
                             <div class="">
-                                <div class="card card-table">
-                                  <div class="card-header pb-3">Current Progress
-                                        <div class="tools dropdown">
-                                        <input class="form-control form-control-md" placeholder="Search student" type="text">    
-                                        </div>
-                                        <span class="card-subtitle">Mark student YES/NO to take the Attendence and giving exam in Exam Hall.</span>
-                                  </div>
+                                
+                                  <div class="">
+                                      <div class="" id="classic_home" role="tabpanel">
+                                      
+                                          <div class="card card-table">
                                   
-                                        <div class="table-responsive noSwipe">
-                                          <table class="table table-striped table-hover">
-                                          
-                                            <tbody>
-                                              <tr>
-                                                
-                                                <td class="user-avatar cell-detail user-info"><img src="http://127.0.0.1:8000/static/admin/assets/img/avatar.png" alt="Avatar"><span>Rajendra Singh</span><span class="cell-detail-description">0902CS171043</span></td>
-                                                <td class="milestone"><span class="completed">8 / 15</span><span class="version">Progress</span>
-                                                  <div class="progress">
-                                                    <div class="progress-bar progress-bar-primary" style="width: 45%;"></div>
-                                                  </div>
-                                                </td>
-                                                <td class="cell-detail"> <span>May 6, 2018 13:55</span><span class="cell-detail-description">Start Time</span></td>
-                                                <td class="cell-detail"> <span class="text-bold">00:05:05</span><span class="cell-detail-description">Time Taken</span></td>
-                                                <td class="cell-detail"> <div class="switch-button switch-button-xs switch-button-yesno">
-                                                        <input type="checkbox" checked="" name="swt1" id="swt1"><span>
-                                                          <label for="swt1"></label></span>
-                                                      </div></td>
-                                                
-                                                <td class="text-right">
-                                                
-                                                        <button class="btn btn-space btn-sm btn-success"><i class="icon icon-left mdi mdi-chart"></i>View Report</button>
-                                                </td>
+                                              <div class="card-header pb-3">Current Progress
+                                                    <div class="tools dropdown">
+                                                    <input class="form-control form-control-md" placeholder="Search student" type="text">    
+                                                    </div>
+                                                    <span class="card-subtitle">Mark student YES/NO to take the Attendence and giving exam in Exam Hall.</span>
+                                              </div>
                                               
-                                            </tr>
-
-                                            
-                                                         
-
+                                                    <div class="table-responsive noSwipe">
+                                                      <table class="table table-striped table-hover">
+                                                      
+                                                        <tbody>
+                                                          <tr>
                                                             
-
-                                                                
-                                                                   
-
-                                         
-                                             
-                                            </tbody>
-                                          </table>
-                                  
+                                                            <td class="user-avatar cell-detail user-info"><img src="http://127.0.0.1:8000/static/admin/assets/img/avatar.png" alt="Avatar"><span>Rajendra Singh</span><span class="cell-detail-description">0902CS171043</span></td>
+                                                            <td class="milestone"><span class="completed">8 / 15</span><span class="version">Progress</span>
+                                                              <div class="progress">
+                                                                <div class="progress-bar progress-bar-primary" style="width: 45%;"></div>
+                                                              </div>
+                                                            </td>
+                                                            <td class="cell-detail"> <span>May 6, 2018 13:55</span><span class="cell-detail-description">Start Time</span></td>
+                                                            <td class="cell-detail"> <span class="text-bold">00:05:05</span><span class="cell-detail-description">Time Taken</span></td>
+                                                            <td class="cell-detail"> <div class="switch-button switch-button-xs switch-button-yesno">
+                                                                    <input type="checkbox" checked="" name="swt1" id="swt1"><span>
+                                                                      <label for="swt1"></label></span>
+                                                                  </div></td>
+                                                            
+                                                            <td class="text-right">
+                                                            
+                                                                    <button class="btn btn-space btn-sm btn-success"><i class="icon icon-left mdi mdi-chart"></i>View Report</button>
+                                                            </td>
+                                                          
+                                                        </tr>
+            
+                                                        
+                                                                     
+            
+                                                                        
+            
+                                                                            
+                                                                               
+            
+                                                     
+                                                         
+                                                        </tbody>
+                                                      </table>
+                                              
+                                                  </div>
+                                            </div>
                                       </div>
-                                </div>
+                                      
+                                      
+                                    </div>
+                           
                               </div>
                           
                     
@@ -296,7 +310,7 @@
 <hr>   
         <div class="widget-chart-container">
                     <div id="top-sales" style="margin-top:-40px; margin-bottom:10px;height: 178px; padding: 0px; position: relative;"><canvas class="flot-base" width="294" height="178" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 294.328px; height: 178px;"></canvas><canvas class="flot-overlay" width="294" height="178" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 294.328px; height: 178px;"></canvas></div>
-                    <div class="chart-pie-counter">10:59:15<br><small style="font-size: 16px;"><i class="icon icon-left mdi mdi-timer"></i> ENDS IN</small></div>
+                    <div  class="chart-pie-counter"><span id="tirmer"></span><br><small style="font-size: 16px;"><i class="icon icon-left mdi mdi-timer"></i> ENDS IN</small></div>
                  
                 </div>
                 <div class="btn-group btn-primary btn-group-justified " role="group"><a class="btn btn-primary" href="/admin-panel/edit/test/{{test_detail.id}}"> Schedule Auto Report</a>
@@ -313,12 +327,12 @@
                                               <tr>
                                                 <td class="icon"><span class="mdi mdi-case"></span></td>
                                                 <td class="item"> Year / Branch<span class="icon s7-portfolio"></span></td>
-                                                <td>1 Yr, Computer Science & Eng.</td>
+                                                <td>{{get_test_details.SCTSemester}} Yr/Sem, {{get_test_details.SCTBranch}}</td>
                                               </tr>
                                               <tr>
                                                 <td class="icon"><span class="mdi mdi-cake"></span></td>
                                                 <td class="item">Program<span class="icon s7-gift"></span></td>
-                                                <td>B-Tech</td>
+                                                <td>{{get_test_details.SCTSteam}}</td>
                                               </tr>
                                              </tbody>
                                           </table>
@@ -353,7 +367,39 @@
     <script src="{% static "admin/assets/lib/select2/js/select2.min.js" %}"  type="text/javascript"></script>
     <script src="{% static "admin/assets/lib/select2/js/select2.full.min.js" %}"  type="text/javascript"></script>
     <script src="{% static "admin/assets/lib/multiselect/js/jquery.multi-select.js" %}" type="text/javascript"></script>
+    <script src="https://www.cssscript.com/demo/countdown-timer-plugin-javascript-timezz/src/TimezZ.js" type="text/javascript"></script>
+    <script src="{% static "admin/assets/countUp.js-master/dist/countUp.min.js" %}" type="text/javascript"></script>
+    
     <script type="text/javascript">
+
+      const options = {
+          startVal: 10,
+        };
+        let demo = new CountUp('myTargetElement', 5696, options);
+        if (!demo.error) {
+          demo.start();
+        } else {
+          console.error(demo.error);
+        }
+
+      new TimezZ('#tirmer', {
+        date: '{{get_test_details_adv.DurationTo}}',
+        daysName: ':',
+        hoursName: ':',
+        minutesName: ':',
+        secondsName: '',
+        numberTag: 'span',
+        letterTag: 'i',
+        stop: false, // stop the countdown timer?
+    });
+
+    setInterval(function() {
+      console.log("Real time Check");
+      $.get("/admin-panel/report/monitor/exam/{{exam_details.id}}/realtime", function(data, status){
+        console.log(data)
+      });
+
+    }, 5000);
      
       $(document).ready(function(){
         //$(".select2").select2();

@@ -376,7 +376,7 @@
                         </div>
                         <div class="card-body card-body-contrast" style="font-size:20px;">
                             <div class=" form-check mt-1">
-                                <div class="custom-control custom-checkbox">
+                                  <div class="custom-control custom-checkbox">
                                     <input name="op[{{key}}][1]" class="custom-control-input" type="checkbox" id="check3{{key}}{{key}}">
                                     <label class="custom-control-label" for="check3{{key}}{{key}}">{{ques.o1}}</label>
                                   </div>
@@ -491,20 +491,20 @@
 
 
         function displayQuestion(action ,key){
-
+          checked_array = {}
           
-
           if(action == 'Next'){
             var ques = $('#q'+(key+1));
             var op = $('#o'+(key+1));
+            
             question++;
+            $.get("/student/exam/session/{{sessionid}}/realtime_question/"+total+"/"+question, function(data, status){});
             $('#cr_q').data('end', question);
             count_update();
 
             $('#q'+key).css('display', 'none');
             $('#o'+key).css('display', 'none');
-
-
+           
             ques.css('display', 'block');
             op.css('display', 'block');
 
@@ -514,6 +514,7 @@
             count_update();
             var ques = $('#q'+(key-1));
             var op = $('#o'+(key-1));
+            $.get("/student/exam/session/{{sessionid}}/realtime_question/"+total+"/"+question, function(data, status){});
             $('#q'+key).css('display', 'none');
             $('#o'+key).css('display', 'none');
             ques.css('display', 'block');
@@ -534,7 +535,11 @@
 
 
         
+        setInterval(function() {
+          console.log("Real time Check");
+          $.get("/student/exam/session/{{sessionid}}/realtime", function(data, status){});
 
+        }, 5000);
 
         
     </script>       

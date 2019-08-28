@@ -2,6 +2,27 @@ from django.db import models
 
 # Create your models here.
 
+class exam_realtime_each_question(models.Model):
+    
+    test_session_id = models.CharField(max_length=250)
+    test_useremail = models.CharField(max_length=250)
+    question_count = models.CharField(max_length=10)
+    question_number = models.CharField(max_length=10)
+    test_started = models.DateTimeField(auto_now_add=True)
+    test_last_update = models.DateTimeField(auto_now_add=True)
+    check_ans_number = models.CharField(max_length=100)
+    TestID = models.CharField(max_length=75, default="")
+    ExamID = models.CharField(max_length=75, default="")
+ 
+
+class exam_realtime_user(models.Model):
+    
+    test_session_id = models.CharField(max_length=250)
+    test_useremail = models.CharField(max_length=250)
+    ExamID = models.CharField(max_length=250, default="")
+    status = models.CharField(max_length=250)
+
+
 class start_exam_details(models.Model):
     
     test_session_id = models.CharField(max_length=250)

@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponse
 from admin_back.admin_main.models import test_data, test_details_advanced, test_details, exam
 from admin_back.websettings.models import settings
 from django.core.signing import Signer
@@ -11,12 +12,68 @@ from admin_back.steam.models import Steam, Steam_Data
 from ..GlobalModels.main import login, check_account
 from ..signup.models import student_academic
 from datetime import datetime
-from ..view_test_info.models import start_test_details, submited_test_report, start_exam_details, submited_exam_report
+from ..view_test_info.models import start_test_details, submited_test_report, start_exam_details, submited_exam_report, exam_realtime_user, exam_realtime_each_question
 import random
 import string
 import json
 from django.utils import timezone
 from admin_back.AdminPackage.querystring_parser import parser
+
+def realtime_check_cron(request):
+    exam_realtime_user.objects.all().delete()
+    return HttpResponse(request, "")
+
+def realtime_question(request, exam_session, total, current):
+    check_login = login(request)
+
+    if check_login == True:
+        setting_obj = settings.objects.get(~Q(timezone=''))
+        email = check_account(request, setting_obj.salt)
+        get_exam = start_exam_details.objects.get(test_session_id=exam_session)
+
+        count_existance = exam_realtime_each_question.objects.filter(test_session_id=get_exam.test_session_id,question_number=current)
+        counted=count_existance.count()
+
+        if counted == 0:
+
+            insert = exam_realtime_each_question.objects.create(
+                test_session_id=get_exam.test_session_id,
+                test_useremail=email,
+                question_count=total,
+                question_number = current,
+                test_started = total,
+                test_last_update = timezone.datetime.now(),
+                check_ans_number = "",
+                TestID = get_exam.TestID,
+                ExamID = get_exam.ExamID
+            )
+
+
+    return HttpResponse(request, "")
+
+def realtime_check(request, exam_session):
+    check_login = login(request)
+
+    if check_login == True:
+
+        setting_obj = settings.objects.get(~Q(timezone=''))
+        email = check_account(request, setting_obj.salt)
+        get_exam = start_exam_details.objects.get(test_session_id=exam_session)
+
+        count_existance = exam_realtime_user.objects.filter(test_session_id=get_exam.test_session_id)
+        counted=count_existance.count()
+
+        if counted == 0:
+
+            insert = exam_realtime_user.objects.create(
+                test_session_id=get_exam.test_session_id,
+                test_useremail=email,
+                ExamID=get_exam.ExamID,
+                status = get_exam.TestStatus
+            )
+
+
+    return HttpResponse(request, "")
 
 def exam_started(request, exam_session):
       
@@ -30,7 +87,6 @@ def exam_started(request, exam_session):
         "sessionid":exam_session,
         "msg_bool" : False,
         "msg":{}
-
     }
     check_login = login(request)
 

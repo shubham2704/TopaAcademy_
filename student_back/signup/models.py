@@ -28,6 +28,8 @@ class student_academic(models.Model):
     date = models.DateField(auto_now_add=True)
     subject_preference = models.TextField()
     goal = models.CharField(max_length=75)
+    EnrollNo = models.CharField(max_length=75, default="")
+    ClgStatus = models.CharField(max_length=75, default="")
     
 class student_dashboard_metrices(models.Model):
     student_id = models.ForeignKey(student_user, on_delete=models.CASCADE)
