@@ -19,6 +19,21 @@ from datetime import datetime
 from django.utils import timezone
 # Create your views here.
 
+def user_submission_report(request, exam_session):
+    checklogin = CheckLogin(request)
+    if checklogin!=True:
+        return redirect('/admin-panel/login')
+    else:
+        params = {
+            'submission': 0,
+            'active':0,
+            'submission_data':{},
+            'active_data':{}
+        }
+
+        return render(request, "admin_html/exam-report.html")
+
+
 
 def monitor_exam_realtime(request, exam_id):
     checklogin = CheckLogin(request)
