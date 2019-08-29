@@ -242,7 +242,8 @@
                                                         <tbody>
                                                      
             
-                                                        
+                                                            <div><p id="loading" class='text-center'><img height='60px' src='/static/admin/assets/ajax.gif'/></p></div>
+                                                   
                                                                      
             
                                                                         
@@ -270,6 +271,7 @@
                                             
                                                   <div class="table-responsive noSwipe">
                                                     <table id="actable"  class="table table-striped table-hover">
+                                                      <div><p id="loadingw" class='text-center'><img height='60px' src='/static/admin/assets/ajax.gif'/></p></div>
                                                    
                                                     </table>
                                             
@@ -402,6 +404,12 @@
         $('#realtime').html(data.active);
         var table = document.getElementById("subtable");
         var table1 = document.getElementById("actable");
+        table1.innerHTML = "";
+        table.innerHTML = "";
+        $('#loading').html("");
+        $('#loadingw').html("");
+        
+        
         
         
         for(let i = 0; i < data.active; i++){
@@ -432,12 +440,12 @@
           }else{
             var checked = ""
           }
-          cell5.innerHTML = '<div class="switch-button switch-button-xs switch-button-yesno"> <input type="checkbox" onclick="attendace('+ data.active_data[i]['ExamSession'] +')" '+checked+' name="swt1" id="swt1"><span> <label for="swt1"></label></span> </div>';
+          cell5.innerHTML = '<div class="switch-button switch-button-xs switch-button-yesno"> <input type="checkbox" onclick="attendace('+ data.active_data[i]['ExamSession'] +')" '+checked+' name="swt1" id="'+ data.submission_data[i]['ExamSession'] +'"><span> <label for="'+ data.submission_data[i]['ExamSession'] +'"></label></span> </div>';
    
        }
 
-       for(let i = 0; i < data.submission; i++){
-        var row1 = table.insertRow(0);
+       for(let ii = 0; ii < data.submission; ii++){
+        var row1 = table1.insertRow(0);
         var cell1 = row1.insertCell(0);
         var cell2 = row1.insertCell(1);
         var cell3 = row1.insertCell(2);
@@ -446,36 +454,45 @@
         var cell6 = row1.insertCell(5);
         
         cell1.className = "user-avatar cell-detail user-info";
-        cell1.innerHTML = '<img src="http://127.0.0.1:8000/static/admin/assets/img/avatar.png" alt="Avatar"><span>'+ data.active_data[i]['FullName'] +'</span><span class="cell-detail-description">'+ data.active_data[i]['Enroll-No'] +'</span>';
+        cell1.innerHTML = '<img src="http://127.0.0.1:8000/static/admin/assets/img/avatar.png" alt="Avatar"><span>'+ data.submission_data[ii]['FullName'] +'</span><span class="cell-detail-description">'+ data.submission_data[ii]['Enroll-No'] +'</span>';
         cell2.className = " milestone";
-        cell2.innerHTML = '<span class="completed">'+ data.submission_data[i]['Scored'] +' / '+data.submission_data[i]['TotalMarks']+'</span><span class="version">Progress</span> <div class="progress"> <div class="progress-bar progress-bar-primary" style="width: '+ data.active_data[i]['Scored'] / data.active_data[i]['TotalMarks'] * 100 +'%;"></div> </div>';
+        cell2.innerHTML = '<span class="completed">'+ data.submission_data[ii]['Scored'] +' / '+data.submission_data[ii]['TotalMarks']+'</span><span class="version">'+data.submission_data[ii]['Result_Status'].toUpperCase() + '</span> <div class="progress"> <div class="progress-bar progress-bar-primary" style="width: '+ data.submission_data[ii]['Scored'] / data.submission_data[ii]['TotalMarks'] * 100 +'%;"></div> </div>';
         cell4.className = " cell-detail";
-        cell4.innerHTML = ' <span > '+data.submission_data[i]['Submitted'] + ' </span><span class="cell-detail-description">Submission Time</span>';
+        cell4.innerHTML = ' <span > '+data.submission_data[ii]['Submitted'] + ' </span><span class="cell-detail-description">Submission Time</span>';
         
         cell3.className = " cell-detail";
-        cell3.innerHTML = ' <span>'+ data.submission_data[i]['Started'] +'</span><span class="cell-detail-description">Start Time</span>';
+        cell3.innerHTML = ' <span>'+ data.submission_data[ii]['Started'] +'</span><span class="cell-detail-description">Start Time</span>';
         
         cell5.className = " cell-detail";
-        if(data.active_data[i]['Attendance'] == true){
+        if(data.submission_data[ii]['Attendance'] == true){
           var checked = "checked"
         }else{
           var checked = ""
         }
-        cell5.innerHTML = '<div class="switch-button switch-button-xs switch-button-yesno"> <input type="checkbox" onclick="attendace('+ data.active_data[i]['ExamSession'] +')" '+checked+' name="swt1" id="swt1"><span> <label for="swt1"></label></span> </div>';
+        cell5.innerHTML = '<div class="switch-button switch-button-xs switch-button-yesno"> <input type="checkbox" onclick="attendace('+ data.submission_data[ii]['ExamSession'] +')" '+checked+' name="'+ data.submission_data[ii]['ExamSession'] +'" id="'+ data.submission_data[ii]['ExamSession'] +'"><span> <label for="'+ data.submission_data[ii]['ExamSession'] +'"></label></span> </div>';
  
      
 
         cell6.className = " cell-detail";
-        cell6.innerHTML = '<a>View Report</a>';
+        cell6.innerHTML = '<a class="btn btn-warning btn-sm" href="/admin-panel/report/exam/submission/session/'+ data.submission_data[ii]['ExamSession'] +'">View Report</a>';
       }
-
-      
-
 
       });
 
     }, 5000);
      
+
+    function attendace(id){
+      console.log(id);
+      if ($("#"+id).is(':checked')) {
+        var c = true;
+      } else {
+        var c = false;
+    }
+
+   
+    console.log(c);
+    }
       $(document).ready(function(){
       	App.init();
       });
