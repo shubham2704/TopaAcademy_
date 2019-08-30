@@ -199,14 +199,21 @@
   
                     <div class="row">
                         <div class="col-md-4">
+                          <form method="POST">
+                        {% csrf_token %}
                                 <div class="input-group mb-3">
-                                        <select class="form-control form-control-xs">
-                                        <option>Select Exam</option>  
+                                        <select name="exam_id" class="form-control form-control-xs">
+                                            <option value="">Select Exam</option>
+                                        {% for exam in all_exam %}
+                                          <option value="{{exam.id}}">{{exam.test_name}}</option>
+                                        {% endfor %}
                                         </select>
                                         <div class="input-group-append">
-                                          <button class="btn btn-primary" type="button">Show Report</button>
+                                          <button class="btn btn-primary" type="submit">Show Report</button>
                                         </div>
-                                      </div> </div>
+                                      </div> 
+                                    </div>
+                                  </form>
 
                                       <div class="offset-md-4 col-md-4 text-right">
                                          <small> Export: </small>
@@ -231,9 +238,109 @@
         
                     {% endfor %}
                  {% endif %}
+                 <div class="row">
+                    <div class="col-lg-4">
+                        <div class="widget widget-fullwidth">
+                            <div class="widget-head">
+                              <div class="tools"><span class="icon mdi mdi-chevron-down"></span><span class="icon mdi mdi-refresh-sync"></span><span class="icon mdi mdi-close"></span></div><span class="title">Chart Table</span><span class="description">This is a table widget with a chart inside</span>
+                            </div>
+                            <div class="widget-chart-container">
+                              <div id="line-chart3" style="height: 80px;"></div>
+                              <div class="chart-table pt-3">
+                                <table class="table table-striped">
+                                  <thead class="primary">
+                                    <tr>
+                                      <th>Student Name</th>
+                                      <th class="number">Rank</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody class="no-border-x">
+                                    <tr>
+                                      <td>Windows</td>
+                                      <td class="number">340</td>
+                                      <td class="number">186</td>
+                                      <td class="number">51%</td>
+                                    </tr>
+                                    <tr>
+                                      <td>Mac OS</td>
+                                      <td class="number">280</td>
+                                      <td class="number">145</td>
+                                      <td class="number">64%</td>
+                                    </tr>
+                                    <tr>
+                                      <td>Linux</td>
+                                      <td class="number">210</td>
+                                      <td class="number">89</td>
+                                      <td class="number">38%</td>
+                                    </tr>
+                                    <tr>
+                                      <td>Android</td>
+                                      <td class="number">176</td>
+                                      <td class="number">67</td>
+                                      <td class="number">57%</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+                    </div>
+                    <div class="col-lg-4">
+                      <div class="card card-default">
+                        <div class="card-header"> 
+                          <div class="tools"><span class="icon s7-upload"></span><span class="icon s7-edit"></span><span class="icon s7-close"></span></div><span class="title">Submission Ratio</span>
+                        </div>
+                        <div class="card-body text-center">
+                            <div class="widget-chart-container ">
+                                <div id="top-sales" style="height: 178px; padding: 0px;"><canvas class="flot-base" width="294" height="178" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 294.328px; height: 178px;"></canvas><canvas class="flot-overlay" width="294" height="178" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 294.328px; height: 178px;"></canvas></div>
+                                <div class="chart-pie-counter"><span id="realtime">0</span><br><small style="font-size: 16px;"><i class="icon icon-left mdi mdi-chart-donut"></i> Average Percentage</small></div>
+                             
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="user-info-list card">
+                            <div class="card-header">Exam Information </div>
+                            <div class="card-body">
+                              <table class="no-border no-strip skills">
+                                <tbody class="no-border-x no-border-y">
+                                    <tr>
+                                        <td class="icon"><span class="mdi mdi-case"></span></td>
+                                        <td class="item"> Exam Name<span class="icon s7-portfolio"></span></td>
+                                        <td>5 Yr/Sem, Computer Science and Engineering </td>
+                                      </tr>
+                                      <tr>
+                                          <td class="icon"><span class="mdi mdi-case"></span></td>
+                                          <td class="item"> Timing<span class="icon s7-portfolio"></span></td>
+                                          <td>5 Yr/Sem, Computer Science and Engineering </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="icon"><span class="mdi mdi-case"></span></td>
+                                            <td class="item"> Category <span class="icon s7-portfolio"></span></td>
+                                            <td>5 Yr/Sem, Computer Science and Engineering </td>
+                                          </tr>
+                                        
+                                  <tr>
+                                    <td class="icon"><span class="mdi mdi-case"></span></td>
+                                    <td class="item"> Year / Branch<span class="icon s7-portfolio"></span></td>
+                                    <td>5 Yr/Sem, Computer Science and Engineering </td>
+                                  </tr>
+                                  <tr>
+                                    <td class="icon"><span class="mdi mdi-cake"></span></td>
+                                    <td class="item">Program<span class="icon s7-gift"></span></td>
+                                    <td>B-Tech</td>
+                                  </tr>
+                                 </tbody>
+                              </table>
+                            </div>
+                          </div>
+                    </div>
+                  </div>
                 <div class="row">
                         <div class="col-lg-12">
-                            <div class="">
+                           
+                            
                                 <div class="card card-table">
                                   
                                   

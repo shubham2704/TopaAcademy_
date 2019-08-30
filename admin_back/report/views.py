@@ -31,7 +31,7 @@ def user_submission_report(request, exam_session):
             'active_data':{}
         }
 
-        return render(request, "admin_html/exam-report.html")
+        return render(request, "admin_html/exam-report-session.html")
 
 
 
@@ -127,5 +127,54 @@ def monitor_exam(request, exam_id):
     return render(request, "admin_html/monitor-exam.html", params)
 
 def exam_report(request):
+
+    checklogin = CheckLogin(request)
+    if checklogin!=True:
+        return redirect('/admin-panel/login')
+    else:
+        params = {
+            "submission_data": {}
+        }
+
+        all_exam = exam.objects.all()
+        params['all_exam']  = all_exam
         
-    return render(request, "admin_html/exam-report.html")
+        if request.method=="POST":
+
+            exam_id = request.POST['exam_id']
+            
+
+            count_active = exam_realtime_user.objects.filter(ExamID=exam_id)
+            params['active'] = count_active.count()
+            count_submission = start_exam_details.objects.filter(TestStatus="Submitted",ExamID=exam_id)
+            params['submission'] = count_submission.count()
+
+            ii = 0
+            for submissions in count_submission:
+                active_user = start_exam_details.objects.get(ExamID=exam_id,test_useremail=submissions.test_useremail)
+
+                submissions_report = submited_exam_report.objects.get(test_session_id=submissions.test_session_id)
+                get_user_details = student_user.objects.get(email=submissions.test_useremail)
+                get_user_academic = student_academic.objects.get(student_email=submissions.test_useremail)
+            
+                params['submission_data'][ii] = {
+                    'FullName':get_user_details.first_name + "" + get_user_details.last_name,
+                    'Enroll-No': get_user_academic.EnrollNo,
+                    'Result_Status':submissions_report.ResultStatus,
+                    'TotalMarks':submissions_report.total_score,
+                    'ExamSession':active_user.test_session_id,
+                    'Scored':submissions_report.scored,
+                    'Started':submissions_report.test_started.strftime("%d %b, %Y %H:%I %p"),
+                    'Submitted':submissions_report.test_submited.strftime("%d %b, %Y %H:%I %p"),
+                    'Attendance':submissions.HallAttendence
+                }
+
+                ii = ii + 1
+
+            
+
+            
+
+        print(params)
+            
+    return render(request, "admin_html/exam-report.html", params)
