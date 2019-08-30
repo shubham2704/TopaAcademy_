@@ -133,39 +133,73 @@ def exam_report(request):
         return redirect('/admin-panel/login')
     else:
         params = {
-            "submission_data": {}
+            "report": False,
+            "submission_data": {},
+            "topper_data": {}
         }
 
         all_exam = exam.objects.all()
         params['all_exam']  = all_exam
         
         if request.method=="POST":
+            params['report'] = True
 
             exam_id = request.POST['exam_id']
-            
 
-            count_active = exam_realtime_user.objects.filter(ExamID=exam_id)
-            params['active'] = count_active.count()
             count_submission = start_exam_details.objects.filter(TestStatus="Submitted",ExamID=exam_id)
+            
+            get_exam = exam.objects.get(id=exam_id)
+            
+            get_test = test_details.objects.get(id=get_exam.test_id)
+            count_student = student_academic.objects.filter(semester=get_test.SCTSemester, branch=get_test.SCTSteam+":"+get_test.SCTBranch)  
+            get_test_adv = test_details_advanced.objects.get(test_id=get_exam.test_id)
             params['submission'] = count_submission.count()
+            params['exam'] = get_exam
+            params['test'] = get_test
+            params['test_adv'] = get_test_adv
+            params['total_students'] = count_student.count()
+            params['ratio'] =count_submission.count() / count_student.count() * 100
+            top_scores = submited_exam_report.objects.filter(ExamID=exam_id).order_by('-scored')[0:5]
+            top = 1
+            for topper in top_scores:
+                active_user = start_exam_details.objects.get(ExamID=exam_id,test_useremail=topper.test_useremail)
+                submissions_report = submited_exam_report.objects.get(test_session_id=topper.test_session_id)
+                get_user_details = student_user.objects.get(email=topper.test_useremail)
+                get_user_academic = student_academic.objects.get(student_email=topper.test_useremail)
+
+                params['topper_data'][top] = {
+                    'FullName':get_user_details.first_name + "" + get_user_details.last_name,
+                    'EnrollNo': get_user_academic.EnrollNo,
+                    'Result_Status':submissions_report.ResultStatus,
+                    'TotalMarks':submissions_report.total_score,
+                    'Scored':submissions_report.scored,
+                    'per': float(submissions_report.scored) / float(submissions_report.total_score) * 100,
+                }
+
+                top = top + 1
+            
+            
 
             ii = 0
             for submissions in count_submission:
                 active_user = start_exam_details.objects.get(ExamID=exam_id,test_useremail=submissions.test_useremail)
-
                 submissions_report = submited_exam_report.objects.get(test_session_id=submissions.test_session_id)
                 get_user_details = student_user.objects.get(email=submissions.test_useremail)
                 get_user_academic = student_academic.objects.get(student_email=submissions.test_useremail)
-            
+                
+                
                 params['submission_data'][ii] = {
                     'FullName':get_user_details.first_name + "" + get_user_details.last_name,
-                    'Enroll-No': get_user_academic.EnrollNo,
+                    'EnrollNo': get_user_academic.EnrollNo,
                     'Result_Status':submissions_report.ResultStatus,
                     'TotalMarks':submissions_report.total_score,
+                    'per': float(submissions_report.scored) / float(submissions_report.total_score) * 100,
                     'ExamSession':active_user.test_session_id,
                     'Scored':submissions_report.scored,
                     'Started':submissions_report.test_started.strftime("%d %b, %Y %H:%I %p"),
                     'Submitted':submissions_report.test_submited.strftime("%d %b, %Y %H:%I %p"),
+                    'wrong':submissions_report.wrong,
+                    'correct':submissions_report.correct,
                     'Attendance':submissions.HallAttendence
                 }
 
@@ -178,3 +212,90 @@ def exam_report(request):
         print(params)
             
     return render(request, "admin_html/exam-report.html", params)
+
+
+
+def pdf_exam(request, exam_id):
+    
+    checklogin = CheckLogin(request)
+    if checklogin!=True:
+        return redirect('/admin-panel/login')
+    else:
+        params = {
+            "report": False,
+            "submission_data": {},
+            "topper_data": {}
+        }
+
+        all_exam = exam.objects.all()
+        params['all_exam']  = all_exam
+        
+        
+
+        count_submission = start_exam_details.objects.filter(TestStatus="Submitted",ExamID=exam_id)
+        
+        get_exam = exam.objects.get(id=exam_id)
+        
+        get_test = test_details.objects.get(id=get_exam.test_id)
+        count_student = student_academic.objects.filter(semester=get_test.SCTSemester, branch=get_test.SCTSteam+":"+get_test.SCTBranch)  
+        get_test_adv = test_details_advanced.objects.get(test_id=get_exam.test_id)
+        params['submission'] = count_submission.count()
+        params['exam'] = get_exam
+        params['test'] = get_test
+        params['test_adv'] = get_test_adv
+        params['total_students'] = count_student.count()
+        params['ratio'] =count_submission.count() / count_student.count() * 100
+        top_scores = submited_exam_report.objects.filter(ExamID=exam_id).order_by('-scored')[0:5]
+        top = 1
+        for topper in top_scores:
+            active_user = start_exam_details.objects.get(ExamID=exam_id,test_useremail=topper.test_useremail)
+            submissions_report = submited_exam_report.objects.get(test_session_id=topper.test_session_id)
+            get_user_details = student_user.objects.get(email=topper.test_useremail)
+            get_user_academic = student_academic.objects.get(student_email=topper.test_useremail)
+
+            params['topper_data'][top] = {
+                'FullName':get_user_details.first_name + "" + get_user_details.last_name,
+                'EnrollNo': get_user_academic.EnrollNo,
+                'Result_Status':submissions_report.ResultStatus,
+                'TotalMarks':submissions_report.total_score,
+                'Scored':submissions_report.scored,
+                'per': float(submissions_report.scored) / float(submissions_report.total_score) * 100,
+            }
+
+            top = top + 1
+        
+        
+
+        ii = 0
+        for submissions in count_submission:
+            active_user = start_exam_details.objects.get(ExamID=exam_id,test_useremail=submissions.test_useremail)
+            submissions_report = submited_exam_report.objects.get(test_session_id=submissions.test_session_id)
+            get_user_details = student_user.objects.get(email=submissions.test_useremail)
+            get_user_academic = student_academic.objects.get(student_email=submissions.test_useremail)
+            
+            
+            params['submission_data'][ii] = {
+                'FullName':get_user_details.first_name + "" + get_user_details.last_name,
+                'EnrollNo': get_user_academic.EnrollNo,
+                'Result_Status':submissions_report.ResultStatus,
+                'TotalMarks':submissions_report.total_score,
+                'per': float(submissions_report.scored) / float(submissions_report.total_score) * 100,
+                'ExamSession':active_user.test_session_id,
+                'Scored':submissions_report.scored,
+                'Started':submissions_report.test_started.strftime("%d %b, %Y %H:%I %p"),
+                'Submitted':submissions_report.test_submited.strftime("%d %b, %Y %H:%I %p"),
+                'wrong':submissions_report.wrong,
+                'correct':submissions_report.correct,
+                'Attendance':submissions.HallAttendence
+            }
+
+            ii = ii + 1
+
+            
+
+            
+
+        print(params)
+            
+    return render(request, "admin_html/pdf_report.html", params)
+
