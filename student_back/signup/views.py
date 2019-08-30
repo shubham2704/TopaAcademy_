@@ -22,8 +22,7 @@ def signup(request):
         if first_name!='' and last_name!='' and email!='' and phone_no!='' and password!='' and confirm!='':
             if password==confirm:
                
-                #email = EmailMessage(subject='subj', body='body', from_email=settings[0].smtp_host, to=["rs188282@gmail.com"],connection=email_connect)
-                #email.send()
+                
                 #sms = send_sms("test", "9685925522", "RJITAC")
                 #print(sms)
 
@@ -38,12 +37,15 @@ def signup(request):
                 if check_email==0 and check_phone==0:
                     obj, insert_user = student_user.objects.get_or_create(first_name=first_name, last_name=last_name, email=email, phone_no=phone_no,password=sign_pwd, account_status='Not Active', email_hash=email_hash, otp=otp, phone_status='Not Verified', email_status='Not Verified')
                     
-                    insert = student_academic.objects.create(student_id_id=obj.id, branch='', semester='0', batch='', profile='', subject_preference='', goal='')
-                    insert = student_dashboard_metrices.objects.create(student_id_id=obj.id, college_level_rank="0", class_level_rank="0")
+                    insert = student_academic.objects.create(student_id_id=obj.id, branch='', semester='0', batch='', profile='/media/avatar.png', subject_preference='', goal='')
+                    insert = student_dashboard_metrices.objects.create(student_id_id=obj.id, college_level_rank="0", class_level_rank="0", student_email=email)
                     
                     if insert:
                         msg = "You otp for phone verifiaction is " + otp 
-                        
+                        body = "here is you link to verify you email is <a href='http://" + request.get_host()+ "/student/activate/" + obj.email_hash +"'> " + request.get_host()+ "/student/activate/" + obj.email_hash +" </a>"
+                        email = EmailMessage(subject='Verify email - Top Academy', body=body, from_email=settings[0].smtp_email, to=[email],connection=email_connect)
+                        email.content_subtype = "html"
+                        email.send()
                         send = send_sms(msg, phone_no, "RJITAC")
                         #print(send)
                         messages.success(request, "Your account has been succesfully created please login and verify you email and phone number.")

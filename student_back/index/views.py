@@ -1,13 +1,13 @@
 from django.shortcuts import render, HttpResponse
 from ..signup.models import student_user, student_academic, student_dashboard_metrices
-from ..GlobalModels.main import login, send_sms, email_connect, check_account
+from ..GlobalModels.main import login, send_sms, email_connect, check_account, settings
 from admin_back.admin_main.models import exam
-from admin_back.websettings.models import settings
 from admin_back.branch.models import branchs
 from django.core.signing import Signer
 from django.db.models import Q
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
+from django.core.mail import EmailMessage
 import os
 import json
 import string_utils
@@ -19,13 +19,22 @@ def email_verification(request):
     response_data = {}
     if check_login == True:
 
-        setting_obj = settings.objects.get(~Q(timezone=''))
-        email = check_account(request,setting_obj.salt)
-        response_data['status'] = False
-        response_data['ntt'] = "success"
-        response_data['msg'] = "Verification email sent to " + email
+        email = check_account(request,settings[0].salt)
 
-        
+        obj = student_user.objects.get(email=email)
+        print(settings)
+        body = "here is you link to verify you email is <a href='http://" + request.get_host()+ "/student/activate/" + obj.email_hash +"'> " + request.get_host()+ "/student/activate/" + obj.email_hash +" </a>"
+        sendb = EmailMessage(subject='Verify email - Top Academy', body=body, from_email=settings[0].smtp_email, to=[email],connection=email_connect)
+        sendb.content_subtype = "html"
+        s = sendb.send()
+
+        if s:
+                        
+            response_data['status'] = False
+            response_data['ntt'] = "success"
+            response_data['msg'] = "Verification email sent to " + email
+
+            
 
     else:
 
@@ -92,8 +101,8 @@ def index(request):
     pass_args['branch_array_old'] = get_branch
     #print(branch_array)
     if check_login == True:
-       setting_obj = settings.objects.get(~Q(timezone=''))
-       email = check_account(request,setting_obj.salt)
+       setting_obj = settings
+       email = check_account(request,setting_obj[0].salt)
        
        get_user = student_user.objects.get(email=email)
        get_user_aca = student_academic.objects.get(student_id_id=get_user.id)
@@ -118,8 +127,14 @@ def index(request):
                pass_args['aca'] = False
                pass_args['profile'] = False
            else:
-
-               pass_args['profile'] = True
+               pass_args['profile'] = True   
+           if get_user_aca.EnrollNo=='':
+               
+               pass_args['aca'] = False
+               pass_args['EnrollNo'] = False
+           
+           else:
+                pass_args['EnrollNo'] = True
        #print(pass_args)
        if get_user.phone_status=='Not Verified':
            pass_args['phone'] = False
@@ -146,7 +161,22 @@ def index(request):
                else:
                    get_user_aca.semester = semesterr
                    pass_args['semester'] = True
+
+           if pass_args['EnrollNo'] == False:
+
+                enroll = request.POST['enroll']
+                if enroll!='':
+
+                    get_user_aca.EnrollNo = enroll
+                    pass_args['EnrollNo'] = True
+                    messages.success(request, "Enrollment No. succesfully updated")
+                    
+                else:
+                    messages.warning(request, "Enter your enrollment number.")
+
+           
                
+
            if pass_args['branch'] == False:
                branch = request.POST['branch']
                
@@ -223,10 +253,11 @@ def index(request):
        pass_args['user'] = get_user
        sem = get_user_aca.semester
        exp = get_user_aca.branch.split(":")
-       get_exam = exam.objects.filter(program=exp[0],branch=exp[1],sem=sem, status='Created')
-       pass_args['exam'] = get_exam
+       if exp[0]!='' and exp[1]!='' and sem!='':
+        get_exam = exam.objects.filter(program=exp[0],branch=exp[1],sem=sem, status='Created')
+        pass_args['exam'] = get_exam
 
-       print(get_exam)
+        print(get_exam)
 
 
        

@@ -329,7 +329,7 @@ def exam_details(request, test_id):
 
     }
     check_login = login(request)
-
+    
     if check_login == True:
         
         setting_obj = settings.objects.get(~Q(timezone=''))

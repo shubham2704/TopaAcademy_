@@ -699,15 +699,24 @@
                           </div>
                         
                         </div>
-                     {% endif %}     
+                     {% endif %}   
+                     {% if EnrollNo == False %}
+                     <div class="row no-margin-y">
+                        <div class="form-group col-sm-12">
+                            <label>Your Enrollment No.</label>
+                        <input name="enroll" class="form-control  " size="16" type="text" placeholder="0902XXXXXXXX">
+                      
+                      </div> 
+                       
+                      </div>
+                      {% endif %}
                        {% if dob == False %}
-                        <div class="row">
-                          <div class="form-group col-md-12">
-                            <label>Your birth date</label>
-                          </div>
-                        </div>
+
+                       
+                        
                         <div class="row no-margin-y">
                           <div class="form-group col-sm-12">
+                              <label>Your birth date</label>
                           <div class="input-group  " data-min-view="2" data-date-format="yyyy-mm-dd">
                           <input name="dob" class="form-control date datetimepicker" size="16" type="text" value="">
                         
