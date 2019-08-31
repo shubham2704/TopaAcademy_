@@ -229,7 +229,7 @@
                   <div class="{%  if edit == True %}  collapse show {% else %} collapse {% endif %}" id="collapseOne" aria-labelledby="headingOne" data-parent="#accordion" style="">
                   
                      <br><br>
-                    <form action="/admin-panel/teacher/add" enctype="multipart/form-data" method="POST" class="col-md-12">
+                    <form action="" enctype="multipart/form-data" method="POST" class="col-md-12">
                     
                     {% csrf_token %}
 
@@ -249,14 +249,14 @@
                     
                       <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputText3">First Name*</label>
                       <div class="col-12 col-sm-8 col-lg-6">
-                        <input name="first_name"  class="form-control" id="inputText3" value="" type="text">
+                        <input name="first_name"  class="form-control" id="inputText3" value="{{current.first_name}}" type="text">
                       </div>
                     </div>
 
                     <div class="form-group row">
                       <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputText3">Last Name*</label>
                       <div class="col-12 col-sm-8 col-lg-6">
-                       <input name="lastname"  class="form-control" id="inputText3" value="" type="text">
+                       <input name="lastname"  class="form-control" id="inputText3" value="{{current.last_name}}" type="text">
                        </div>
                     </div>
 
@@ -264,14 +264,14 @@
                     
                       <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputText3">Employe ID</label>
                       <div class="col-12 col-sm-8 col-lg-6">
-                      <input name="employe_id"  class="form-control" id="inputText3" value="" type="text">
+                      <input name="employe_id"  class="form-control" id="inputText3" value="{{current.epployee_id}}" type="text">
                       </div>
                      </div>
                      <div class="form-group row">
                     
                       <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputText3">Department*</label>
                       <div class="col-12 col-sm-8 col-lg-6">
-                        <input name="department" value="" placeholder="" class="form-control" id="inputText3" type="text">
+                        <input name="department" value="{{current.department}}" placeholder="" class="form-control" id="inputText3" type="text">
                       </div>
                     </div>
 
@@ -279,33 +279,33 @@
                     
                       <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputText3">Designation*</label>
                       <div class="col-12 col-sm-8 col-lg-6">
-                        <input name="designation" value="" placeholder="" class="form-control" id="inputText3" type="text">
+                        <input name="designation" value="{{current.desination}}" placeholder="" class="form-control" id="inputText3" type="text">
                       </div>
                     </div>
 
                     <div class="form-group row">
                       <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputDefault">Email*</label>
                       <div class="col-12 col-sm-8 col-lg-6">
-                        <input name="email" value="" class="form-control" id="inputDefault" type="email" placeholder="abc@example.com">
+                        <input name="email" value="{{current.email}}" class="form-control" id="inputDefault" type="email" placeholder="abc@example.com">
                       </div>
                     </div>
                     
                      <div class="form-group row pt-1 pb-1">
                       <label class="col-12 col-sm-3 col-form-label text-sm-right">Status</label>
                       <div class="col-12 col-sm-8 col-lg-6 form-check mt-1">
-                      
+                        
                         <label class="custom-control custom-radio custom-control-inline">
-                          <input class="custom-control-input" checked type="radio" value="Active" name="status"><span class="custom-control-label">Active</span>
+                          <input class="custom-control-input" {% if current.status == "Active" %} checked {% endif %} type="radio" value="Active" name="status"><span class="custom-control-label">Active</span>
                         </label>
                         <label class="custom-control custom-radio custom-control-inline">
-                          <input  class="custom-control-input" type="radio" value="In Active" name="status" ><span class="custom-control-label">In Active</span>
+                          <input  class="custom-control-input" type="radio" value="In Active" {% if current.status == "In Active" %} checked {% endif %} name="status" ><span class="custom-control-label">In Active</span>
                         </label>
                       </div>
                     </div>
                     <div class="form-group row">
                       <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputDefault">Phone No. *</label>
                       <div class="col-12 col-sm-8 col-lg-6">
-                        <input name="phone" class="form-control" id="inputDefault" type="text" value="">
+                        <input name="phone" class="form-control" id="inputDefault" type="text" value="{{current.phone}}">
                       </div>
                     </div>
                     {%  if edit != True %}
@@ -353,7 +353,7 @@
                     <thead>
                       <tr>
                         <th style="width:30%;">Name</th>
-                        <th style="width:10%;">Status</th>
+                        <th style="width:10%;">Desination</th>
                         
                         <th style="width:10%;">Date</th>
                         <th >Department</th>
@@ -364,6 +364,7 @@
                      {% for user in users %}
                       <tr>
                         <td class="user-avatar"> <img src="{% static "admin/assets/img/avatar1.png" %}" alt="Avatar">{{user.prefix}} {{user.first_name}} {{user.lastname}} ({{user.epployee_id}})</td>
+                        <td>{{user.desination}}</td>
                         <td>{{user.status}}</td>
                         <td>{{user.department}}</td>
                         
@@ -371,11 +372,10 @@
                             <div class="btn-group btn-hspace">
                               <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">Action <span class="icon-dropdown mdi mdi-chevron-down"></span></button>
                               <div class="dropdown-menu" role="menu">
-                               <a class="dropdown-item" href="/admin-panel/teacher/edit/{{user.id}}">Edit Faculty</a>
-                               <a class="dropdown-item" href="/admin-panel/teacher/view/{{user.id}}">View Profile</a>
-                               <a class="dropdown-item" href="/admin-panel/teacher/allot/{{user.id}}">Manage Faculty</a>
+                               <a class="dropdown-item" href="/admin-panel/staff/edit/{{user.id}}">Edit Faculty</a>
+                               <a class="dropdown-item" href="/admin-panel/staff/view/{{user.id}}">View Profile</a>
                               
-                                <div class="dropdown-divider"></div><a class="dropdown-item" href="/admin-panel/manage-admin/delete/{{user.id}}">Delete</a>
+                                <div class="dropdown-divider"></div><a class="dropdown-item" href="/admin-panel/staff/add?action=delete&id={{user.id}}">Delete</a>
                               </div>
                             </div>
                           </td>

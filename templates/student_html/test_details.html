@@ -276,13 +276,14 @@
                                                   <label class="col-form-label text-sm-right ">{{test_details.type}}</label>
                                             </div>
                                           </div>
+                                          {% if ask_quesy == True %}
                                               <div class="form-group row">
                                                 <label class="col-12 col-sm-6 col-form-label text-sm-right" for="inputPassword3">Total Questions : </label>
                                                 <div class="col-12 col-sm-8 col-lg-6">
                                                       <label class="col-form-label text-sm-right text-info">{{test_details.AskQuestion}}</label>
                                                 </div>
                                               </div>
-                              
+                                              {% endif %}      
                                 <div class="form-group row">
                                         <label class="col-12 col-sm-6 col-form-label " for="inputTextarea3"></label>
                                         {% if test_button == True %}

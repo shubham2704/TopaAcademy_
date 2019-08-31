@@ -63,14 +63,17 @@ def ajax_browse(request):
         if passfull == 'true':
              get_result = test_details.objects.values_list('id', 'test_name', 'description', 'added_by', 'AskQuestion', 'category_one', 'steam', 'category_two', 'TestType').filter(status='Active')
              count_result = get_result.count()
-             print(get_result)
+             #print(get_result)
              response_result = {}
              response_result['count'] = count_result
              response_result['data'] = {}
+             
              inc = 0
              for request in get_result:
+                 
                  response_result['data'][inc]={}
                  id = request[0]
+                 print("dssd", id)
                  added_by = request[3]
                  get_adv_details = test_details_advanced.objects.values_list('isTimer', 'TimerLength').get(test_id=id)
                  upload_user = users.objects.values_list('first_name', 'lastname').get(email=added_by)
@@ -99,7 +102,8 @@ def ajax_browse(request):
 
              difficulty = request.GET['difficulty']
              test_type = request.GET['test_type']
-             get_category = Steam.objects.get(id=category).steam_name
+             print(category)
+             get_category = Steam.objects.get(steam_link_id=category).steam_name
 
              build_ar = {}
              build_ar['TestDifficulty'] = difficulty
@@ -119,10 +123,12 @@ def ajax_browse(request):
              response_result['count'] = count_result
              response_result['data'] = {}
              inc = 0
+             
              for request in get_result:
                  response_result['data'][inc]={}
                  id = request[0]
                  added_by = request[3]
+                 
                  get_adv_details = test_details_advanced.objects.values_list('isTimer', 'TimerLength').get(test_id=id)
                  upload_user = users.objects.values_list('first_name', 'lastname').get(email=added_by)
                  response_result['data'][inc]['isTimer'] = get_adv_details[0]

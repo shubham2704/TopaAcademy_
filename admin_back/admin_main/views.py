@@ -9,6 +9,7 @@ from django.contrib import messages
 from ..websettings.models import settings
 import json
 from ..Add_Admin.models import users
+from datetime import datetime
 
 def exam_eligability_create(request, test_id, outside_s):
     
@@ -81,7 +82,11 @@ def exam_eligability(request, test_id):
 
         if get_all_test.ranking == True:
             params['cam']['ranking'] = True
-            params['cam']['ranking_det'] = json.loads(get_all_test.MarkingSetting)
+            if get_all_test.MarkingSetting=='':
+                params['cam']['ranking'] = False
+
+            else:
+                params['cam']['ranking_det'] = json.loads(get_all_test.MarkingSetting)
 
             
         else:
@@ -151,12 +156,37 @@ def test_det(request):
     if checklogin!=True:
         return redirect('/admin-panel/login')
     else:
-        params = {}
+
+        try:
+            if request.method=="GET":
+                if request.GET['action']=="delete_exam":
+
+                    del_ = exam.objects.get(id=request.GET['id']).delete()
+
+                    if del_:
+
+                        messages.success(request, "Exam deleted")
+                    else:
+                        messages.success(request, "Unexpecetd error.", extra_tags="danger")
+        except:
+            pass
+            
+        params = {"exam":{}}
         get_test = test_details.objects.all()
         get_exam = exam.objects.all()
         params['tests'] = get_test
-        params['exams'] = get_exam
-        params['exam_count'] = get_exam.count()
+        today = datetime.today().strftime("%Y-%m-%d %H:%M")
+        ie = 0
+        for abss in get_exam:
+            exam_det = test_details_advanced.objects.get(test_id=abss.test_id)
+            to_date = exam_det.DurationTo
+
+            if today < to_date:
+
+                params['exam'][ie] = abss
+
+        
+        params['exam_count'] = len(params['exam'])
 
         print(params)
 

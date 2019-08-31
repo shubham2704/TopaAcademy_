@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponse
 from ..signup.models import student_user, student_academic, student_dashboard_metrices
 from ..GlobalModels.main import login, send_sms, email_connect, check_account, settings
+from admin_back.admin_main.models import test_data, test_details_advanced, test_details, exam
 from admin_back.admin_main.models import exam
 from admin_back.branch.models import branchs
 from django.core.signing import Signer
@@ -11,6 +12,8 @@ from django.core.mail import EmailMessage
 import os
 import json
 import string_utils
+from django.utils import timezone
+from datetime import datetime
 
 
 def email_verification(request):
@@ -23,7 +26,7 @@ def email_verification(request):
 
         obj = student_user.objects.get(email=email)
         print(settings)
-        body = "here is you link to verify you email is <a href='http://" + request.get_host()+ "/student/activate/" + obj.email_hash +"'> " + request.get_host()+ "/student/activate/" + obj.email_hash +" </a>"
+        body = "here is you link to verify you email is <a href='http://" + request.get_host()+ "/student/verify_email/" + obj.email_hash +"'> " + request.get_host()+ "/student/activate/" + obj.email_hash +" </a>"
         sendb = EmailMessage(subject='Verify email - Top Academy', body=body, from_email=settings[0].smtp_email, to=[email],connection=email_connect)
         sendb.content_subtype = "html"
         s = sendb.send()
@@ -85,7 +88,7 @@ def otp_send(request, number):
 def index(request):
 
     check_login = login(request)
-    pass_args = {}
+    pass_args = {"exam":{}}
     branch_array = {}
     get_branch = branchs.objects.all()
     
@@ -254,10 +257,19 @@ def index(request):
        sem = get_user_aca.semester
        exp = get_user_aca.branch.split(":")
        if exp[0]!='' and exp[1]!='' and sem!='':
+        ie = 0
         get_exam = exam.objects.filter(program=exp[0],branch=exp[1],sem=sem, status='Created')
-        pass_args['exam'] = get_exam
+        today = datetime.today().strftime("%Y-%m-%d %H:%M")
+        
+        for abss in get_exam:
+            exam_det = test_details_advanced.objects.get(test_id=abss.test_id)
+            to_date = exam_det.DurationTo
 
-        print(get_exam)
+            if today < to_date:
+
+                pass_args['exam'][ie] = abss
+
+        
 
 
        

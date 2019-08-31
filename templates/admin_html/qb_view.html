@@ -15,15 +15,20 @@
     <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/jquery.vectormap/jquery-jvectormap-1.2.2.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/jqvmap/jqvmap.min.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/datetimepicker/css/bootstrap-datetimepicker.min.css" %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/sweetalert2/sweetalert2.min.css" %}" />
-    <link rel="stylesheet" href="{% static "admin/assets/css/app.css" %}" type="text/css"/>
-
+   <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/select2/css/select2.min.css" %}"/>
+   
+   <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/datatables/datatables.net-bs4/css/dataTables.bootstrap4.css" %}"/>
+   <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/datatables/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" %}"/>
+   <link rel="stylesheet" href="{% static "admin/assets/css/app.css" %}" type="text/css"/>
+   <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/multiselect/css/multi-select.css" %}"/>
+   <link rel="stylesheet" type="text/css"  href="{% static "admin/assets/lib/morrisjs/morris.css" %}"/>
+    
   </head>
   <body>
     <div class="be-wrapper be-fixed-sidebar">
       <nav class="navbar navbar-expand fixed-top be-top-header">
         <div class="container-fluid">
-          <div class=""><a class="navbar-brand" href="index-2.html"></a>
+          <div class=""><a class="navbar-brand" href="#"></a>
           </div>
           <div class="page-title"><span><i>Top Academy</i></span></div>
           <div class="be-right-navbar">
@@ -106,93 +111,83 @@
                 <ul class="sidebar-elements">
                   <li class="divider">Menu</li>
                   
-                  <li class="parent"><a href="#"><i class="icon mdi mdi-face"></i><span>Dashboard</span></a>
+                  <li class=" active"><a href="#"><i class="icon mdi mdi-face"></i><span>Dashboards</span></a>
+                   </li>
+
+                  <li class="parent"><a href="charts.html"><i class="icon mdi mdi-chart-donut"></i><span>Question Banks</span></a>
                     <ul class="sub-menu">
-                      <li><a href="ui-alerts.html">My Activity</a>
-                      </li>
-                      <li><a href="ui-alerts.html">Teacher Activity</a>
-                      </li>
-                      <li><a href="ui-buttons.html">Student Activity</a>
-                      </li>
+                      <li><a href="admin-panel/add/test">New Question Bank</a></li>
+                      
+                      <li><a href="/admin-panel/test/">Manage QB</a></li>
+                      <li><a href="admin-panel/account">Test Actions</a></li>
                      
                     </ul>
                   </li>
 
-                  <li class="parent"><a href="charts.html"><i class="icon mdi mdi-chart-donut"></i><span>Question Banks</span></a>
+                  <li class="parent"><a href="#"><i class="icon mdi mdi-dot-circle"></i><span>Learning</span></a>
                     <ul class="sub-menu">
-                      <li><a href="charts-flot.html">Mock Test</a>
+                      
+                      <li><a href="/admin-panel/post/add">New Post</a>
                       </li>
-                      <li><a href="charts-sparkline.html">Practice Test</a>
+                      <li><a href="/admin-panel/post/">My Posts</a>
                       </li>
-                      <li><a href="charts-sparkline.html">Manage QB</a>
+                    </ul>
+                  </li>
+                  <li class="parent"><a href="#"><i class="icon mdi mdi-border-all"></i><span>Manage Users</span></a>
+                    <ul class="sub-menu">
+                      <li><a href="/admin-panel/users/students">Students</a>
                       </li>
-                     
+
+                      <li><a href="/admin-panel/staff/add">Staff</a>
+                      </li>
+
+                      <li><a href="admin-panel/user/admin">Admin</a>
+                      </li>
+                    </ul>
+                  </li>
+
+                  <li class="parent"><a href="#"><i class="icon mdi mdi-dot-circle"></i><span>Reports</span></a>
+                    <ul class="sub-menu">
+                      <li><a href="admin-panel/account">Test Reports</a></li>
+                      
+                      <li><a href="admin-panel/account">Staff Activity</a></li>
+                      
                     </ul>
                   </li>
 
                   
-                  <li class="parent"><a href="#"><i class="icon mdi mdi-border-all"></i><span>Manage Users</span></a>
-                    <ul class="sub-menu">
-                      <li><a href="tables-general.html">Students</a>
-                      </li>
-                      <li><a href="tables-datatables.html">Teacher</a>
-                      </li>
-                      <li><a href="tables-filters.html"><span class="badge badge-primary float-right">New</span>Admin</a>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="parent"><a href="#"><i class="icon mdi mdi-layers"></i><span>Historic Activity</span></a>
-                    <ul class="sub-menu">
-                      <li><a href="pages-blank.html">Admin</a>
-                      </li>
-                      <li><a href="pages-blank-header.html">Teacher</a>
-                      </li>
-                      <li><a href="pages-login.html">Student</a>
-                      </li>
-                      
-                    </ul>
-                  </li>
                   <li class="parent"><a href="#"><i class="icon mdi mdi-dot-circle"></i><span>Account</span></a>
                     <ul class="sub-menu">
-                      <li><a href="form-elements.html">Add Admin</a>
-                      </li>
-                      <li><a href="form-validation.html">Add Teacher</a>
-                      </li>
-                      <li><a href="form-multiselect.html">My Account</a>
-                      </li>
-                      
+                      <li><a href="admin-panel/account">My Account</a></li>
                     </ul>
                   </li>
                   <li class="divider">Other</li>
-                  <li class="parent"><a href="#"><i class="icon mdi mdi-inbox"></i><span>Announcements</span></a>
-                    <ul class="sub-menu">
-                        <li><a href="email-inbox.html">To All</a>
-                        </li>
-                      <li><a href="email-inbox.html">To Teacher</a>
-                      </li>
-                      <li><a href="email-read.html">To Student</a>
-                      </li>
-                      <li><a href="email-compose.html">To Admins</a>
-                      </li>
-                    </ul>
-                  </li>
-               
+                  
                   <li class="parent"><a href="charts.html"><i class="icon mdi mdi-chart-donut"></i><span>Setup Website</span></a>
                     <ul class="sub-menu">
-                      <li  class="active"><a href="charts-flot.html">Add Steam</a>
+                      <li><a href="charts-flot.html">Question Bank Categories</a>
                       </li>
-                      <li><a href="charts-sparkline.html">Add Branches</a>
+                      <li><a href="charts-sparkline.html"> College Programmes</a>
                       </li>
-                      <li><a href="charts-sparkline.html">Subjects</a>
-                      </li>
-                      <li><a href="charts-chartjs.html">Signup Settings</a>
-                      </li>
-                      <li><a href="charts-chartjs.html">SEO Meta</a>
+                      
+                      <li><a href="charts-chartjs.html">Website Settings</a>
                       </li>
                      
                     </ul>
                   </li>
-                  <li><a href="documentation.html"><i class="icon mdi mdi-book"></i><span>Admin Manual</span></a>
+                  <li class="parent"><a href="#"><i class="icon mdi mdi-inbox"></i><span>Announcements</span></a>
+                    <ul class="sub-menu">
+                        <li><a href="email-inbox.html">Create New</a>
+                        </li>
+                      <li><a href="email-inbox.html">View All</a>
+                      </li>
+                     
+                    </ul>
+                  </li>
+               
+                  <li><a href="session/"><i class="icon mdi mdi-assignment-account"></i><span>Session Manager</span></a>
+                  </li>
+                  <li><a href="documentation.html"><i class="icon mdi mdi-book"></i><span>Website Manual</span></a>
                   </li>
                 </ul>
               </div>
@@ -201,114 +196,89 @@
           
         </div>
       </div>
+      
       <div class="be-content">
-        <div class="main-content container-fluid">
-            {% if messages %}
+
+            <div class="card-header pb-3">
+  
+
+                  </div>
+              <div class="main-content container-fluid">
+                    {% if messages %}
 
 
-            {% for message in messages %}
-
-            
-            
-            <div class="alert alert-{{message.tags}} alert-dismissible" role="alert">
-                <button class="close" type="button" data-dismiss="alert" aria-label="Close"><span class="mdi mdi-close" aria-hidden="true"></span></button>
-                <div class="icon"><span class="mdi mdi-alert-triangle"></span></div>
-                <div class="message">{{message}}</div>
-              </div>
-
-
+                    {% for message in messages %}
         
-            {% endfor %}
-         {% endif %}
-<div class="row">
-
-                        <div class="col-lg-12">
-                    <div class="text-right">
-                    <a href="/admin-panel/add/test"  class="btn btn-space btn-primary"><i class="icon icon-left mdi mdi-plus"></i>Add New Test</a>
-                    <a href="/admin-panel/test/action"  class="btn btn-space btn-primary"><i class="icon icon-left mdi mdi-pencil"></i>Test Actions</a>
-                 
-                  </div>
-
-                 
-                  </div>
-</div>
-<br>
-                <div class="row">
-                  {% if exam_count > 0 %}
-                  <div class="card-header ">Active Exam</div>
-                  <div class="row col-md-12">
-                     {% for key, exam in exam.items %}
-                      <div class="col-lg-4">
-                          <div class="card ">
-                            <div class="card-header">{{exam.test_name}}
-                               <div class="tools dropdown">
-                               <a data-toggle="tooltip" data-placement="left" title="" data-original-title="Tooltip on left" href="/admin-panel/report/monitor/exam/{{exam.id}}"><span class="icon mdi mdi-chart"></span>
-                               </a>
-                            </div></div>
-                            <div class="card-body">
-                              <p class="text-bold"> {{exam.sem}} Sem/Yr, {{exam.branch}}, {{exam.program}}  </p><a class="card-link" href="">Start : {{exam.start_time}}</a>
-                              <a class="card-link text-danger" onclick="delete_exam({{exam.id}})" href="#">Delete</a>
-                            </div>
-                          </div>
-                        </div>
-  {% endfor %}
-
-                          
-                  </div>
-                  {% endif %}
-                        <div class="col-lg-12">
-                          <div class="card card-border-color card-border-color-primary card-table">
-                            <div class="card-header ">All Tests</div>
-                            
-                            
-                            <div class="card-body">
-                    <table class="table">
-                    <thead>
-                      <tr>
-                        <th style="width:20%;">Test Name</th>
-                        <th style="width:25%;">Description</th>
-                        <th style="width:30%;">Categories</th>
-                        
-                        <th style="width:10%;">Status</th>
-                        <th style="width:10%;">Date</th>
-                        <th class="actions"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                     {% for test in tests %}
-                      <tr>
-                        <td>{{test.test_name}}</td>
-                        <td>{{test.description}}</td>
-                        <td>
-                        {% if test.category_one != '' %}<label class="badge badge-secondary"> {{test.category_one}} </label>{% endif %}
-                        {% if test.category_two != '' %}<label class="badge badge-primary"> {{test.category_two}} </label>{% endif %}
-                        {% if test.category_three != '' %}<label class="badge badge-success"> {{test.category_three}} </label>{% endif %}
-                        </td>
-                        
-                        <td>{{test.status}}</td>
-                        <td>{{test.date}}</td>
-                        
-                      <td class="text-center">
-                            <div class="btn-group btn-hspace">
-                              <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">Action <span class="icon-dropdown mdi mdi-chevron-down"></span></button>
-                              <div class="dropdown-menu" role="menu"><a class="dropdown-item" href="/admin-panel/edit/test/{{test.id}}">Edit / QB</a>
-                                <div class="dropdown-divider"></div><a class="dropdown-item" href="/admin-panel/delete/test/{{test.id}}">Delete</a>
-                              </div>
-                            </div>
-                          </td>
-                      </tr>
-                       {% endfor %}
-                    </tbody>
-                  </table>
-                         
-                            </div>
-                          </div>
-                        </div>
-                    
+                     <div class="alert alert-{{message.tags}} alert-dismissible" role="alert">
+                        <button class="close" type="button" data-dismiss="alert" aria-label="Close"><span class="mdi mdi-close" aria-hidden="true"></span></button>
+                        <div class="icon"><span class="mdi mdi-alert-triangle"></span></div>
+                        <div class="message">{{message}}</div>
                       </div>
+        
+                    {% endfor %}
+                 {% endif %}
+
+                 {% if q_count == 0 %}
+   <h2 class="text-center">No Question Found</h2>
+   <p class="text-center"> Please upload some question and come back here.</p>
+                 {% endif %}
+                 {% if q_count != 0 %}
+               
+               
+                 <div class="">
+                    <div class="card card-table">
+                        <div class="card-header">Questions
+                      
+                        </div>
+                        <div class="card-body">
+                            <form method="POST">
+                          <table class="table table-sm table-striped">
+                            <thead>
+                              <tr>
+                                <th style="width:30%;" >Question</th>
+                                <th style="width:20%;" >Explanation</th>
+                                <th style="width:30%;" class="">Options</th>
+                                <th style="width:10%;" class=""></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                             {% for qb in questions %}
+                              <tr>
+                               
+                                <td >{{qb.question}}</td>
+                                <td>{{qb.explanation}}</td>
+                                <td class="">
+                                    <ul>
+                                        <li class="{% if qb.a1 == True %}text-success{% endif %}" > {{qb.o1}} </li>
+                                        <li class="{% if qb.a2 == True %}text-success{% endif %}" >{{qb.o2}}</li>
+                                        <li class="{% if qb.a3 == True %}text-success{% endif %}" >{{qb.o3}}</li>
+                                        <li class="{% if qb.a4 == True %}text-success{% endif %}" >{{qb.o4}}</li>
+                                    </ul>
+
+                                </td>
+                                <td class="actions"><a class="icon" href="?action=delete&id={{qb.id}}"><i class="mdi mdi-delete"></i></a></td>
+                              </tr>
+
+                              {%endfor%}
+                            </tbody>
+                          </table>
+                     
+                        </div>
+                
+                      </div>
+                  
+                    </form>
+                              </div>
+                          
+                    
+                        </div>
+                        
+                        {% endif %}
+                      </div>
+                  
         </div>
       </div>
-      
+     
     </div>
     <script src="{% static "admin/assets/lib/jquery/jquery.min.js" %}" type="text/javascript"></script>
     <script src="{% static "admin/assets/lib/perfect-scrollbar/js/perfect-scrollbar.min.js" %}" type="text/javascript"></script>
@@ -321,30 +291,34 @@
     <script src="{% static "admin/assets/lib/jquery-flot/plugins/jquery.flot.orderBars.js" %}" type="text/javascript"></script>
     <script src="{% static "admin/assets/lib/jquery-flot/plugins/curvedLines.js" %}" type="text/javascript"></script>
     <script src="{% static "admin/assets/lib/jquery-flot/plugins/jquery.flot.tooltip.js" %}" type="text/javascript"></script>
-    <script src="{% static "admin/assets/lib/jquery.sparkline/jquery.sparkline.min.js" %}" type="text/javascript"></script>
-    <script src="{% static "admin/assets/lib/jquery-ui/jquery-ui.min.js" %}" type="text/javascript"></script>
-    <script src="{% static "admin/assets/lib/sweetalert2/sweetalert2.min.js" %}" type="text/javascript"></script>
-     <script type="text/javascript">
-
-      function delete_exam(id){
+    <script src="{% static "admin/assets/lib/chartjs/Chart.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/countup/countUp.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/raphael/raphael.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/morrisjs/morris.min.js" %}"  type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/datatables/datatables.net/js/jquery.dataTables.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/datatables/datatables.net-bs4/js/dataTables.bootstrap4.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/datatables/datatables.net-buttons/js/dataTables.buttons.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/datatables/datatables.net-buttons/js/buttons.flash.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/datatables/jszip/jszip.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/datatables/pdfmake/pdfmake.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/datatables/pdfmake/vfs_fonts.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/datatables/datatables.net-buttons/js/buttons.colVis.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/datatables/datatables.net-buttons/js/buttons.print.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/datatables/datatables.net-buttons/js/buttons.html5.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/datatables/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/datatables/datatables.net-responsive/js/dataTables.responsive.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/datatables/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js" %}" type="text/javascript"></script>
+    
+    <script type="text/javascript">
       
-        Swal.fire({title:"Are you sure",text:"Are you really want to detele the exam, this action is unchangeable.",confirmButtonText:"Proceed",showCloseButton:!0}).then(result => {
-        if (result.value) {
-          window.location.href = "?action=delete_exam&id="+id;
-        } else {
-          
-        }
-      });
 
-    }
       $(document).ready(function(){
-      	//-initialize the javascript
-      	App.init();
       
+        //$(".select2").select2();
+      	//-initialize the javascript
+        App.init();
       
       });
-      
-     
     </script>
   </body>
 </html>

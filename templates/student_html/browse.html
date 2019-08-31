@@ -194,7 +194,7 @@
                    <select id="category" onchange="steam_select(this)" class="form-control form-control-sm">
                         <option value="">Select One </option>
                         {% for steam in steam_c %}
-                         <option value="{{steam.id}}"> {{steam.steam_name}} </option>
+                         <option value="{{steam.steam_link_id}}"> {{steam.steam_name}} </option>
                         {% endfor %}
                          
                          
@@ -354,7 +354,12 @@
           $('#loader_here').html("");
           $('.ajax-loader').html("");
          $.each(data.data, function( index, value ) {
-           var cat2 = "", cat1 = "";
+          if(value.AskQuestion>0){
+          var quest = '<span style="font-size:15px;font-weight:400;" class="badge  badge-default"> '+value.AskQuestion+' Questions </span> ';
+          }else{
+            var quest = '';
+          }
+          var cat2 = "", cat1 = "";
            if(value.category_one!=''){
              cat1 = '<li class="breadcrumb-item">'+value.category_one+'</li>';
            }
@@ -369,7 +374,7 @@
             
           }
 
-          var main_wrap = ' <div data-steam="'+value.test_name+':'+value.category_one+':'+value.category_two+':'+value.test_name+':'+value.description+'" class="col-md-12"> <div class="be-booking-promo be-booking-promo-soldout  be-booking-promo-success"> <div class="be-booking-desc "> <h4 class="be-booking-desc-title">'+value.test_name+' </h4><span class="be-booking-desc-details">'+value.description+'</span>  '+category+' <br>  <span style="font-size:15px;font-weight:400;" class="badge  badge-default"> '+value.AskQuestion+' Questions </span> </div> <div class="be-booking-promo-price"> '+ wrap_timer +'<a class="btn btn-primary be-booking-btn-price" href="/student/test/details/'+value.id+'">Start Test</a> <p> <small style="font-size: 9px;">Uploaded by '+value.added_by+'</small> </p></div><span class="be-soldout-title">'+ value.test_type+'</span> </div></div>';
+          var main_wrap = ' <div data-steam="'+value.test_name+':'+value.category_one+':'+value.category_two+':'+value.test_name+':'+value.description+'" class="col-md-12"> <div class="be-booking-promo be-booking-promo-soldout  be-booking-promo-success"> <div class="be-booking-desc "> <h4 class="be-booking-desc-title">'+value.test_name+' </h4><span class="be-booking-desc-details">'+value.description+'</span>  '+category+' <br>  '+ quest +'</div> <div class="be-booking-promo-price"> '+ wrap_timer +'<a class="btn btn-primary be-booking-btn-price" href="/student/test/details/'+value.id+'">Start Test</a> <p> <small style="font-size: 9px;">Uploaded by '+value.added_by+'</small> </p></div><span class="be-soldout-title">'+ value.test_type+'</span> </div></div>';
           $('.ajax-loader').append(main_wrap)
 
         });

@@ -13,8 +13,156 @@ import json
 from ..Add_Admin.models import users
 import os
 import pandas as pd
+from .models import question as qb
+from django.http import JsonResponse
 
-# Create your views here.
+def change_status(request, edit_id,bool_s):
+    checklogin = CheckLogin(request)
+    if checklogin!=True:
+        return redirect('/admin-panel/login')
+    else:
+        params = {"status":"Success", "msg":"Test Status Changed"}
+
+        count_test = test_details.objects.filter(id=edit_id)
+
+        if count_test.count()==1:
+            get_test = test_details.objects.get(id=edit_id)
+
+            if get_test.TestType=="Mock":
+                if get_test.ranking==True:
+                    if get_test.MarkingSetting=='':
+                        params['status'] = "Error"
+                        params['msg'] = "Update your marking details"
+
+            if get_test.TestType=="Practice":
+                if get_test.ranking==True:
+                    if get_test.MarkingSetting=='':
+                        params['status'] = "Error"
+                        params['msg'] = "Update your marking details"
+
+
+            if get_test.QuestionUploaded == False:
+                params['status'] = "Error"
+                params['msg'] = "Upload question bank."
+
+            if params['status']=="Success":
+                if bool_s == "true":
+                    bool_s = "Active"
+                else:
+                    bool_s = "in Active"    
+                
+                get_test.status = bool_s
+                get_test.save()
+        return JsonResponse(params)
+
+
+
+
+
+
+
+
+def question_bank_view(request, edit_id):
+    checklogin = CheckLogin(request)
+    if checklogin!=True:
+        return redirect('/admin-panel/login')
+    else:
+        params = {"q_count":0}
+        if request.method=="GET":
+            try:
+                if request.GET['action'] == "delete":
+                    id_get = request.GET['id']
+                    check = qb.objects.filter(id=id_get)
+                    if check.count()==1:
+                        check.delete()
+                        messages.success(request, "Question succesfully deleted")
+            except:
+                pass
+        questions = qb.objects.filter(test_id=edit_id)
+        params['questions']= questions
+        params['q_count']= questions.count()
+
+
+
+        return render(request, "admin_html/qb_view.html", params)
+
+
+
+
+def merge_question_bank(request, edit_id):
+    checklogin = CheckLogin(request)
+    if checklogin!=True:
+        return redirect('/admin-panel/login')
+    else:
+        params = {"report":False}
+
+        try:
+            get_test = test_details.objects.all()
+            params['all_test'] = get_test
+
+          
+            print(request.POST)
+            if request.method=="POST":
+                if 'get_qb' in  request.POST:
+
+                    test_id=request.POST['exam_id']
+                    questions = qb.objects.filter(test_id=test_id)
+                    params['questions'] = questions
+                    print("got_qb")
+                    params['report'] = True
+
+
+                if 'merge' in  request.POST:
+                    questions = qb.objects.filter(test_id=edit_id)
+                    params['questions'] = questions
+                    params['report'] = True
+                    got_qb = parser.parse(request.POST.urlencode())['op']
+                    merg_inc = 0
+                    for key, val in got_qb.items():
+                        get_qb = qb.objects.get(id=key)
+                        insert = qb.objects.create(
+                            test_id=edit_id,
+                            question=get_qb.question,
+                            explanation=get_qb.explanation,
+                            a1=get_qb.a1,
+                            a2=get_qb.a2,
+                            a3=get_qb.a3,
+                            a4=get_qb.a4,
+                            o1=get_qb.o1,
+                            o2=get_qb.o2,
+                            o3=get_qb.o3,
+                            o4=get_qb.o4,
+                        )
+                        if insert:
+                            merg_inc = merg_inc + 1
+
+
+                    messages.success(request, str(merg_inc) + " question were succesfully merged.")
+
+
+        except Exception as E:
+            print(E)
+
+        return render(request, "admin_html/merge_qb.html", params)
+
+
+def view_question_bank(request, edit_id):
+    checklogin = CheckLogin(request)
+    if checklogin!=True:
+        return redirect('/admin-panel/login')
+    else:
+        params = {}
+
+        try:
+            get_test = test_details.objects.get(id=edit_id)
+            questions = qb.objects.filter(test_id=edit_id)
+
+        
+        
+        except:
+            pass
+
+   
 
 def question_bank(request, edit_id):
     checklogin = CheckLogin(request)
@@ -108,7 +256,7 @@ def edit_test(request, edit_id):
             
             get_test = test_details.objects.get(id=edit_id)
 
-            params['test_detail'] = get_test
+            params['test_details'] = get_test
             
             try:
                 get_m = json.loads(get_test.MarkingSetting)

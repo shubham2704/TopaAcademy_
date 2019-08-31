@@ -15,6 +15,7 @@
     <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/jquery.vectormap/jquery-jvectormap-1.2.2.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/jqvmap/jqvmap.min.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/datetimepicker/css/bootstrap-datetimepicker.min.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/jquery.gritter/css/jquery.gritter.css" %}"/>
     <link rel="stylesheet" href="{% static "admin/assets/css/app.css" %}" type="text/css"/>
   </head>
   <body>
@@ -226,17 +227,17 @@
                 <ul class="nav nav-tabs nav-tabs-classic" role="tablist">
                   <li class="nav-item"><a class="nav-link active" href="#classic_home" data-toggle="tab" role="tab" aria-selected="true">Test Details</a></li>
                   <li class="nav-item"><a class="nav-link" href="#classic_messages" data-toggle="tab" role="tab">1 . Question Bank</a></li>
-                  {% if test_detail.ranking == True %}
+                  {% if test_details.ranking == True %}
                   
                   <li class="nav-item"><a class="nav-link" href="#marking" data-toggle="tab" role="tab">2 . Marking Settings</a></li>
                   {% endif %}
                 </ul>
                 <div class="tab-content">
-                    {% if test_detail.ranking == True %}
+                    {% if test_details.ranking == True %}
                     <div class="tab-pane" id="marking" role="tabpanel">
                         
 
-                      {% if test_detail.QuestionUploaded == True %}
+                      {% if test_details.QuestionUploaded == True %}
                       <form method="post">
                       <div class="">
                           <div class="form-group row">
@@ -303,13 +304,13 @@
                     <div class="form-group row">
                       <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputText3">Test Name</label>
                       <div class="col-12 col-sm-8 col-lg-6">
-                        <input value="{{test_detail.test_name}}" class="form-control" id="inputText3" type="text">
+                        <input value="{{test_details.test_name}}" class="form-control" id="inputText3" type="text">
                       </div>
                     </div>
                     <div class="form-group row">
                       <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputPassword3">Description</label>
                       <div class="col-12 col-sm-8 col-lg-6">
-                        <input class="form-control" value="{{test_detail.description}}" id="inputPassword3" type="text">
+                        <input class="form-control" value="{{test_details.description}}" id="inputPassword3" type="text">
                       </div>
                     </div>
 
@@ -317,10 +318,10 @@
                       <label class="col-12 col-sm-3 col-form-label text-sm-right">Status</label>
                       <div class="col-12 col-sm-8 col-lg-6 pt-1">
                         <div class="switch-button switch-button-success">
-                          <input type="checkbox" {% if test_details.status == "Active" %} checked {% endif %}  name="swt5" id="swt5"><span>
+                          <input type="checkbox" onclick="change_status(this)" {% if test_details.status == "Active" %} checked {% endif %}  name="swt5" id="swt5"><span>
                             <label for="swt5"></label></span>
                         </div>
-                        <p class="badge badge-primary">{{test_detail.status}}</p>
+                        <p class="badge badge-primary">{{test_details.status}}</p>
                       </div>
                     </div>
                     
@@ -328,7 +329,7 @@
                       <label class="col-12 col-sm-3 col-form-label text-sm-right">is SCT</label>
                       <div class="col-12 col-sm-8 col-lg-6 pt-1">
                         <div class="switch-button switch-button-success">
-                          <input type="checkbox" {% if test_details.isSCT_test == True %} checked {% endif %}  name="swt5" id="swt5"><span>
+                          <input disabled type="checkbox" {% if test_details.isSCT_test == True %} checked {% endif %}  name="swt5" id="swt5"><span>
                             <label for="swt5"></label></span>
                         </div>
                       </div>
@@ -350,7 +351,7 @@
 
 
                     <div class="form-group row">
-                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputText3">Semester
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputText3">Semester/Year
                       </label>
                       <div class="col-12 col-sm-8 col-lg-6">
                         <input  value="{{test_details.SCTSemester}}"  class="form-control" id="inputText3" disabled type="text">
@@ -363,7 +364,7 @@
                       <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputText3">Category
                       </label>
                       <div class="col-12 col-sm-8 col-lg-6">
-                        <input disabled class="form-control" id="inputText3"  type="text">
+                        <input disabled class="form-control" id="inputText3"  value="{{test_details.category_one}}" type="text">
                       </div>
                     </div>
                     {% endif %}
@@ -374,7 +375,7 @@
                       <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputText3">Sub Category
                       </label>
                       <div class="col-12 col-sm-8 col-lg-6">
-                        <input disabled class="form-control" id="inputText3"  type="text">
+                        <input disabled class="form-control" value="{{test_details.category_two}}" id="inputText3"  type="text">
                       </div>
                     </div>
                     {% endif %}
@@ -383,7 +384,7 @@
                       <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputText3">Sub Category
                       </label>
                       <div class="col-12 col-sm-8 col-lg-6">
-                        <input disabled class="form-control" id="inputText3"  type="text">
+                        <input disabled class="form-control" value="{{test_details.category_three}}" id="inputText3"  type="text">
                       </div>
                     </div>
                      {% endif %}
@@ -465,42 +466,48 @@
                           <div class="text-center">
                               <br><br>
                               
-                              <a href="/admin-panel/edit/test/{{test_detail.id}}/QuestionBank" class="btn btn-sq-lg btn-primary">
+                              <a href="/admin-panel/edit/test/{{test_details.id}}/view/QuestionBank" class="btn btn-sq-lg btn-primary">
                                       <p></p>
                                       <p><i class="mdi mdi-collection-plus " style="font-size: 40px;"></i></p>
-                                      <p class="lead">Add Manually<br>
-                                      <small>MCQ, Fill Up & True/False etc</small>
+                                      <p class="lead">Open QB Viewer<br>
+                                      <small>Edit & Delete Question</small>
                                </p>
                               </a>
                   
                              </div>
                             </div>
-                             <br>
-                      <form method="post" class="col-md-8" enctype="multipart/form-data">
-                         {% csrf_token %}
-                        <p>If you have consistent question like all Single Answer : MCQ then upload it using below Question uploader.</p>
-                         <p>Excel Sheet must have 6 colums in same sequence</p>
-                        
-                         
-                         <ul style="list-style-type:decimal">
-                         <li>Question</li>
-                         <li>Option One</li>
-                         <li>Option Two</li>
-                         <li>Option Three</li>
-                         <li>Option Four</li>
-                         <li>Answer</li>
-                         </ul>
-                           <div class=""> <p class="" for="file-2">You can upload only .xlsx(utf-8) and .csv is allowed below or add Question manually.</p>
-                        
-                               <input type="file" name="file-2"  >
-                               <button name="qb"  class="btn btn-space btn-primary" type="submit"><i class="icon icon-left mdi mdi-plus"></i>Upload Question</button>
-               
-                      </div>
-                  
-                      </div>
-                    </div>
 
-                 </form>
+                            <div  class="col-md-4" >
+                              <div class="text-center">
+                                  <br><br>
+                                  
+                                  <a href="/admin-panel/edit/test/{{test_details.id}}/QuestionBank" class="btn btn-sq-lg btn-primary">
+                                          <p></p>
+                                          <p><i class="mdi mdi-collection-plus " style="font-size: 40px;"></i></p>
+                                          <p class="lead">Add Manually<br>
+                                          <small>MCQ, Fill Up & True/False etc</small>
+                                   </p>
+                                  </a>
+                      
+                                 </div>
+                                </div>
+                            <div  class="col-md-4" >
+                              <div class="text-center">
+                                  <br><br>
+                                  
+                                  <a href="/admin-panel/edit/test/{{test_details.id}}/QuestionBank/merge" class="btn btn-sq-lg btn-primary">
+                                          <p></p>
+                                          <p><i class="mdi mdi-collection-plus " style="font-size: 40px;"></i></p>
+                                          <p class="lead">Merge QB<br>
+                                          <small>Merge other's Question Bank</small>
+                                   </p>
+                                  </a>
+                      
+                                 </div>
+                                </div>
+
+                             <br>
+                  
                 </div>
                 </div>
               </div>
@@ -525,6 +532,7 @@
     <script src="{% static "admin/assets/lib/jquery-ui/jquery-ui.min.js" %}" type="text/javascript"></script>
     <script src="{% static "admin/assets/lib/jqvmap/jquery.vmap.min.js" %}" type="text/javascript"></script>
     <script src="{% static "admin/assets/lib/jqvmap/maps/jquery.vmap.world.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery.gritter/js/jquery.gritter.js" %}" type="text/javascript"></script>
     <script type="text/javascript">
         var i=0;
         function add_question(){
@@ -539,10 +547,37 @@
           i++;
 
         }
+
+        function change_status(e){
+          if ($(e).is(':checked')) {
+           var st = true;
+          } else {
+            var st = false;
+          }
+
+          console.log(st);
+          $.ajax({
+            url: "/admin-panel/edit/test/{{test_details.id}}/status/"+st,
+            context: document.body
+          }).done(function(dataa) {
+            
+            if(dataa.status == "Success"){
+              console.log(dataa);
+              $.gritter.add({title:"Success",text:dataa.msg,class_name:"success"});
+            }else{
+              $.gritter.add({title:"Error",text:dataa.msg,class_name:"danger"});
+            }
+            
+          });
+
+        }
+
+
+
       $(document).ready(function(){
       	//-initialize the javascript
       	App.init();
-      	App.dashboard();
+      
         
       });
     </script>

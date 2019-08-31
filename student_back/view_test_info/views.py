@@ -335,6 +335,21 @@ def startsession(request, test_id):
     if check_login == True:
         setting_obj = settings.objects.get(~Q(timezone=''))
         email = check_account(request, setting_obj.salt)
+
+        try:
+                check_exm = exam.objects.get(test_id=test_id)
+                
+                get_exam_test = test_details_advanced.objects.get(test_id=check_exm.test_id)
+                today = datetime.today().strftime("%Y-%m-%d %H:%M")
+                to_date = get_exam_test.DurationTo
+                
+                if today < to_date:
+                    print(check_exm)
+                    params['test_button'] = False
+                    return redirect("/student/test/details/"+ str(test_id) +"?er=010")
+
+        except:
+            pass
         
         try:
             get_test = test_details.objects.get(status='Active', id=test_id)
@@ -398,6 +413,7 @@ def test_details_view(request, test_id):
 
     params = {
         "test_button" : True,
+        "ask_quesy" : False,
         "test_details": {},
         "test_rules": {},
         "messages_er":{}
@@ -420,12 +436,29 @@ def test_details_view(request, test_id):
                 if request.GET['er'] == "015":
                     
                     messages.warning(request, "You have already attended this Test.")
+                if request.GET['er'] == "010":
+                    
+                    messages.warning(request, "You cannot attend this test since it is in Exam State")
         except:
             pass
             
         try:
             get_test = test_details.objects.get(id=test_id)
             get_test_adv = test_details_advanced.objects.get(test_id=test_id)
+            try:
+                check_exm = exam.objects.get(test_id=test_id)
+                
+                get_exam_test = test_details_advanced.objects.get(test_id=check_exm.test_id)
+                today = datetime.today().strftime("%Y-%m-%d %H:%M")
+                to_date = get_exam_test.DurationTo
+                
+                if today < to_date:
+                    print(check_exm)
+                    params['test_button'] = False
+                    messages.warning(request, "You cannot attend this test since it is in Exam State")
+
+            except:
+                pass
         
             params['test_details']['steam'] = get_test.steam
             params['test_details']['id'] = test_id
@@ -434,6 +467,8 @@ def test_details_view(request, test_id):
             params['test_details']['desc'] = get_test.description
             params['test_details']['name'] = get_test.test_name
             params['test_details']['status'] = get_test.status
+            if get_test.AskQuestion!='':
+                params['ask_quesy'] = True
             params['test_details']['AskQuestion'] = get_test.AskQuestion
 
             if get_test.TestType == "Mock":

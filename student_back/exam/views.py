@@ -401,14 +401,23 @@ def exam_details(request, test_id):
                 params['test_rules'][3] = "Total " + str(params['test_details']['AskQuestion']) + " will be asked."
             else:
                 params['test_details']['timer'] = None
+            
             if get_test.isSCT_test == True:
-                if get_test.SCTSteam != exp_branch[0]:
+                if get_test.SCTSteam.strip() != exp_branch[0].strip():
                     params['test_button'] = False
+                    
                     params['messages_er']['msg'] = "The uploader has disable the test for your branch and semester."
                     params['messages_er']['tags'] = "info"
                     params['messages_er']['icon'] = "mdi mdi-account-o"
-
-                if get_test.SCTBranch != exp_branch[1]:
+                
+                if get_test.SCTBranch.strip() != exp_branch[1].strip():
+                    print(get_test.SCTBranch, exp_branch[1])
+                    params['test_button'] = False
+                    params['messages_er']['msg'] = "The uploader has disable the test for your branch and semester."  
+                    params['messages_er']['tags'] = "info"
+                    params['messages_er']['icon'] = "mdi mdi-account-o"
+                
+                if int(get_test.SCTSemester) != int(get_exam.sem):
                     params['test_button'] = False
                     params['messages_er']['msg'] = "The uploader has disable the test for your branch and semester."  
                     params['messages_er']['tags'] = "info"
