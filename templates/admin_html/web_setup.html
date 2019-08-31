@@ -1,0 +1,178 @@
+{%  load static %}
+<!DOCTYPE html>
+<html lang="en">
+  
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="assets/img/logo-fav.png">
+    <title>Beagle</title>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/perfect-scrollbar/css/perfect-scrollbar.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/material-design-icons/css/material-design-iconic-font.min.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/jquery.vectormap/jquery-jvectormap-1.2.2.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/jqvmap/jqvmap.min.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/datetimepicker/css/bootstrap-datetimepicker.min.css" %}"/>
+    <link rel="stylesheet" href="{% static "admin/assets/css/app.css" %}" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/select2/css/select2.min.css" %}" />
+  </head>
+  <body>
+    <div >
+    
+      <div class="">
+        <div class="main-content container-fluid">
+            {% if messages %}
+
+
+            {% for message in messages %}
+
+            
+            
+            <div class="alert alert-{{message.tags}} alert-dismissible" role="alert">
+                <button class="close" type="button" data-dismiss="alert" aria-label="Close"><span class="mdi mdi-close" aria-hidden="true"></span></button>
+                <div class="icon"><span class="mdi mdi-alert-triangle"></span></div>
+                <div class="message">{{message}}</div>
+              </div>
+
+
+        
+            {% endfor %}
+         {% endif %}
+
+<div class="row">
+            <div class="col-12 col-lg-12">
+                <form action="" enctype="multipart/form-data" method="POST" class="col-md-12">
+                    
+                    {% csrf_token %}
+
+                  
+                           
+                    <div class="form-group row">
+                    
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputText3">First Name*</label>
+                      <div class="col-12 col-sm-8 col-lg-6">
+                        <input name="first_name"  class="form-control" id="inputText3" value="{{user.first_name}}" type="text">
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputText3">Last Name*</label>
+                      <div class="col-12 col-sm-8 col-lg-6">
+                       <input name="lastname"  class="form-control" id="inputText3" value="{{user.lastname}}" type="text">
+                       </div>
+                    </div>
+
+                     <div class="form-group row">
+                    
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputText3">Employe ID</label>
+                      <div class="col-12 col-sm-8 col-lg-6">
+                <input name="employe_id"  class="form-control" id="inputText3" value="{{user.employe_id}}" type="text">
+                      </div>
+                     </div>
+                     <div class="form-group row">
+                    
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputText3">Department*</label>
+                      <div class="col-12 col-sm-8 col-lg-6">
+                        <input name="department" value="{{user.department}}" placeholder="" class="form-control" id="inputText3" type="text">
+                      </div>
+                    </div>
+
+                    <div class="form-group row">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputDefault">Email*</label>
+                      <div class="col-12 col-sm-8 col-lg-6">
+                        <input name="email" value="{{user.email}}" class="form-control" id="inputDefault" type="email" placeholder="smpt.example.com">
+                      </div>
+                    </div>
+                    <div class="form-group row pt-1 pb-1">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right">Role</label>
+                      <div class="col-12 col-sm-8 col-lg-6 form-check mt-1">
+                        <label class="custom-control custom-radio custom-control-inline">
+                          <input  class="custom-control-input" {%  if user.role == 'Moderator' %}  checked="" {% endif %} type="radio" name="role" value="Moderator"><span class="custom-control-label">Moderator</span>
+                        </label>
+                        <label class="custom-control custom-radio custom-control-inline">
+                          <input class="custom-control-input" type="radio" value="Admin" name="role" {%  if user.role == 'Admin' %}  checked="" {% endif %}><span class="custom-control-label">Admin</span>
+                        </label>
+                        <label class="custom-control custom-radio custom-control-inline">
+                          <input  class="custom-control-input" type="radio" value="Analytics" name="role" {%  if user.role == 'Analytics' %}  checked="" {% endif %} ><span class="custom-control-label">Analytics</span>
+                        </label>
+                      </div>
+                    </div>
+                     <div class="form-group row pt-1 pb-1">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right">Status</label>
+                      <div class="col-12 col-sm-8 col-lg-6 form-check mt-1">
+                      
+                        <label class="custom-control custom-radio custom-control-inline">
+                          <input class="custom-control-input" type="radio" value="Active" name="status" {%  if user.status == 'Active' %}  checked="" {% endif %}><span class="custom-control-label">Active</span>
+                        </label>
+                        <label class="custom-control custom-radio custom-control-inline">
+                          <input  class="custom-control-input" type="radio" value="In Active" name="status" {%  if user.status == 'In Active' %}  checked="" {% endif %}><span class="custom-control-label">In Active</span>
+                        </label>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputDefault">Phone No. *</label>
+                      <div class="col-12 col-sm-8 col-lg-6">
+                        <input name="phone" class="form-control" id="inputDefault" type="text" value="{{user.phone_no}}">
+                      </div>
+                    </div>
+                    {%  if edit != True %}
+                    <div class="form-group row">
+                      <label class="col-12 col-sm-3 col-form-label text-sm-right" for="inputDefault">Password*</label>
+                      <div class="col-12 col-sm-8 col-lg-6">
+                        <input name="password" class="form-control" id="inputDefault" type="text" value="">
+                      </div>
+                    </div>
+                    {% endif %}
+                   
+                    <div class="row pt-3">
+                      <div class="col-lg-6 pb-4 pb-lg-0">
+                      
+                      </div>
+
+             
+                      <div class="col-sm-6">
+                        <p class="text-right">
+                          <button class="btn btn-space btn-primary" type="submit">Submit</button>
+                         
+                        </p>
+                      </div>
+                 
+                    </div>
+                   </form>
+            </div>
+          
+          </div>
+
+        </div>
+      </div>
+      
+    </div>
+    <script src="{% static "admin/assets/lib/jquery/jquery.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/perfect-scrollbar/js/perfect-scrollbar.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/bootstrap/dist/js/bootstrap.bundle.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/js/app.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery-flot/jquery.flot.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery-flot/jquery.flot.pie.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery-flot/jquery.flot.time.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery-flot/jquery.flot.resize.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery-flot/plugins/jquery.flot.orderBars.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery-flot/plugins/curvedLines.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery-flot/plugins/jquery.flot.tooltip.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery.sparkline/jquery.sparkline.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/countup/countUp.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jquery-ui/jquery-ui.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jqvmap/jquery.vmap.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/jqvmap/maps/jquery.vmap.world.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/select2/js/select2.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "admin/assets/lib/select2/js/select2.full.min.js" %}" type="text/javascript"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+      	//-initialize the javascript
+        App.init();
+        
+      });
+    </script>
+  </body>
+</html>

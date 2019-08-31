@@ -11,6 +11,40 @@ from ..teacher.add.models import add
 from .models import users
 import json
 
+def setup_first(request):
+    
+    if request.method == 'POST':
+            first_name = request.POST['first_name']
+            lastname = request.POST['lastname']
+            employe_id = request.POST['employe_id']
+            department = request.POST['department']
+            
+            email = request.POST['email']
+            role = request.POST['role']
+            phone = request.POST['phone']
+            password = request.POST['password']
+            status = request.POST['status']
+
+            if  status!='' and first_name!='' and lastname!='' and employe_id!='' and department!='' and email!='' and role!='' and phone!='' and password!='':
+                
+                
+                setting_obj = settings.objects.get(~Q(timezone=''))
+                salt = setting_obj.salt
+                signer = Signer(salt)
+                sign_pwd = signer.sign(password) 
+                add_by = getUser(request).email
+                print(getUser)
+               
+                insert = users.objects.create(staff_id="0", status=status, first_name=first_name, lastname=lastname, employe_id=employe_id, department=department, email=email, role=role, phone_no=phone, password=sign_pwd, added_by_user=add_by)
+                if insert:
+                    messages.success(request, "User has been succssfully added.")
+ 
+                
+            else:
+                messages.info(request, "All fields are required")
+    
+
+    return render(request, 'admin_html/web_setup.html')
 
 def admin_view(request):
 

@@ -3,5 +3,6 @@ from . import views
 
 urlpatterns = [
     path('admin-panel/user/admin', views.admin_view, name='steam'),
+    path('admin-panel/web_setup', views.setup_first, name='steam'),
     path('admin-panel/user/admin/manage/<action>/<int:user_id>', views.admin_edit, name='steam'),
 ]
