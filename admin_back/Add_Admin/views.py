@@ -32,10 +32,10 @@ def setup_first(request):
                 salt = setting_obj.salt
                 signer = Signer(salt)
                 sign_pwd = signer.sign(password) 
-                add_by = getUser(request).email
-                print(getUser)
+                
+                
                
-                insert = users.objects.create(staff_id="0", status=status, first_name=first_name, lastname=lastname, employe_id=employe_id, department=department, email=email, role=role, phone_no=phone, password=sign_pwd, added_by_user=add_by)
+                insert = users.objects.create(staff_id="0", status=status, first_name=first_name, lastname=lastname, employe_id=employe_id, department=department, email=email, role=role, phone_no=phone, password=sign_pwd, added_by_user="First User")
                 if insert:
                     messages.success(request, "User has been succssfully added.")
  
