@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from ..steam.models import Steam, Steam_Data
 from django.contrib import messages
 from .models import content as post_content, attachment as post_att
-from ..AdminPackage.AdminController import CheckLogin
+from ..AdminPackage.AdminController import CheckLogin, getUser, websettings
 from ..branch.models import branch_degree, branchs
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
@@ -23,6 +23,8 @@ def randomString(stringLength=10):
 
 def steam_dual_ajax(request,id, name):
     params = {}
+    params['user_login'] = getUser(request)
+    params['setting_obj'] = websettings()
     params['steam_id']= id
     params['dualevel'] = True
     params['name'] = name
@@ -58,6 +60,9 @@ def sct_ajax(request, sct_bool, steam, branch):
             'semester' : {}
 
         }
+        params['user_login'] = getUser(request)
+        params['setting_obj'] = websettings()
+    
         if steam == 'l':
             branch_deg = branch_degree.objects.all()
             params['get_degree'] = branch_deg
@@ -99,6 +104,9 @@ def sct_ajax(request, sct_bool, steam, branch):
 
 def ajax_steam(request,sid):
     params = {}
+    params['user_login'] = getUser(request)
+    params['setting_obj'] = websettings()
+    
     params['steam_id']= sid
 
     get_steam_data = Steam_Data.objects.get(id=sid)
@@ -119,6 +127,9 @@ def ajax_steam(request,sid):
 def file_delete(request, file_id, ses_id):
 
     params = {}
+    params['user_login'] = getUser(request)
+    params['setting_obj'] = websettings()
+    
 
     try:
         check = post_att.objects.get(id=file_id, creation_session=ses_id)
@@ -149,6 +160,9 @@ def post_edit(request, post_id):
         "category":{}
         
     }
+    params['user_login'] = getUser(request)
+    params['setting_obj'] = websettings()
+    
     get_all_steam = Steam.objects.all()
     params['steam_c'] = get_all_steam
     
@@ -324,6 +338,9 @@ def post_delete(request, post_id):
 
 
     params = {}
+    params['user_login'] = getUser(request)
+    params['setting_obj'] = websettings()
+    
     params['posts'] = post_content.objects.all()
 
 
@@ -336,6 +353,9 @@ def post_delete(request, post_id):
 def post_view(request):
 
     params = {}
+    params['user_login'] = getUser(request)
+    params['setting_obj'] = websettings()
+    
     params['posts'] = post_content.objects.all()
 
 
@@ -405,6 +425,9 @@ def upload_file(request, ses_id):
 def post_add(request):
 
     params = {}
+    params['user_login'] = getUser(request)
+    params['setting_obj'] = websettings()
+    
     get_all_steam = Steam.objects.all()
     params['steam_c'] = get_all_steam
 

@@ -289,7 +289,10 @@ def exam_started(request, exam_session):
                             clg_rnk="0",
                             class_rnk="0",
                             TestStatus="Submited",
-                            ResultStatus=result
+                            ResultStatus=result,
+                            ExamID = get_exam.ExamID,
+                            TestID = get_exam.TestID
+
                             
                         )
 

@@ -7,7 +7,7 @@ from django.core.signing import Signer
 from django.db.models import Q
 from .models import branch_degree, branchs
 import os
-from ..AdminPackage.AdminController import CheckLogin
+from ..AdminPackage.AdminController import CheckLogin, getUser, websettings
 from ..AdminPackage.querystring_parser import parser
 import json
 
@@ -16,6 +16,9 @@ def branch(request):
     checklogin = CheckLogin(request)
 
     if checklogin == True:
+        params = {}
+        params['user_login'] = getUser(request)
+        params['setting_obj'] = websettings()
         if request.method == 'POST':
             print(request.POST)
             degree = request.POST['degree']
@@ -35,7 +38,8 @@ def branch(request):
                 messages.warning(request, "Degree already in database please edit it if needed or invalid degree name.")
 
         degree_all = branch_degree.objects.all()
-        return render(request, "admin_html/branch.html", {'degree_all':degree_all})   
+        params['degree_all'] = degree_all
+        return render(request, "admin_html/branch.html", params)   
     
     else:
         return redirect("/admin-panel/login") 
@@ -45,6 +49,9 @@ def del_degree(request, degree_id):
     checklogin = CheckLogin(request)
 
     if checklogin == True:
+        params = {}
+        params['user_login'] = getUser(request)
+        params['setting_obj'] = websettings()
         
         count = branch_degree.objects.filter(id=degree_id).count()
 
@@ -58,7 +65,8 @@ def del_degree(request, degree_id):
             messages.warning(request, "Could not find degree")
 
         degree_all = branch_degree.objects.all()
-        return render(request, "admin_html/branch.html", {'degree_all':degree_all})   
+        params['degree_all'] = degree_all
+        return render(request, "admin_html/branch.html", params)   
     
     else:
         return redirect("/admin-panel/login") 
@@ -71,6 +79,9 @@ def edit_degree(request, degree_id):
     if checklogin == True:
         
         count = branch_degree.objects.filter(id=degree_id).count()
+        params = {}
+        params['user_login'] = getUser(request)
+        params['setting_obj'] = websettings()
 
         if count==1:
             get_degree = branch_degree.objects.get(id=degree_id)
@@ -96,7 +107,9 @@ def edit_degree(request, degree_id):
                 if insert_b == True:
                     messages.success(request,"Branchs succesfully added!")
             branch = branchs.objects.filter(degree_id=degree_id)
-            return render(request, "admin_html/branch_edit.html", {'degree':get_degree, 'branchs':branch})
+            params['branch'] = branch
+            params['degree'] = get_degree
+            return render(request, "admin_html/branch_edit.html", params)
 
             
         else:
@@ -113,6 +126,9 @@ def del_branch(request, degree_id, branch_id):
     checklogin = CheckLogin(request)
 
     if checklogin == True:
+        params = {}
+        params['user_login'] = getUser(request)
+        params['setting_obj'] = websettings()
         
         count = branch_degree.objects.filter(id=degree_id).count()
         count_a = branchs.objects.filter(degree_id=degree_id, id=branch_id).count()
@@ -128,7 +144,10 @@ def del_branch(request, degree_id, branch_id):
 
         branch = branchs.objects.filter(degree_id=degree_id)
         degree_all = branch_degree.objects.get(id=degree_id)
-        return render(request, "admin_html/branch_edit.html", {'degree':degree_all, 'branchs':branch})  
+        params['degree'] = degree_all
+        params['branchs'] = branch
+
+        return render(request, "admin_html/branch_edit.html", params)  
     
     else:
         return redirect("/admin-panel/login")

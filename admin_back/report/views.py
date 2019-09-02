@@ -3,8 +3,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from ..branch.models import branchs, branch_degree
 from ..steam.models import Steam, Steam_Data
+
 from ..admin_main.models import test_details, test_details_advanced, test_data, exam
-from ..AdminPackage.AdminController import CheckLogin, getUser
+from ..AdminPackage.AdminController import CheckLogin, getUser, websettings
 from ..AdminPackage.querystring_parser import parser
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
@@ -19,6 +20,98 @@ from datetime import datetime
 from django.utils import timezone
 # Create your views here.
 
+def test_report(request):
+    checklogin = CheckLogin(request)
+    if checklogin!=True:
+        return redirect('/admin-panel/login')
+    else:
+        params = {
+            "report": False,
+            "submission_data": {},
+            "topper_data": {}
+        }
+        params['user_login'] = getUser(request)
+        params['setting_obj'] = websettings()
+
+        all_exam = test_details.objects.all()
+        params['all_exam']  = all_exam
+
+        if request.method=="POST":
+            params['report'] = True
+
+            exam_id = request.POST['exam_id']
+
+            count_submission = start_test_details.objects.filter(TestStatus="Submitted",TestID=exam_id)
+            
+            get_exam = test_details.objects.get(id=exam_id)
+            
+            get_test = test_details.objects.get(id=get_exam.id)
+            count_student = student_academic.objects.filter(semester=get_test.SCTSemester, branch=get_test.SCTSteam+":"+get_test.SCTBranch)  
+            get_test_adv = test_details_advanced.objects.get(test_id=get_exam.id)
+            params['submission'] = count_submission.count()
+            params['exam'] = get_exam
+            params['test'] = get_test
+            params['test_adv'] = get_test_adv
+            params['total_students'] = count_student.count()
+            params['ratio'] =  round(count_submission.count() / count_student.count() * 100, 2)
+            top_scores = submited_test_report.objects.filter(TestID=exam_id).order_by('-scored')[0:5]
+            top = 1
+            for topper in top_scores:
+                active_user = start_test_details.objects.get(TestID=exam_id,test_useremail=topper.test_useremail)
+                submissions_report = submited_exam_report.objects.get(test_session_id=topper.test_session_id)
+                get_user_details = student_user.objects.get(email=topper.test_useremail)
+                get_user_academic = student_academic.objects.get(student_email=topper.test_useremail)
+
+                params['topper_data'][top] = {
+                    'FullName':get_user_details.first_name + "" + get_user_details.last_name,
+                    'EnrollNo': get_user_academic.EnrollNo,
+                    'Result_Status':submissions_report.ResultStatus,
+                    'TotalMarks':submissions_report.total_score,
+                    'Scored':submissions_report.scored,
+                    'per': round(float(submissions_report.scored) / float(submissions_report.total_score) * 100 , 2),
+                }
+
+                top = top + 1
+            
+            
+
+            ii = 0
+            for submissions in count_submission:
+                active_user = start_test_details.objects.get(TestID=exam_id,test_useremail=submissions.test_useremail)
+                submissions_report = submited_test_report.objects.get(test_session_id=submissions.test_session_id)
+                get_user_details = student_user.objects.get(email=submissions.test_useremail)
+                get_user_academic = student_academic.objects.get(student_email=submissions.test_useremail)
+                
+                
+                params['submission_data'][ii] = {
+                    'FullName':get_user_details.first_name + "" + get_user_details.last_name,
+                    'EnrollNo': get_user_academic.EnrollNo,
+                    'Result_Status':submissions_report.ResultStatus,
+                    'TotalMarks':submissions_report.total_score,
+                    'per': float(submissions_report.scored) / float(submissions_report.total_score) * 100,
+                    'ExamSession':active_user.test_session_id,
+                    'Scored':submissions_report.scored,
+                    'Started':submissions_report.test_started.strftime("%d %b, %Y %H:%I %p"),
+                    'Submitted':submissions_report.test_submited.strftime("%d %b, %Y %H:%I %p"),
+                    'wrong':submissions_report.wrong,
+                    'correct':submissions_report.correct,
+                    'Attendance':submissions.HallAttendence
+                }
+
+                ii = ii + 1
+
+            
+
+            
+
+        print(params)
+
+
+        return render(request, "admin_html/test_report.html", params)
+
+
+
+
 def user_submission_report(request, exam_session):
     checklogin = CheckLogin(request)
     if checklogin!=True:
@@ -30,6 +123,9 @@ def user_submission_report(request, exam_session):
             'submission_data':{},
             'active_data':{}
         }
+        params['user_login'] = getUser(request)
+        params['setting_obj'] = websettings()
+    
 
         return render(request, "admin_html/exam-report-session.html")
 
@@ -46,6 +142,9 @@ def monitor_exam_realtime(request, exam_id):
             'submission_data':{},
             'active_data':{}
         }
+        params['user_login'] = getUser(request)
+        params['setting_obj'] = websettings()
+    
         
 
         count_active = exam_realtime_user.objects.filter(ExamID=exam_id)
@@ -114,6 +213,9 @@ def monitor_exam(request, exam_id):
         return redirect('/admin-panel/login')
     else:
         params = {}
+        params['user_login'] = getUser(request)
+        params['setting_obj'] = websettings()
+    
         get_exam = exam.objects.get(id=exam_id)
         get_test_details = test_details.objects.get(id=get_exam.test_id)
         get_test_details_adv = test_details_advanced.objects.get(test_id=get_exam.test_id)
@@ -137,6 +239,9 @@ def exam_report(request):
             "submission_data": {},
             "topper_data": {}
         }
+        params['user_login'] = getUser(request)
+        params['setting_obj'] = websettings()
+    
 
         all_exam = exam.objects.all()
         params['all_exam']  = all_exam
@@ -158,7 +263,7 @@ def exam_report(request):
             params['test'] = get_test
             params['test_adv'] = get_test_adv
             params['total_students'] = count_student.count()
-            params['ratio'] =count_submission.count() / count_student.count() * 100
+            params['ratio'] =  round(count_submission.count() / count_student.count() * 100, 2)
             top_scores = submited_exam_report.objects.filter(ExamID=exam_id).order_by('-scored')[0:5]
             top = 1
             for topper in top_scores:
@@ -173,7 +278,7 @@ def exam_report(request):
                     'Result_Status':submissions_report.ResultStatus,
                     'TotalMarks':submissions_report.total_score,
                     'Scored':submissions_report.scored,
-                    'per': float(submissions_report.scored) / float(submissions_report.total_score) * 100,
+                    'per': round(float(submissions_report.scored) / float(submissions_report.total_score) * 100 , 2),
                 }
 
                 top = top + 1
@@ -226,6 +331,9 @@ def pdf_exam(request, exam_id):
             "submission_data": {},
             "topper_data": {}
         }
+        params['user_login'] = getUser(request)
+        params['setting_obj'] = websettings()
+    
 
         all_exam = exam.objects.all()
         params['all_exam']  = all_exam
@@ -244,7 +352,7 @@ def pdf_exam(request, exam_id):
         params['test'] = get_test
         params['test_adv'] = get_test_adv
         params['total_students'] = count_student.count()
-        params['ratio'] =count_submission.count() / count_student.count() * 100
+        params['ratio'] = round(count_submission.count() / count_student.count() * 100, 1)
         top_scores = submited_exam_report.objects.filter(ExamID=exam_id).order_by('-scored')[0:5]
         top = 1
         for topper in top_scores:
@@ -259,7 +367,7 @@ def pdf_exam(request, exam_id):
                 'Result_Status':submissions_report.ResultStatus,
                 'TotalMarks':submissions_report.total_score,
                 'Scored':submissions_report.scored,
-                'per': float(submissions_report.scored) / float(submissions_report.total_score) * 100,
+                'per': round(float(submissions_report.scored) / float(submissions_report.total_score) * 100, 1),
             }
 
             top = top + 1

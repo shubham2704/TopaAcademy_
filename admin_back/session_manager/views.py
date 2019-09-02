@@ -8,7 +8,7 @@ from django.db.models import Q
 from ..branch.models import branch_degree, branchs
 from .models import data as ses_dat, data_semseter, details
 import os
-from ..AdminPackage.AdminController import CheckLogin
+from ..AdminPackage.AdminController import CheckLogin, getUser, websettings
 from ..AdminPackage.querystring_parser import parser
 from ..teacher.add.models import add as staff
 import json
@@ -19,6 +19,9 @@ def session_ajax_modal_update_view(request, id, class_tchr , hod):
     param = {}
 
     if checklogin == True:
+        param['user_login'] = getUser(request)
+        param['setting_obj'] = websettings()
+    
         if id!='' and class_tchr!='' and hod!='':
             
             try:
@@ -50,6 +53,9 @@ def session_ajax_modal_view(request, id):
 
     if checklogin == True:
         try:
+            param['user_login'] = getUser(request)
+            param['setting_obj'] = websettings()
+    
 
             check_ses_data_id = data_semseter.objects.get(id = id)
             get_all_staff = staff.objects.all()
@@ -84,6 +90,9 @@ def session_view(request):
     checklogin = CheckLogin(request)
 
     if checklogin == True:
+        param['user_login'] = getUser(request)
+        param['setting_obj'] = websettings()
+    
         try:
             check_session = details.objects.get(current_session=True)
             param['session_from'] = check_session.session_from

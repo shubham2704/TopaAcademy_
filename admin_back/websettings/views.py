@@ -8,7 +8,7 @@ from django.core.signing import Signer
 from django.db.models import Q
 from .models import settings
 import os
-from ..AdminPackage.AdminController import CheckLogin
+from ..AdminPackage.AdminController import CheckLogin, getUser, websettings
 import json
 
 
@@ -31,8 +31,12 @@ def settings_call(request):
                 
             
             }
+            params['user_login'] = getUser(request)
+            params['setting_obj'] = websettings()
         else:
             params = {'count':count_row}
+            params['user_login'] = getUser(request)
+            params['setting_obj'] = websettings()
 
             if request.method == 'POST':
 

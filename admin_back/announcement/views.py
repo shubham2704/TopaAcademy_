@@ -2,9 +2,10 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.db import connections
 from django.core.signing import Signer
-from ..AdminPackage.AdminController import CheckLogin
+from ..AdminPackage.AdminController import CheckLogin, getUser, websettings
 from ..teacher.add.models import add as staff
 from student_back.signup.models import student_user
+
 from ..session_manager.models import details as session_mdetails, data_semseter, data as session_data
 
 # Create your views here.
@@ -12,6 +13,8 @@ from ..session_manager.models import details as session_mdetails, data_semseter,
 def announcement_view(request):
 
     params = {}
+    params['user_login'] = getUser(request)
+    params['setting_obj'] = websettings()
     params['hod'] = {}
     params['classteacher'] = {}
     checklogin = CheckLogin(request)

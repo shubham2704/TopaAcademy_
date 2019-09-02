@@ -147,21 +147,21 @@
   
                     <div class="row">
                         <div class="col-md-4">
-                            <form method="POST">
-                                {% csrf_token %}
-                                        <div class="input-group mb-3">
-                                                <select name="exam_id" class="form-control form-control-xs">
-                                                    <option value="">Select Exam</option>
-                                                {% for test in all_test %}
-                                                  <option value="{{test.id}}">{{test.test_name}}</option>
-                                                {% endfor %}
-                                                </select>
-                                                <div class="input-group-append">
-                                                  <button class="btn btn-primary" name="get_qb" type="submit">Display Question Bank</button>
-                                                </div>
-                                              </div> 
-                                            </div>
-                                          </form>
+                          <form method="POST">
+                        {% csrf_token %}
+                                <div class="input-group mb-3">
+                                        <select name="exam_id" class="form-control form-control-xs">
+                                            <option value="">Select Exam</option>
+                                        {% for exam in all_exam %}
+                                          <option value="{{exam.id}}">{{exam.test_name}}</option>
+                                        {% endfor %}
+                                        </select>
+                                        <div class="input-group-append">
+                                          <button class="btn btn-primary" type="submit">Show Report</button>
+                                        </div>
+                                      </div> 
+                                    </div>
+                                  </form>
              
                     </div>
 
@@ -182,59 +182,166 @@
                  {% endif %}
 
                  {% if report == False %}
-<h2 class="text-center">Select a Merging Test First!</h2>
-<p class="text-center">Selecet the Test you want get the merged.</>
+<h2 class="text-center">Select a Exam First!</h2>
+<p class="text-center">Selecet the Exam you want get the Report of.</>
                  {% endif %}
                  {% if report == True %}
-               
-               
-                 <div class="">
-                    <div class="card card-table">
-                        <div class="card-header">Question Bank
-                      
-                        </div>
-                        <div class="card-body">
-                            <form method="POST">
-                          <table class="table table-sm table-striped">
-                            <thead>
-                              <tr>
-                                <th style="width:10%;"></th>
-                                <th style="width:40%;" >Question</th>
-                                <th style="width:20%;" >Explanation</th>
-                                <th style="width:30%;" class="">Options</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                             {% for qb in questions %}
-                              <tr>
-                                <td>
-                                        <label class="custom-control custom-checkbox custom-control-inline">
-                                                <input class="custom-control-input" name="op[{{qb.id}}]" value="{{qb.id}}" type="checkbox" checked=""><span class="custom-control-label custom-control-color"></span>
-                                              </label>
-                                </td>
-                                <td >{{qb.question}}</td>
-                                <td>{{qb.explanation}}</td>
-                                <td class="">
-                                    <ul>
-                                        <li class="{% if qb.a1 == True %}text-success{% endif %}" > {{qb.o1}} </li>
-                                        <li class="{% if qb.a2 == True %}text-success{% endif %}" >{{qb.o2}}</li>
-                                        <li class="{% if qb.a3 == True %}text-success{% endif %}" >{{qb.o3}}</li>
-                                        <li class="{% if qb.a4 == True %}text-success{% endif %}" >{{qb.o4}}</li>
-                                    </ul>
+                 <div class="row">
+                    <div class="col-md-12">
+                      <div class="float-right">
+                                  <button class="btn btn-warning btn-md">Send Report to Email</button>      
+                                  <a href="/admin-panel/report/monitor/exam/{{exam.id}}" class="btn btn-primary btn-md">Real time Monitoring</a>       
+                                  <a href="/admin-panel/report/exam/pdf/{{exam.id}}" class="btn btn-success btn-md">Print Report</a>
+                                       
+                                </div>   
+                 </div> </div>
+                 <br>
+                 <div class="row">
+                 
+                    <div class="col-lg-4">
 
-                                </td>
-                              </tr>
+                        <div class="card card-table">
+                            <div class="card-header">Top 5 Performer
+                              
+                            </div>
+                            <div class="card-body">
+                              <table class="table">
+                                <thead>
+                                  <tr>
+                                    <th style="width:50%;">Name</th>
+                                    <th style="width:10%;"  class="number">Score</th>
+                                    <th style="width:10%;"  class="number">%</th>
+                                    <th style="width:10%;" class="number">Rank</th>
+                                  </tr>
+                                </thead>
+                                <tbody class="no-border-x">
+                                    {% for key, top in topper_data.items %}
+                                    <tr>
+                                      <td class="user-avatar cell-detail user-info"> <img src="http://127.0.0.1:8000/static/admin/assets/img/avatar.png" alt="Avatar">{{top.FullName}}<span class="cell-detail-description">{{top.EnrollNo}}</span></td>
+                                      <td class="milestone"><span class="completed">{{top.Scored}} / {{top.TotalMarks}}</span><span class="version">{{top.Result_Status | upper}}</span>
+                                        <div class="progress">
+                                          <div class="progress-bar progress-bar-primary" style="width: {{top.per}}%;"></div>
+                                        </div>
+                                      </td>
+                                      <td class="number">{{top.per}}%</td>
+                                      <td class="number"><b>{{key}}</b></td>
+                                    </tr>
+                                    {% endfor %}
+                                  </tbody>
+                              </table>
+                            </div>
+                          </div>
 
-                              {%endfor%}
-                            </tbody>
-                          </table>
-                     
+                        
+                    </div>
+                    <div class="col-lg-3">
+                        
+                      <div class="card card-default">
+                        <div class="card-header"> 
+                          <div class="tools"><span class="icon s7-upload"></span><span class="icon s7-edit"></span><span class="icon s7-close"></span></div><span class="title">Submission Ratio</span>
                         </div>
-                
+                        <div class="card-body text-center">
+                            
+                            <div class="widget-chart-container ">
+                                <div class="counter">
+                                    <div class="value">{{ratio}}%</div>
+                                    <div class="desc">RATIO</div>
+                                  </div>
+                                <div id="pie-chart4" style="height: 200px;"></div>
+                            </div>
+                        </div>
                       </div>
-                      {% csrf_token %}
-                      <button name="merge" class="btn btn-primary" type="submit">Merge Selected Question</button>
-                    </form>
+                    </div>
+                    <div class="col-lg-5">
+                        <div class="user-info-list card">
+                            <div class="card-header">Exam Information </div>
+                            <div class="card-body">
+                              <table class="no-border no-strip skills">
+                                <tbody class="no-border-x no-border-y">
+                                    <tr>
+                                        <td class="icon"><span class="mdi mdi-case"></span></td>
+                                        <td class="item"> Exam Name<span class="icon s7-portfolio"></span></td>
+                                        <td>{{exam.test_name}} <span class="badge badge-primary">{{test.TestDifficulty}}</span> </td>
+                                      </tr>
+                                      <tr>
+                                          <td class="icon"><span class="mdi mdi-timer"></span></td>
+                                          <td class="item"> Timing<span class="icon s7-portfolio"></span></td>
+                                          <td>{{test_adv.DurationFrom}} - {{test_adv.DurationTo}} </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="icon"><span class="mdi mdi-shape"></span></td>
+                                            <td class="item"> Category <span class="icon s7-shape"></span></td>
+                                            <td><span class="">{{test.category_two}}</span>, <span class="">{{test.category_one}}</span>, <span class="">{{test.steam}}</span> </td>
+                                          </tr>
+                                        
+                                  <tr>
+                                    <td class="icon"><span class="mdi mdi-landscape"></span></td>
+                                    <td class="item"> Year / Branch<span class="icon s7-portfolio"></span></td>
+                                    <td>{{test.SCTSemester}} Yr/Sem, {{test.SCTBranch}} </td>
+                                  </tr>
+                                  <tr>
+                                    <td class="icon"><span class="mdi mdi-graduation-cap"></span></td>
+                                    <td class="item">Program<span class="icon s7-gift"></span></td>
+                                    <td>{{test.SCTSteam}}</td>
+                                  </tr>
+                                 </tbody>
+                              </table>
+                            </div>
+                          </div>
+                    </div>
+                  </div>
+                <div class="row">
+                        <div class="col-lg-12">
+                           
+                            
+                                <div class="card card-table">
+                                  
+                                    <div class="card-header">Student Submissions 
+                                     
+                                      </div>       
+                                        <div class="table-responsive ">
+                                          <table class="table table-striped table-hover table-fw-widget" id="table3">
+                                          
+                                            <tbody>
+                                              {% for key, sub in submission_data.items %}
+                                              <tr>
+                                                
+                                                <td class="user-avatar cell-detail user-info"><img src="http://127.0.0.1:8000/static/admin/assets/img/avatar.png" alt="Avatar"><span>{{sub.FullName}}</span><span class="cell-detail-description">{{sub.EnrollNo}}</span></td>
+                                                <td class="milestone"><span class="completed">{{sub.Scored}} / {{sub.TotalMarks}}</span><span class="version">{{sub.Result_Status | upper}}</span>
+                                                  <div class="progress">
+                                                    <div class="progress-bar progress-bar-primary" style="width: {{sub.per}}%;"></div>
+                                                  </div>
+                                                </td>
+                                                <td class="cell-detail"> <span>{{sub.Started}}</span><span class="cell-detail-description">Start Time</span></td>
+                                                <td class="cell-detail"> <span class="text-bold">{{sub.Submitted}}</span><span class="cell-detail-description">Submission Time</span></td>
+                                                <td class="cell-detail"> <span class="text-bold">{{sub.correct}} | {{sub.wrong}}</span><span class="cell-detail-description">Correct vs Wrong</span></td>
+                                                
+                                                <td class="cell-detail"> <div class="switch-button switch-button-xs switch-button-yesno">
+                                                        <input disabled type="checkbox" {% if sub.Attendance %} checked {% endif %} name="swt1" id="swt1"><span>
+                                                          <label for="swt1"></label></span>
+                                                      </div></td>
+                                                
+                                                <td class="text-right">
+                                                
+                                                        <a href="/admin-panel/report/exam/submission/session/{{sub.ExamSession}}" class="btn btn-sm btn-success"><i class="icon icon-left mdi mdi-chart"></i>in-Depth Report</a>
+                                                </td>
+                                              
+                                            </tr>
+{% endfor %}
+                                            
+
+
+                                                    
+
+                                                      
+                                                         
+                                           
+                                 
+                                            </tbody>
+                                          </table>
+                                  
+                                      </div>
+                                </div>
                               </div>
                           
                     

@@ -128,201 +128,263 @@ def randomString(stringLength=10):
 
 
 def testing_session(request,test_session_id ):
+      
     params = {
-
-        "testView":True,
-        "result":{},
-        "resumeable":True,
-        "complete":False,
-        "st":"",
-        "icon":"",
-        "st_title":"",
-        "msg_msg":"",
-        "msg_d":False,
-        "test_data": {
-            "questions_counts":0
-        }
-
+        "AllowTest" : True,
+        "Result" : False,
+        "questions": {},
+        "test_details": {},
+        "timer_end": '',
+        "test_data":{},
+        "sessionid":test_session_id,
+        "msg_bool" : False,
+        "msg":{}
     }
     check_login = login(request)
 
     if check_login == True:
+
         setting_obj = settings.objects.get(~Q(timezone=''))
         email = check_account(request, setting_obj.salt)
-        get_test_stated_session = start_test_details.objects.get(test_session_id=test_session_id, test_useremail=email)
-        istim = get_test_stated_session.test_istimer
-        test_det = test_details.objects.get(id=get_test_stated_session.TestID)
-        params['resumeable'] = get_test_stated_session.resumeable
-        params['test_details'] = test_det
-        
-        if get_test_stated_session.TestStatus == "No Completed":
+        get_exam = start_test_details.objects.get(test_session_id=test_session_id)
+        get_test = test_details.objects.get(id=get_exam.TestID)
+        get_test_adv = test_details_advanced.objects.get(test_id=get_exam.TestID)
 
-            params['testView'] = False
-            params['st'] = "info"
-            params['st_title'] = "Session Removed"
-            params['icon'] = "mdi mdi-delete"
-            params['msg_d'] = True
-            get_test_stated_session.TestStatus = "No Completed"
-            params['msg_msg'] = "The test session is removed possible reasons may be Test Time Limit exceed, Resumablimity is Disabled by Uploader or Test not submited for long time."
-
-
-        
-        if get_test_stated_session.TestStatus == "Started":
-
-        
-            if istim == True:
-                current_time = timezone.now()
-                test_time = get_test_stated_session.test_started
-                duration = get_test_stated_session.timer_duration
-                time_diff =  (current_time - test_time).seconds / 60
-
-                if time_diff > int(duration):
-                    params['testView'] = False
-                    params['st'] = "warning"
-                    params['st_title'] = "Test Time Limit Exceeded"
-                    params['icon'] = "mdi mdi-timer-off"
-                    params['msg_d'] = True
-                    get_test_stated_session.TestStatus = "No Completed"
-                    params['msg_msg'] = "Sorry test times is expired, You cannot resume the test please start the test from begininmg (if avail)."
-
-        
-            if get_test_stated_session.resumeable == False and get_test_stated_session.TestStarted == True:
-                
-                    params['testView'] = False
-                    params['st'] = "warning"
-                    params['icon'] = "mdi mdi-close-circle-o"
-                    params['msg_d'] = True
-                    params['st_title'] = "Cannot Resume the Test"
-                    params['msg_msg'] = "Sorry test the test cannot be resumed, Please test please start from begininmg(if avail)."
-                    get_test_stated_session.TestStatus = "No Completed"
-
-        if get_test_stated_session.TestStatus == "Completed":
-            params['testView'] = False
-            params['complete'] = True
-            check = submited_test_report.objects.get(test_session_id = test_session_id)
-            params['result']['class_rank'] = check.class_rnk
-            params['result']['clg_rank'] = check.clg_rnk
-            params['result']['pts'] = check.scored
-            params['result']['total_pts'] = check.total_score
-            params['complete'] = True
-            params['result']['msg_body'] = "You scorred " + str(check.scored) + " pts out of "  + str(check.total_score) + " pts and " + str(check.correct) + " were correct and rest incorrect."
+        if get_exam.TestStatus == "Submitted":
+            get_result = submited_test_report.objects.get(test_session_id=test_session_id)
+            params['AllowTest'] = False
+            params['Result'] = True
+            params['result_data'] = get_result
+            params['msg']['msg'] = "Test is already submited"
+            params['msg']['tags'] = "success"
+            params['msg']['icon'] = "mdi mdi-timer-off"
+            params['msg_bool'] = True
             
 
-        #print(params) 
+        
+        if get_exam.resumeable == False  and get_exam.TestStarted == True:
+            params['AllowTest'] = False
+            params['msg']['msg'] = "Test is Not Resuamable."
+            params['msg']['tags'] = "danger"
+            params['msg']['icon'] = "mdi mdi-timer-off"
+           
+            
 
-        if params['testView'] == True:
-            get_test_stated_session.TestStarted = True
-            if istim == True:
-                params['test_data']['istimer'] = istim
+        if get_test_adv.isAvailDuration == True:
+                from_date = get_test_adv.DurationFrom
+                today = datetime.today().strftime("%Y-%m-%d %H:%M")
+                to_date = get_test_adv.DurationTo
+                
+                
+                if today < from_date:
+                    
+                    params['AllowTest'] = False
+                    params['msg']['msg'] = "This test is not available now it will live on " + str(from_date)
+                    params['msg']['tags'] = "warning"
+                    params['msg']['icon'] = "mdi mdi-timer-off" 
+
+                #from_time = datetime.fromtimestamp(from_date)
+                
+                if to_date!='Forever':
+                    
+                    if today > to_date:
+                        params['AllowTest'] = False
+                        params['msg']['msg'] = "Exam time is over. You can not attend this Exam now."
+                        params['msg']['tags'] = "warning"
+                        params['msg']['icon'] = "mdi mdi-timer-off"
+
+        if params['AllowTest'] == True:
+            if get_exam.TestStarted == False:
+                get_exam.TestStarted = True
+                get_exam.save()
+
+            quest_ar = {}
+            test_settings = json.loads(get_exam.test_settings)
+            i = 0
+            for ques in test_settings['question_array']:
+                quest_ar[i] = ques_model.objects.get(id=ques)
+                i = i + 1
+            params['questions'] = quest_ar
+
+            if get_exam.test_istimer == True:
+
+                current_time = timezone.now()
+                test_time = get_exam.test_started
+                duration = get_exam.timer_duration
+
+                time_diff =  (current_time - test_time).seconds / 60
+                params['test_data']['istimer'] = get_exam.test_istimer
                 time_left = int(duration) * 60 - time_diff*60
                 params['test_data']['time_left'] = time_left
-            load_test_setting = json.loads(get_test_stated_session.test_settings)
 
-            offset = load_test_setting['offset'].split(", ")
-            get_questions = test_data.objects.filter(test_id=get_test_stated_session.TestID)[int(offset[0]):int(offset[1])]
-            count = get_questions.count()
-            lst_of_qs = {}
-            i = 1
-            for rn in get_questions:
-                lst_of_qs[i] = rn
+                if time_left < 0:
+                    params['test_details'] = get_test
+                    params['AllowTest'] = False
+                    params['msg']['msg'] = "Time is Over"
+                    params['msg']['tags'] = "warning"
+                    params['msg']['icon'] = "mdi mdi-timer-off"
+                    params['msg_bool'] = True
+            #print(params)
+            if params['AllowTest'] == True:
+                if request.method=="POST":
 
-                i = 1+i
+                    if get_exam.TestType == "Mock":
+                        marking = json.loads(get_test.MarkingSetting)
+                    buil_dic = {}
+                    answers = parser.parse(request.POST.urlencode())['op']
+                    ie = 0
+                    for ques_ar_count in range(0, i):
+                        buil_dic[ques_ar_count] = {}
+                        for ques_ar_countt in range(1, 5):
+                            if ques_ar_count in answers:
+                                if ques_ar_countt in answers[ques_ar_count]:
+                                    buil_dic[ques_ar_count][ques_ar_countt] = True
+                                else:
+                                    buil_dic[ques_ar_count][ques_ar_countt] = False    
+                            else:
+                                buil_dic[ques_ar_count][ques_ar_countt] = False    
+                    and_inc = 0
+                    marks_scored = 0
+                    correct_ans = 0
+                    wrong_ans = 0
+                    for key, che_ans in params['questions'].items():
+                        sub = buil_dic[and_inc]
+                        my1 = sub[1]
+                        my2 = sub[2]
+                        my3 = sub[3]
+                        my4 = sub[4]
 
-            params['test_data']['questions_count'] = lst_of_qs
-            params['test_data']['questions_counts'] = count
-           
-                
-                #print( params)
+                        #print(sub, che_ans.a4)
+                        
+                        op1 = che_ans.a1
+                        op2 = che_ans.a2
+                        op3 = che_ans.a3
+                        op4 = che_ans.a4
+                        correct_count = 0
+                        if op1 == True:
+                            correct_count = 1 + correct_count
 
-        if request.method == "POST" and request.POST['submit_test']=='':
-            
-            answers = parser.parse(request.POST.urlencode())['ans']
+                        if op2 == True:
+                            correct_count = 1 + correct_count
 
-            if len(answers) == params['test_data']['questions_counts']:
-                answers_json = json.dumps(answers)
-                pts_total = get_test_stated_session.total_score
-                pts_scored = 0
-                correct_answ = 0
-                wrong_ans = 0
-                pts_avg = int(pts_total) / params['test_data']['questions_counts']
-                for key, val in answers.items():
-                    get_ansforq = test_data.objects.get(id=key)
+                        if op3 == True:
+                            correct_count = 1 + correct_count
 
-                    if get_ansforq.answer == val:
+                        if op4 == True:
+                            correct_count = 1 + correct_count
 
-                        correct_answ = 1 + correct_answ
-                        pts_scored = pts_avg + pts_scored
+                        
+                        if my1 != False:
+                            if op1 == my1:
+                                if get_exam.TestType == "Mock":
+                                    marks_scored = marks_scored + float(marking['positive'])/correct_count
+                                #print(float(marking['positive'])/correct_count, che_ans.id, correct_count)
+                                correct_ans = correct_ans + 1
 
+                            else:
+                                if get_exam.TestType == "Mock":
+                                    marks_scored = marks_scored - float(marking['negative'])/correct_count
+                                wrong_ans = wrong_ans + 1
+                                #print(float(marking['negative'])/correct_count, che_ans.id, correct_count)
+
+                        if my2 != False:
+                                if op2 == my2:
+                                    if get_exam.TestType == "Mock":
+                                        marks_scored = marks_scored + float(marking['positive'])/correct_count
+                                    correct_ans = correct_ans + 1
+                                    #print(float(marking['positive'])/correct_count, che_ans.id, correct_count)
+
+                                else:
+                                    if get_exam.TestType == "Mock":
+
+                                        marks_scored = marks_scored - float(marking['negative'])/correct_count
+                                    wrong_ans = wrong_ans + 1
+                                    #print(float(marking['negative'])/correct_count, che_ans.id, correct_count)
+
+
+                        if my3 != False:
+                                if op3 == my3:
+                                    if get_exam.TestType == "Mock":
+                                        marks_scored = marks_scored + float(marking['positive'])/correct_count
+                                    correct_ans = correct_ans + 1
+                                    #print(float(marking['positive'])/correct_count, che_ans.id, correct_count)
+
+                                else:
+                                    if get_exam.TestType == "Mock":
+                                        marks_scored = marks_scored - float(marking['negative'])/correct_count
+                                    wrong_ans = wrong_ans + 1
+                                    #print(float(marking['negative'])/correct_count, che_ans.id, correct_count)
+
+
+                        if my4 != False:
+                                if op4 == my4:
+                                    if get_exam.TestType == "Mock":
+                                        marks_scored = marks_scored + float(marking['positive'])/correct_count
+                                    correct_ans = correct_ans + 1
+                                    #print(float(marking['positive'])/correct_count, che_ans.id, correct_count)
+
+                                else:
+                                    if get_exam.TestType == "Mock":
+                                        marks_scored = marks_scored - float(marking['negative'])/correct_count
+                                    wrong_ans = wrong_ans + 1
+                                    #print(float(marking['negative'])/correct_count, che_ans.id, correct_count)
+
+
+                        and_inc = 1 + and_inc
+
+                    print(buil_dic)
+                    count_subm = submited_test_report.objects.filter(test_session_id=test_session_id).count()
+                    if get_exam.TestType == "Mock":
+                        markk = marking['total']
+                        if  marks_scored >= int(marking['passing']):
+                            result="Pass"
+                        else:
+                            result="Fail"
                     else:
-                        wrong_ans = 1 + wrong_ans
+                        markk = 0
+                        result="No Scoring"
 
-                if get_test_stated_session.TestType == "Mock":
-                    get_test_stated_session.scored = pts_scored
-                    
+                    if count_subm == 0:
+                        insert = submited_test_report.objects.create(
+                            test_session_id=test_session_id,
+                            test_useremail=email,
+                            test_started=get_exam.test_started,
+                            submited_det=json.dumps(buil_dic),
+                            scored=marks_scored,
+                            total_score=markk,
+                            correct=correct_ans,
+                            wrong=wrong_ans,
+                            clg_rnk="0",
+                            class_rnk="0",
+                            TestStatus="Submited",
+                            ResultStatus=result,
+                            TestID=get_exam.TestID,
+                            ExamID="0",
+                            
+                        )
 
+                        if insert:
+                            get_exam.TestStatus = "Submitted"
+                            get_exam.scored = marks_scored
+                            get_exam.save();
+                            get_result = submited_test_report.objects.get(test_session_id=test_session_id)
+                            params['AllowTest'] = False
+                            params['Result'] = True
+                            params['result_data'] = get_result
+                            params['msg']['msg'] = "Test is already submited"
+                            params['msg']['tags'] = "success"
+                            params['msg']['icon'] = "mdi mdi-timer-off"
+                            params['msg_bool'] = True
+                                    
+            
+                params['test_details'] = get_test
+                params['question_count'] = i - 1
 
-                if get_test_stated_session.TestType == "Practice":
-                    get_test_stated_session.scored = 0
-                    
-                try:
-                    
-                    check = submited_test_report.objects.get(test_session_id = test_session_id)
-                    params['result']['class_rank'] = check.class_rnk
-                    params['result']['clg_rank'] = check.clg_rnk
-                    params['result']['pts'] = check.scored
-                    params['result']['total_pts'] = check.total_score
-                    params['complete'] = True
-                    params['result']['msg_body'] = "You scorred " + str(check.scored) + "pts out of "  + str(check.total_score) + " pts and " + str(check.correct) + "were correct and rest incorrect."
-                    
-
-                except:
-                    
-
-                    params['result']['class_rank'] = 10
-                    params['result']['clg_rank'] = 21
-                    params['result']['pts'] = pts_scored
-                    params['result']['total_pts'] = pts_total
-                    params['result']['msg_body'] = "You scorred " + str(pts_scored) + " pts out of "  + str(pts_total) + " pts and " + str(correct_answ) + " were correct and rest incorrect."
-                    
-                   
-
-                    insert = submited_test_report.objects.create(
-                        test_session_id = test_session_id,
-                        test_useremail = email,
-                        test_started = get_test_stated_session.test_started,
-                        submited_det = answers_json,
-                        scored = pts_scored,
-                        total_score = pts_total,
-                        correct = correct_answ,
-                        wrong = wrong_ans,
-                        clg_rnk = params['result']['clg_rank'],
-                        class_rnk = params['result']['class_rank'],
-                        TestStatus = "Submited", 
-                    )
-
-                    if insert:
-                        get_test_stated_session.TestStatus = "Completed"
-                        params['complete'] = True
-                        params['testView'] = True
-
-                
-
-
-
-
-               
-
-                
-            else:
-                messages.warning(request, "Make sure to give anwers to all queston.")
-
-        get_test_stated_session.save()
-        params['sessionid'] = test_session_id
-        params['TestID'] = get_test_stated_session.TestID
         print(params)
+
         return render(request, "student_html/test_view.html", params)
 
-        
+
 
 
 
@@ -331,81 +393,132 @@ def startsession(request, test_id):
     
     params = {}
     check_login = login(request)
+    
 
     if check_login == True:
         setting_obj = settings.objects.get(~Q(timezone=''))
         email = check_account(request, setting_obj.salt)
-
-        try:
-                check_exm = exam.objects.get(test_id=test_id)
-                
-                get_exam_test = test_details_advanced.objects.get(test_id=check_exm.test_id)
-                today = datetime.today().strftime("%Y-%m-%d %H:%M")
-                to_date = get_exam_test.DurationTo
-                
-                if today < to_date:
-                    print(check_exm)
-                    params['test_button'] = False
-                    return redirect("/student/test/details/"+ str(test_id) +"?er=010")
-
-        except:
-            pass
         
-        try:
-            get_test = test_details.objects.get(status='Active', id=test_id)
-            get_test_adv = test_details_advanced.objects.get(test_id=test_id)
-            count_prev_test = start_test_details.objects.filter(TestID=test_id).exclude(TestStatus="No Completed").count()
-            count_question = test_data.objects.filter(test_id=test_id).count()
 
-            if get_test.TestType == "Mock":
-                count_prev_ques = int(count_prev_test) * int(get_test.AskQuestion) # ques asked
-                avg = count_question - count_prev_ques #question left
-
-                print(count_question, count_prev_ques, avg, int(get_test.AskQuestion))
-
-                if  avg >= int(get_test.AskQuestion):
-
-                    question_offset = str(count_prev_ques) + ", " + str(count_prev_ques + int(get_test.AskQuestion))
+    
+        get_test = test_details.objects.get(id=test_id)
+        get_test_adv = test_details_advanced.objects.get(test_id=test_id)
+        count_exam = exam.objects.filter(test_id=test_id, status="Created").count()
+        #count_prev_test = start_exam_details.objects.filter(TestID=test_id).exclude(TestStatus="No Completed").count()
+        count_question = ques_model.objects.filter(test_id=test_id).count()
+        
+        if count_exam == 0:
+            question_ask = get_test.ask
+            print(count_exam)
+            if question_ask == "All":
+                print(question_ask)
+                
+                count = start_test_details.objects.filter(TestID=test_id).count()
+                
+                if count == 0:
+                    print(count)
                     test_session_setting = {}
-                    test_session_setting['offset'] = question_offset
-                    ses_id = randomString(10)
-
-                    insert = start_test_details.objects.create(
-
-                        test_session_id=ses_id,
-                        test_useremail=email,
-                        test_istimer=get_test_adv.isTimer,
-                        timer_duration=get_test_adv.TimerLength,
-                        test_settings=json.dumps(test_session_setting),
-                        scored="",
-                        total_score=int(get_test.AskQuestion) * 10,
-                        TestType=get_test.TestType,
-                        TestID=test_id,
-                        resumeable=get_test.resumeable,
-                        TestStarted=False
-
-                    )
-
-                    if insert:
-                        return redirect("/student/test/session/"+ ses_id)
-
-
+                    test_session_setting['offset'] = "0, "+ str(count_question)
+                    test_session_setting['question_array'] = []
                     
+                    if get_test.shuffle == True:
+                        question = ques_model.objects.filter(test_id=test_id).order_by('?')
+                    else:
+                        question = ques_model.objects.filter(test_id=test_id)
+
+
+                    for ques in question:
+                        test_session_setting['question_array'].append(ques.id)
 
                     
                 else:
-                    #messages.info(request, "You have already gave to all tests of this test.")
-                    return redirect("/student/test/details/"+ str(test_id) +"?er=015")
                     
+                    return redirect("/student/test/details/"+ str(test_id) +"?er=015")  
+
+            elif question_ask == "Limited":
+                
+                count = start_test_details.objects.filter(TestID=test_id).count()
+
+                asking = int(get_test.AskQuestion)
+
+                ced = count_question - count*asking
+                
+                if ced >= asking:
+                    
+                    test_session_setting = {}
+                    test_session_setting['offset'] = str(count*asking)+ ", "+ str(count*asking + asking)
+                    test_session_setting['question_array'] = []
+                    
+                    if get_test.shuffle == True:
+                        question = ques_model.objects.filter(test_id=test_id).order_by('?')[count*asking:count*asking + asking]
+                    else:
+                        question = ques_model.objects.filter(test_id=test_id)[count*asking:count*asking + asking]
 
 
+                    for ques in question:
+                        test_session_setting['question_array'].append(ques.id)
+                
+                else:
+                    return redirect("/student/test/details/"+ str(test_id) +"?er=015")  
+
+                
+            if get_test.TestType == "Practice":
             
-            #return redirect("/student/test/session/dasdasd")
+                strr = randomString()
+                insert = start_test_details.objects.create(
+                    test_session_id = strr,
+                    test_useremail = email,
+                    test_istimer = get_test_adv.isTimer,
+                    timer_duration = get_test_adv.TimerLength,
+                    test_settings = json.dumps(test_session_setting),
+                    scored = "0",
+                    total_score = "0",
+                    TestType = get_test.TestType,
+                    TestID = test_id,
+                    resumeable = get_test.resumeable,
+                    TestStarted = False
+
+                )
+
+            if get_test.TestType == "Mock":
+                
+                strr = randomString()
+                if get_test.ranking == True:
+                    if get_test.MarkingSetting!='':
+                        mark = json.loads(get_test.MarkingSetting)
+
+                    else:
+                        return redirect("/student/test/details/"+ str(test_id) +"?er=011")  
+
+                else:
+                    return redirect("/student/test/details/"+ str(test_id) +"?er=010")     
+                insert = start_test_details.objects.create(
+                    test_session_id = strr,
+                    test_useremail = email,
+                    test_istimer = get_test_adv.isTimer,
+                    timer_duration = get_test_adv.TimerLength,
+                    test_settings = json.dumps(test_session_setting),
+                    scored = "0",
+                    total_score = mark['total'],
+                    TestType = get_test.TestType,
+                    TestID = test_id,
+                    resumeable = get_test.resumeable,
+                    TestStarted = False
+
+                )
+                
+            if insert:
+                    return redirect("/student/test/session/"+ strr)
+            
+        else:
+            #Under Exam 
+            pass
+        
+            
             
 
-        except:
-            return redirect("/student/test/details/"+ str(test_id) +"?er=015")
-
+    else:
+        return redirect("/student/login")
  
 
 
@@ -477,7 +590,7 @@ def test_details_view(request, test_id):
                 params['test_rules'][1] = "Perofrmance for this test will be saved and comapre with other Students."
 
             if get_test.TestType == "Practice":
-                params['test_details']['type'] = "Mock Test"
+                params['test_details']['type'] = "Practice Test"
                 params['test_rules'][0] = "You can Leave the Test at middle of the test."
                 params['test_rules'][1] = "Perofrmance for this test will not be saved."
 

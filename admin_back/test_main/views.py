@@ -4,7 +4,7 @@ from ..branch.models import branchs, branch_degree
 from ..steam.models import Steam, Steam_Data
 from .models import question as qb
 from ..admin_main.models import test_details, test_details_advanced, test_data
-from ..AdminPackage.AdminController import CheckLogin, getUser
+from ..AdminPackage.AdminController import CheckLogin, getUser, websettings
 from ..AdminPackage.querystring_parser import parser
 from django.contrib import messages
 from django.core.files.storage import FileSystemStorage
@@ -22,6 +22,7 @@ def change_status(request, edit_id,bool_s):
         return redirect('/admin-panel/login')
     else:
         params = {"status":"Success", "msg":"Test Status Changed"}
+        
 
         count_test = test_details.objects.filter(id=edit_id)
 
@@ -68,6 +69,9 @@ def question_bank_view(request, edit_id):
         return redirect('/admin-panel/login')
     else:
         params = {"q_count":0}
+        params['user_login'] = getUser(request)
+        params['setting_obj'] = websettings()
+    
         if request.method=="GET":
             try:
                 if request.GET['action'] == "delete":
@@ -95,6 +99,9 @@ def merge_question_bank(request, edit_id):
         return redirect('/admin-panel/login')
     else:
         params = {"report":False}
+        params['user_login'] = getUser(request)
+        params['setting_obj'] = websettings()
+    
 
         try:
             get_test = test_details.objects.all()
@@ -152,6 +159,10 @@ def view_question_bank(request, edit_id):
         return redirect('/admin-panel/login')
     else:
         params = {}
+        params['user_login'] = getUser(request)
+        params['setting_obj'] = websettings()
+    
+        
 
         try:
             get_test = test_details.objects.get(id=edit_id)
@@ -170,6 +181,9 @@ def question_bank(request, edit_id):
         return redirect('/admin-panel/login')
     else:
         params = {}
+        params['user_login'] = getUser(request)
+        params['setting_obj'] = websettings()
+    
 
         if request.method == "POST":
             question = request.POST['question']
@@ -244,6 +258,9 @@ def edit_test(request, edit_id):
         return redirect('/admin-panel/login')
     else:
         params = {}
+        params['user_login'] = getUser(request)
+        params['setting_obj'] = websettings()
+    
 
         dirc = {
                             "total":"0",

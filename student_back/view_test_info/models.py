@@ -126,3 +126,6 @@ class submited_test_report(models.Model):
     clg_rnk = models.CharField(max_length=20, default="")
     class_rnk = models.CharField(max_length=20, default="")
     TestStatus = models.CharField(max_length=20, default="Submited")
+    ResultStatus = models.CharField(max_length=20, default="")
+    ExamID = models.CharField(max_length=20, default="")
+    TestID = models.CharField(max_length=20, default="")

@@ -5,7 +5,7 @@ from django.db import connections
 from django.core.signing import Signer
 from django.db.models import Q
 import os
-from ..AdminPackage.AdminController import CheckLogin, getUser
+from ..AdminPackage.AdminController import CheckLogin, getUser, websettings
 from ..websettings.models import settings
 from ..teacher.add.models import add 
 from .models import users

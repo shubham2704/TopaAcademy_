@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from ..branch.models import branchs, branch_degree
 from ..steam.models import Steam, Steam_Data
 from .models import test_details, test_details_advanced, exam
-from ..AdminPackage.AdminController import CheckLogin, getUser
+from ..AdminPackage.AdminController import CheckLogin, getUser, websettings
 from ..AdminPackage.querystring_parser import parser
 from django.contrib import messages
 from ..websettings.models import settings
@@ -14,6 +14,8 @@ from datetime import datetime
 def exam_eligability_create(request, test_id, outside_s):
     
     params = {}
+    params['user_login'] = getUser(request)
+    params['setting_obj'] = websettings()
     checklogin = CheckLogin(request)
     if checklogin!=True:
         return redirect('/admin-panel/login')
@@ -54,6 +56,8 @@ def exam_eligability(request, test_id):
     
 
     params = {}
+    params['user_login'] = getUser(request)
+    params['setting_obj'] = websettings()
     checklogin = CheckLogin(request)
     if checklogin!=True:
         return redirect('/admin-panel/login')
@@ -132,6 +136,8 @@ def exam_eligability(request, test_id):
 def conduct_exam(request):
 
     params = {}
+    params['user_login'] = getUser(request)
+    params['setting_obj'] = websettings()
     checklogin = CheckLogin(request)
     if checklogin!=True:
         return redirect('/admin-panel/login')
@@ -172,6 +178,8 @@ def test_det(request):
             pass
             
         params = {"exam":{}}
+        params['user_login'] = getUser(request)
+        params['setting_obj'] = websettings()
         get_test = test_details.objects.all()
         get_exam = exam.objects.all()
         params['tests'] = get_test
@@ -203,6 +211,8 @@ def add_mock_test(request):
         return redirect('/admin-panel/login')
 
     params = {}
+    params['user_login'] = getUser(request)
+    params['setting_obj'] = websettings()
     get_all_steam = Steam.objects.all()
     params['steam_c'] = get_all_steam
     start_insert = True
@@ -359,6 +369,8 @@ def sct_ajax(request, sct_bool, steam, branch):
             'semester' : {}
 
         }
+        params['user_login'] = getUser(request)
+        params['setting_obj'] = websettings()
         if steam == 'l':
             branch_deg = branch_degree.objects.all()
             params['get_degree'] = branch_deg
@@ -398,6 +410,8 @@ def sct_ajax(request, sct_bool, steam, branch):
 
 def steam_ajax(request, steam_id):
     params = {}
+    params['user_login'] = getUser(request)
+    params['setting_obj'] = websettings()
     params['steam_id']= steam_id
 
     get_steam_data = Steam_Data.objects.get(id=steam_id)
@@ -417,6 +431,8 @@ def steam_ajax(request, steam_id):
 
 def steam_dual_ajax(request,id, name):
     params = {}
+    params['user_login'] = getUser(request)
+    params['setting_obj'] = websettings()
     params['steam_id']= id
     params['dualevel'] = True
     params['name'] = name

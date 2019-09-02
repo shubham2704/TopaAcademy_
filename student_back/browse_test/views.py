@@ -75,6 +75,7 @@ def ajax_browse(request):
                  id = request[0]
                  print("dssd", id)
                  added_by = request[3]
+                 print(added_by)
                  get_adv_details = test_details_advanced.objects.values_list('isTimer', 'TimerLength').get(test_id=id)
                  upload_user = users.objects.values_list('first_name', 'lastname').get(email=added_by)
                  response_result['data'][inc]['isTimer'] = get_adv_details[0]

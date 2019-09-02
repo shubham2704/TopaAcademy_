@@ -13,7 +13,8 @@ def CheckLogin(request):
     else:
         print("Not Logged in")
         return False
-
+def websettings():
+    return settings.objects.get(~Q(timezone=''))
                
 def getUser(request):
     setting_obj = settings.objects.get(~Q(timezone=''))
