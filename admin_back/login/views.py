@@ -8,6 +8,17 @@ from django.db.models import Q
 
 # Create your views here.
 
+def logout(request):
+    try:
+
+        request.session.pop('login_session')
+        return redirect('/admin-panel/login')
+        
+
+    except:
+
+        return redirect('/admin-panel/login')
+
 def login(request):
     login_error = False
     

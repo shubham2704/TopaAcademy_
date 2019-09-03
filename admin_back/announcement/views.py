@@ -12,14 +12,15 @@ from ..session_manager.models import details as session_mdetails, data_semseter,
 
 def announcement_view(request):
 
-    params = {}
-    params['user_login'] = getUser(request)
-    params['setting_obj'] = websettings()
-    params['hod'] = {}
-    params['classteacher'] = {}
+   
     checklogin = CheckLogin(request)
    
     if checklogin == True:
+        params = {}
+        params['user_login'] = getUser(request)
+        params['setting_obj'] = websettings()
+        params['hod'] = {}
+        params['classteacher'] = {}
 
         get_all_staff = staff.objects.all()
         get_all_students = student_user.objects.all()
@@ -35,16 +36,19 @@ def announcement_view(request):
             if hod not in params['hod']:
                 params['hod'][hod] = {}
                 idd = int(app_fliter.HOD_ID)
-                
-                params['hod'][hod] = staff.objects.get(id = idd)
-
+                try:
+                    params['hod'][hod] = staff.objects.get(id = idd)
+                except:
+                    pass
                 
 
             if class_teacher not in params['classteacher']:
                 params['classteacher'][class_teacher] = {}
                 idd = int(class_teacher)
-                params['classteacher'][class_teacher] = staff.objects.get(id = idd)
-           
+                try:
+                    params['classteacher'][class_teacher] = staff.objects.get(id = idd)
+                except:
+                    pass
 
 
 

@@ -107,7 +107,7 @@ def edit_degree(request, degree_id):
                 if insert_b == True:
                     messages.success(request,"Branchs succesfully added!")
             branch = branchs.objects.filter(degree_id=degree_id)
-            params['branch'] = branch
+            params['branchs'] = branch
             params['degree'] = get_degree
             return render(request, "admin_html/branch_edit.html", params)
 
@@ -124,6 +124,7 @@ def edit_degree(request, degree_id):
 def del_branch(request, degree_id, branch_id):
     
     checklogin = CheckLogin(request)
+    
 
     if checklogin == True:
         params = {}
@@ -144,9 +145,10 @@ def del_branch(request, degree_id, branch_id):
 
         branch = branchs.objects.filter(degree_id=degree_id)
         degree_all = branch_degree.objects.get(id=degree_id)
+        
         params['degree'] = degree_all
         params['branchs'] = branch
-
+        
         return render(request, "admin_html/branch_edit.html", params)  
     
     else:

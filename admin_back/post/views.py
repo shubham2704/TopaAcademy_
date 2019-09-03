@@ -352,16 +352,21 @@ def post_delete(request, post_id):
 
 def post_view(request):
 
-    params = {}
-    params['user_login'] = getUser(request)
-    params['setting_obj'] = websettings()
-    
-    params['posts'] = post_content.objects.all()
+    checklogin = CheckLogin(request)
+    if checklogin!=True:
+        return redirect('/admin-panel/login')
+    else:
+
+        params = {}
+        params['user_login'] = getUser(request)
+        params['setting_obj'] = websettings()
+        
+        params['posts'] = post_content.objects.all()
 
 
 
-    
-    return render(request, "admin_html/view_post.html", params)
+        
+        return render(request, "admin_html/view_post.html", params)
 def upload_file(request, ses_id):
     
     
@@ -522,11 +527,7 @@ def post_add(request):
         return redirect("/admin-panel/post/add?ses="+sess)
         
                
-            
 
-
-    
-    
     return render(request, "admin_html/post.html", params)
 
     

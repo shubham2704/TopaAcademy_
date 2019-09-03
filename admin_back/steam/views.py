@@ -43,7 +43,7 @@ def steam(request):
           params['steam'] = fetch_steam
           return render(request, 'admin_html/steam.html', params) 
      else:
-          return redirect('login')
+          return redirect('/admin-panel/login')
 
 
     

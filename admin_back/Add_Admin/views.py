@@ -11,6 +11,86 @@ from ..teacher.add.models import add
 from .models import users
 import json
 
+def admin_account(request):
+    checklogin = CheckLogin(request)
+     
+    if checklogin == True:
+        params = {}
+        params['user_login'] = getUser(request)
+        params['setting_obj'] = websettings()
+        print(params['user_login'].first_name)
+
+        if request.method=="POST":
+               
+               if 'account' in request.POST:
+                    
+                    first_name = request.POST['first_name']
+                    lastname = request.POST['lastname']
+                    email = request.POST['email']
+                    phone = request.POST['phone']
+                    
+                    
+                    
+                    
+                    if first_name!='' and lastname!='' and email!='' and phone!='' and len(phone) == 10:
+                         ins = users.objects.get(email=params['user_login'].email)
+                         
+                         
+                         
+                         ins.first_name = first_name
+                         ins.lastname = lastname
+                         ins.email = email
+                         ins.phone_no = phone
+                         sav = ins.save()
+
+                         if sav is None:
+                             messages.success(request, "Account details updated", extra_tags="success")
+
+
+
+                    else:
+                         messages.success(request, "All fields are mandatory", extra_tags="danger")
+               
+               if 'password_b' in request.POST:
+                   newpassword = request.POST['newpassword']
+                   password = request.POST['password']
+
+                   if newpassword!='' and password!='':
+                       ins = users.objects.get(email=params['user_login'].email)
+
+
+                       signer = Signer(params['setting_obj'].salt)
+                       sipwd = signer.unsign(ins.password)
+
+                       if password == sipwd:
+                           signnew = signer.sign(newpassword)
+                           ins.password = signnew
+                           sv = ins.save()
+
+                           if sv is None:
+                               request.session.pop('login_session')
+                               messages.success(request, "Password succesfully changed.")
+
+
+                       else:
+                           messages.success(request, "Wrong current password", extra_tags="danger")
+
+                       
+
+
+
+                   else:
+                       messages.success(request, "All fields are mandatory", extra_tags="danger")
+
+                    
+        
+        
+        return render(request, 'admin_html/account.html', params)
+
+    else:
+        return redirect('/admin-panel/login') 
+
+
 def setup_first(request):
     
     if request.method == 'POST':
@@ -90,7 +170,7 @@ def admin_view(request):
 
     else:
 
-        return redirect('login')
+        return redirect('/admin-panel.login')
 
 def admin_edit(request, action, user_id):
 
@@ -151,4 +231,4 @@ def admin_edit(request, action, user_id):
         
 
     else:
-        return redirect('login')
+        return redirect('/admin-panel/login')

@@ -17,12 +17,15 @@ def websettings():
     return settings.objects.get(~Q(timezone=''))
                
 def getUser(request):
-    setting_obj = settings.objects.get(~Q(timezone=''))
-    signer = Signer(setting_obj.salt)
-    username = signer.unsign(request.session['login_session'])
 
-    print(username)
-    return users.objects.get(email=username)
+    if CheckLogin(request) == True:
+    
+        setting_obj = settings.objects.get(~Q(timezone=''))
+        signer = Signer(setting_obj.salt)
+        username = signer.unsign(request.session['login_session'])
+
+        print(username)
+        return users.objects.get(email=username)
 
     
     
