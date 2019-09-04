@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href="{{setting_obj.favicon}}">
-    <title>Beagle</title>
+    <title>Add new Test - Admin</title>
     <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/perfect-scrollbar/css/perfect-scrollbar.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/material-design-icons/css/material-design-iconic-font.min.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "admin/assets/lib/select2/css/select2.min.css" %}"/>
@@ -136,13 +136,8 @@
       </div>
       <div class="be-content">
       <div class="page-head">
-          <h2 class="page-head-title">Mock Test</h2>
-          <nav aria-label="breadcrumb" role="navigation">
-            <ol class="breadcrumb page-head-nav">
-              <li class="breadcrumb-item"><a href="#">Question Banks</a></li>
-              <li class="breadcrumb-item"><a href="#">Mock Test</a></li>
-             </ol>
-          </nav>
+          <h2 class="page-head-title">Add Test</h2>
+         
         </div>
         <div class="main-content container-fluid">
             {% if messages %}
@@ -203,9 +198,7 @@
                          <div class="form-group row">
                       <label class="col-12 col-sm-3 col-form-label text-sm-right">Test Type</label>
                      <div class="col-12 col-sm-8 col-lg-6 form-check mt-1">
-                        <label class="custom-control custom-radio">
-                          <input class="custom-control-input" type="radio" name="test_type" checked="" value="Quiz"><span class="custom-control-label">Quiz</span>
-                        </label>
+                        
                         <label class="custom-control custom-radio">
                           <input class="custom-control-input" type="radio" name="test_type"  value="Mock"><span class="custom-control-label">Mock Test</span>
                         </label>
@@ -281,7 +274,7 @@
                           <input name="difficulty" value="Hard" class="custom-control-input" type="radio" ><span class="custom-control-label custom-control-color">Hard</span>
                         </label>
                         <label class="custom-control custom-radio custom-control-inline">
-                          <input name="difficulty" value="Hard" class="custom-control-input" type="radio" ><span class="custom-control-label custom-control-color">Combined</span>
+                          <input name="difficulty" value="Combined" class="custom-control-input" type="radio" ><span class="custom-control-label custom-control-color">Combined</span>
                         </label>
                       </div>
                     </div>
@@ -356,7 +349,7 @@
                         
                         <div class="custom-control custom-checkbox custom-control-inline">
                       
-                          <input name="dur-forever"  class="custom-control-input" type="checkbox" value="True" checked="" id="dur-forever">
+                          <input name="dur-forever"  class="custom-control-input" type="checkbox" value="True"  id="dur-forever">
                           <label class="custom-control-label" for="dur-forever">Available Forever</label>
                         </div>
                       </div>
