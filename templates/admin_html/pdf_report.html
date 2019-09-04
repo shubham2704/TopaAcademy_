@@ -28,7 +28,7 @@
         <div class="t">
 
                
-                  <div class="main-content container-fluid">
+                  <div class=" container-fluid">
                       
                   
     
@@ -47,7 +47,7 @@
                                                                 <div class="row col-md-12">  
                                                                         <div class="widget-chart-container col-md-4">
                                                                                     <div id="top-sales" style="height: 178px; padding: 0px; position: relative;"><canvas class="flot-base" width="294" height="178" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 294.328px; height: 178px;"></canvas><canvas class="flot-overlay" width="294" height="178" style="direction: ltr; position: absolute; left: 0px; top: 0px; width: 294.328px; height: 178px;"></canvas></div>
-                                                                                    <div class="chart-pie-counter"><span id="realtime">{{ratio}}%</span><br><small style="font-size: 16px;">SUBMISSION RATIO</small></div>
+                                                                                    <div class="chart-pie-counter"><span id="">{{ratio}}</span><br><small style="font-size: 16px;">SUBMISSION RATIO(%)</small></div>
                                                                                  
                                                                                 </div>
                                                                                
@@ -133,7 +133,7 @@
                                                             <tbody class="no-border-x">
                                                                 {% for key, top in topper_data.items %}
                                                                 <tr>
-                                                                  <td class="user-avatar cell-detail user-info"> <img src="http://127.0.0.1:8000/static/admin/assets/img/avatar.png" alt="Avatar">{{top.FullName}}<span class="cell-detail-description">{{top.EnrollNo}}</span></td>
+                                                                  <td class="user-avatar cell-detail user-info"> <img src="http://127.0.0.1:8000/static/admin/assets/img/avatar.png" alt="Avatar">{{top.FullName}}<span class="cell-detail-description">{{top.EnrollNo | upper}}</span></td>
                                                                   <td class="milestone"><span class="completed">{{top.Scored}} / {{top.TotalMarks}}</span><span class="version">{{top.Result_Status | upper}}</span>
                                                                     <div class="progress">
                                                                       <div class="progress-bar progress-bar-primary" style="width: {{top.per}}%;"></div>
@@ -164,7 +164,7 @@
                                                               <th>Status</th>
                                                               <th>Attent Time</th>
                                                               <th>Submit Time</th>
-                                                              <th>Wrong vs Correct Ans</th>
+                                                              <th>Correct vs Wrong</th>
                                                               <th>Attendance</th>
                                                             </tr>
                                                           </thead>
@@ -172,7 +172,7 @@
                                                   {% for key, sub in submission_data.items %}
                                                   <tr>
                                                     
-                                                    <td class="user-avatar cell-detail user-info"><img src="http://127.0.0.1:8000/static/admin/assets/img/avatar.png" alt="Avatar"><span>{{sub.FullName}}</span><span class="cell-detail-description">{{sub.EnrollNo}}</span></td>
+                                                    <td class="user-avatar cell-detail user-info"><img src="http://127.0.0.1:8000/static/admin/assets/img/avatar.png" alt="Avatar"><span>{{sub.FullName}}</span><span class="cell-detail-description">{{sub.EnrollNo | upper}}</span></td>
                                                     <td class="milestone"><span class="completed">{{sub.Scored}} / {{sub.TotalMarks}}</span><span class="version">{{sub.Result_Status | upper}}</span>
                                                       <div class="progress">
                                                         <div class="progress-bar progress-bar-primary" style="width: {{sub.per}}%;"></div>
@@ -180,7 +180,7 @@
                                                     </td>
                                                     <td class="cell-detail"> <span>{{sub.Started}}</span></td>
                                                     <td class="cell-detail"> <span class="text-bold">{{sub.Submitted}}</span></td>
-                                                    <td class="cell-detail"> <span class="text-bold">{{sub.correct}} | {{sub.wrong}}</span></td>
+                                                    <td class="cell-detail"> <span class="text-bold">{{sub.correct}} ,  {{sub.wrong}}</span></td>
                                                     
                                                     <td class="cell-detail">
 

@@ -290,12 +290,15 @@
                         <div class="row no-margin-y">
                           <div class="form-group col-sm-12">
                               <label>Your birth date</label>
-                          <div class="input-group  " data-min-view="2" data-date-format="yyyy-mm-dd">
-                          <input name="dob" class="form-control date datetimepicker" size="16" type="text" value="">
-                        
-                        </div> </div>
-                         
-                        </div>
+                              <div class="input-group date datetimepicker" data-min-view="2" data-date-format="yyyy-mm-dd">
+                                  <input class="form-control" size="16" type="text" value="" name="dob">
+                                  <div class="input-group-append">
+                                    <button type="button" class="btn btn-primary"><i class="icon-th mdi mdi-calendar"></i></button>
+                                  </div>
+                                </div>
+                              </div>
+                      
+</div>
                         {% endif %}
                       </div>
                       <div class="modal-footer">
@@ -382,15 +385,20 @@
       	//-initialize the javascript
       	App.init();
       	App.dashboard();
-        $(".datetimepicker").datetimepicker();
-        {% if phone == False or dob == False or branch == False or semester == False or profile == False %}
-
-        $("#nifty").click()
-
-        {% endif %}
+        
+       
 
 
       });
+
+      //$(".datetimepicker").datetimepicker();
+
+      {% if phone == False or dob == False or branch == False or semester == False or profile == False %}
+
+      $("#nifty").click();
+      $(".datetimepicker").datetimepicker({autoclose:!0,componentIcon:".mdi.mdi-calendar",navIcons:{rightIcon:"mdi mdi-chevron-right",leftIcon:"mdi mdi-chevron-left"}});
+
+      {% endif %}
 
       
   {% if phone == False %}

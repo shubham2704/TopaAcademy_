@@ -60,7 +60,7 @@ def otp_send(request, number):
 
         if len_number == 10 :
             
-            setting_obj = settings.objects.get(~Q(timezone=''))
+            setting_obj = settings[0]
             email = check_account(request,setting_obj.salt)
             otp = string_utils.shuffle("54789")
             get_user = student_user.objects.get(email=email)
