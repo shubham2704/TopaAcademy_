@@ -142,8 +142,6 @@ def monitor_exam_realtime(request, exam_id):
             'submission_data':{},
             'active_data':{}
         }
-        params['user_login'] = getUser(request)
-        params['setting_obj'] = websettings()
     
         
 

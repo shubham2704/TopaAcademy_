@@ -7,7 +7,7 @@ from django.db.models import Q
 from django.contrib import messages
 from admin_back.websettings.models import settings
 from admin_back.steam.models import Steam, Steam_Data
-from ..GlobalModels.main import login, check_account
+from ..GlobalModels.main import login, send_sms, email_connect, check_account, settings, getUser
 from ..signup.models import student_academic
 from datetime import datetime
 from .models import start_test_details, submited_test_report, start_exam_details, submited_exam_individual, submited_exam_report
@@ -21,10 +21,16 @@ def startsession_exam(request, test_id):
      
     params = {}
     check_login = login(request)
+    if  check_login == False:
+        return redirect("/student/login")
 
     if check_login == True:
-        setting_obj = settings.objects.get(~Q(timezone=''))
-        email = check_account(request, setting_obj.salt)
+        setting_obj = settings
+        student = getUser(request,setting_obj[0].salt)
+        params['student'] = student
+        params['setting_obj'] = settings[0]
+        email = student['students'].email
+        
         
         try:
             get_exam = exam.objects.get(id=test_id)
@@ -141,11 +147,17 @@ def testing_session(request,test_session_id ):
         "msg":{}
     }
     check_login = login(request)
+    if  check_login == False:
+        return redirect("/student/login")
 
     if check_login == True:
 
-        setting_obj = settings.objects.get(~Q(timezone=''))
-        email = check_account(request, setting_obj.salt)
+        setting_obj = settings
+        student = getUser(request,setting_obj[0].salt)
+        params['student'] = student
+        params['setting_obj'] = settings[0]
+        email = student['students'].email
+
         get_exam = start_test_details.objects.get(test_session_id=test_session_id)
         get_test = test_details.objects.get(id=get_exam.TestID)
         get_test_adv = test_details_advanced.objects.get(test_id=get_exam.TestID)
@@ -393,11 +405,16 @@ def startsession(request, test_id):
     
     params = {}
     check_login = login(request)
+    if  check_login == False:
+        return redirect("/student/login")
     
 
     if check_login == True:
-        setting_obj = settings.objects.get(~Q(timezone=''))
-        email = check_account(request, setting_obj.salt)
+        setting_obj = settings
+        student = getUser(request,setting_obj[0].salt)
+        params['student'] = student
+        params['setting_obj'] = settings[0]
+        email = student['students'].email
         
 
     
@@ -534,10 +551,18 @@ def test_details_view(request, test_id):
 
     }
     check_login = login(request)
+    if  check_login == False:
+        return redirect("/student/login")
 
     if check_login == True:
-        setting_obj = settings.objects.get(~Q(timezone=''))
-        email = check_account(request, setting_obj.salt)
+
+        setting_obj = settings
+        student = getUser(request,setting_obj[0].salt)
+        params['student'] = student
+        params['setting_obj'] = settings[0]
+   
+        
+        email = student['students'].email
 
         get_user_account = student_academic.objects.get(student_email = email)
         exp_branch = get_user_account.branch.split(":")

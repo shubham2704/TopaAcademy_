@@ -4,6 +4,7 @@ import http.client
 from django.core.mail import EmailMessage
 from django.core.mail.backends.smtp import EmailBackend
 import json
+from ..signup.models import student_academic, student_user
 from django.db.models import Q
 from django.core.signing import Signer
 
@@ -55,8 +56,21 @@ def login(request):
         print("Not Logged in")
         return False
 
+def getUser(request, salt):
+         
+    enc_session = request.session['student_login_session']
+    signer = Signer(salt)
+    dc = signer.unsign(enc_session)
+
+    params = {}
+
+    params['students'] = student_user.objects.get(email=dc)
+    params['academic'] = student_academic.objects.get(student_email=dc)
+
+    return params
+
 def check_account(request, salt):
     
     enc_session = request.session['student_login_session']
     signer = Signer(salt)
-    return signer.unsign(enc_session)        
+    return signer.unsign(enc_session)

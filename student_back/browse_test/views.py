@@ -1,14 +1,27 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 from admin_back.steam.models import Steam, Steam_Data
 from admin_back.admin_main.models import test_data, test_details_advanced, test_details
 from admin_back.Add_Admin.models import users
+from ..GlobalModels.main import login, send_sms, email_connect, check_account, settings, getUser
 import json
+from django.db.models import Q
 from django.http import JsonResponse
 # Create your views here.
 def browse(request):
+    check_login = login(request)
+    if  check_login == False:
+        return redirect("/student/login")
+        
     params = {}
     get_all_steam = Steam.objects.all()
     params['steam_c'] = get_all_steam
+
+    setting_obj = settings
+    student = getUser(request,setting_obj[0].salt)
+    params['student'] = student
+    params['setting_obj'] = settings[0]
+
+
     return render(request, "student_html/browse.html", params)
 
 def steam_ajax(request, steam_id):
@@ -56,6 +69,12 @@ def steam_dual_ajax(request,id, name):
     
 
 def ajax_browse(request):
+
+    check_login = login(request)
+    if  check_login == False:
+        return redirect("/student/login")
+
+
     
     if request.method == "GET":
 

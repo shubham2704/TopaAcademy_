@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href="{{setting_obj.favicon}}">
-    <title>Beagle</title>
+    <title>Learning Center</title>
     <link rel="stylesheet" type="text/css" href="{% static "student/assets/lib/perfect-scrollbar/css/perfect-scrollbar.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "student/assets/lib/material-design-icons/css/material-design-iconic-font.min.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "student/assets/lib/jquery.vectormap/jquery-jvectormap-1.2.2.css" %}"/>
@@ -56,24 +56,25 @@
   <body >
   
     <div class="be-wrapper be-offcanvas-menu be-fixed-sidebar   {% if email == False %} be-color-header   {% endif %}">
-    
-       <nav class="navbar navbar-expand fixed-top be-top-header">
+      <nav class="navbar navbar-expand fixed-top be-top-header">
         <div class="container-fluid">
-                <div class="be-navbar-header"><a class="nav-link be-toggle-left-sidebar" href="#"><span class="icon mdi mdi-menu"></span></a><a class="navbar-brand" href="index-2.html"></a>
-                </div>
+          <a class="nav-link be-toggle-left-sidebar" href="#"><span class="icon mdi mdi-menu"></span></a>
+    
+          <div class="page-title"> {% if setting_obj.logo != ''%} <img style="height:30px;" src="{{setting_obj.logo}}"> {% else %}  {% if setting_obj.logo != ''%} <img style="height:30px;" src="{{setting_obj.logo}}"> {% else %}  <span><i>Top Academy</i></span>  {% endif %}  {% endif %}</div>
+              
          
-          
          {% if email == False %}  <div class="page-title"><span style="font-size:13px;">Email verification is pending please verify your email address or resend verification <a href="#" onclick="send_email()" class="btn btn-warning btn-xs">email</a>.</span></div>
-            {% endif %}
+         
+         {% endif %}
          
           <div class="be-right-navbar">
             <ul class="nav navbar-nav float-right be-user-nav">
-              <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false"><img src="assets/img/avatar.png" alt="Avatar"><span class="user-name">{{user_login.first_name}}</span></a>
+              <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false"><img src="{{student.academic.profile}}" alt="Avatar"><span class="user-name">{{student.students.first_name}} {{student.students.last_name}}</span></a>
                 <div class="dropdown-menu" role="menu">     
                   <div class="user-info">
-                    <div class="user-name">{{user_login.first_name}}</div>
+                    <div class="user-name">{{student.students.first_name}} {{student.students.last_name}}</div>
                     <div class="user-position online">Available</div>
-                  </div><a class="dropdown-item" href="/admin-panel/account"><span class="icon mdi mdi-face"></span>My Account</a><a class="dropdown-item" href="/admin-panel/settings"><span class="icon mdi mdi-settings"></span>Settings</a><a class="dropdown-item" href="/admin-panel/logout"><span class="icon mdi mdi-power"></span>Logout</a>
+                  </div><a class="dropdown-item" href="/student/account/"><span class="icon mdi mdi-face"></span>My Account</a><a class="dropdown-item" href="/student/account/academy"><span class="icon mdi mdi-settings"></span>Academy</a><a class="dropdown-item" href="/student/logout"><span class="icon mdi mdi-power"></span>Logout</a>
                 </div>
               </li>
             </ul>
@@ -88,28 +89,19 @@
               <div class="left-sidebar-content">
                 <ul class="sidebar-elements">
                   <li class="divider">Menu</li>
-                  <li class="active"><a href="index-2.html"><i class="icon mdi mdi-home"></i><span>Dashboard</span></a>
+                  <li class="active"><a href="/student/"><i class="icon mdi mdi-home"></i><span>Dashboard</span></a>
                   </li>
-                   <li><a href="index-2.html"><i class="icon mdi mdi-search"></i><span>Browse Test</span></a>
+                   <li><a href="/student/test/browse"><i class="icon mdi mdi-search"></i><span>Browse Test</span></a>
                   </li>
-                  <li class="parent"><a href="#"><i class="icon mdi mdi-code"></i><span>Practice</span></a>
-                    <ul class="sub-menu">
-                      <li ><a href="ui-alerts.html">Mock Test</a>
-                      </li>
-                      <li><a href="ui-alerts.html">Practice Test</a>
-                      </li>
-                     
-                     
-                    </ul>
-                  </li>
-                  <li><a href="index-2.html"><i class="icon mdi mdi-library"></i><span>Learning</span></a>
+                
+                  <li><a href="/student/learning/"><i class="icon mdi mdi-library"></i><span>Learning</span></a>
                   </li>
                  
                   <li class="parent"><a href="#"><i class="icon mdi mdi-layers"></i><span>My Activity</span></a>
                     <ul class="sub-menu">
-                      <li><a href="pages-blank.html">Mock Test</a>
+                      <li><a href="/student/report/exam">Exam Report</a>
                       </li>
-                      <li><a href="pages-blank-header.html">Practice Test</a>
+                      <li><a href="/student/report/test">Test Report</a>
                       </li>
                       
                       
@@ -117,25 +109,22 @@
                   </li>
                   <li class="parent"><a href="#"><i class="icon mdi mdi-account"></i><span>My Account</span></a>
                     <ul class="sub-menu">
-                      <li><a href="form-elements.html">Personal Info</a>
+                      <li><a href="/student/account/">Personal Info </a>
                       </li>
-                      <li><a href="form-validation.html">Acadamic Info</a>
+                      <li><a href="/student/account/academy">Acadamic</a>
                       </li>
                       
                       
                     </ul>
                   </li>
-                   <li><a href="#"><i class="icon mdi mdi-notifications-add"></i><span>Notifications </span></li>
+                   <li><a href="/student/announcement/"><i class="icon mdi mdi-notifications-add"></i><span>Announcements</a></span></li>
                 </ul>
               </div>
               
             </div>
             
           </div>
-          <div class="progress-widget primary">
-            <div class="progress-data"><span class="progress-value"><span class="mdi mdi-android"></span> </span><span class="name">Download App</span></div>
-            
-          </div>
+        
         </div>
       </div>
       <div class="be-content">
@@ -210,8 +199,9 @@
                             {% for resultt in result %}
                                 <div onclick="window.location.href='/student/learning/{{resultt.id}}'" class="col-md-6">
                                         <div  class="card mb-4 box-shadow">
-                                          <img class="card-img-top"  src="https://via.placeholder.com/500x100" data-holder-rendered="true" style="height: 100px; width: 100%; display: block;">
+                                            <img class="card-img-top"  src="https://dummyimage.com/500x100/4286f4/ffffff&text={{resultt.title}}" data-holder-rendered="true" style="height: 100px; width: 100%; display: block;">
                                           <div class="card-body" style="color:black;">
+                                            
                                               <p class="" style="font-size:15px;padding-top:10px;"> {{resultt.title}} </p>
                                                  
                                             <p class="card-text">{{resultt.description}}</p>

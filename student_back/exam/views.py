@@ -4,12 +4,13 @@ from admin_back.admin_main.models import test_data, test_details_advanced, test_
 from admin_back.websettings.models import settings
 from django.core.signing import Signer
 from admin_back.admin_main.models import exam
+
 from admin_back.test_main.models import question
 from django.db.models import Q
 from django.contrib import messages
 from admin_back.websettings.models import settings
 from admin_back.steam.models import Steam, Steam_Data
-from ..GlobalModels.main import login, check_account
+from ..GlobalModels.main import login, send_sms, email_connect, check_account, settings, getUser
 from ..signup.models import student_academic
 from datetime import datetime
 from ..view_test_info.models import start_test_details, submited_test_report, start_exam_details, submited_exam_report, exam_realtime_user, exam_realtime_each_question
@@ -27,7 +28,7 @@ def realtime_question(request, exam_session, total, current):
     check_login = login(request)
 
     if check_login == True:
-        setting_obj = settings.objects.get(~Q(timezone=''))
+        setting_obj = settings[0]
         email = check_account(request, setting_obj.salt)
         get_exam = start_exam_details.objects.get(test_session_id=exam_session)
 
@@ -56,7 +57,7 @@ def realtime_check(request, exam_session):
 
     if check_login == True:
 
-        setting_obj = settings.objects.get(~Q(timezone=''))
+        setting_obj = settings[0]
         email = check_account(request, setting_obj.salt)
         get_exam = start_exam_details.objects.get(test_session_id=exam_session)
 
@@ -76,6 +77,7 @@ def realtime_check(request, exam_session):
     return HttpResponse(request, "")
 
 def exam_started(request, exam_session):
+    
       
     params = {
         "AllowTest" : True,
@@ -90,10 +92,20 @@ def exam_started(request, exam_session):
     }
     check_login = login(request)
 
+    if  check_login == False:
+        return redirect("/student/login")
+
     if check_login == True:
 
-        setting_obj = settings.objects.get(~Q(timezone=''))
-        email = check_account(request, setting_obj.salt)
+        
+
+        setting_obj = settings
+        student = getUser(request,setting_obj[0].salt)
+        params['student'] = student
+        params['setting_obj'] = settings[0]
+
+
+        email = check_account(request, setting_obj[0].salt)
         get_exam = start_exam_details.objects.get(test_session_id=exam_session)
         get_test = test_details.objects.get(id=get_exam.TestID)
         get_test_adv = test_details_advanced.objects.get(test_id=get_exam.TestID)
@@ -332,18 +344,21 @@ def exam_details(request, test_id):
 
     }
     check_login = login(request)
+    if  check_login == False:
+        return redirect("/student/login")
     
     if check_login == True:
         
-        setting_obj = settings.objects.get(~Q(timezone=''))
-        email = check_account(request, setting_obj.salt)
+        setting_obj = settings
+        student = getUser(request,setting_obj[0].salt)
+        params['student'] = student
+        params['setting_obj'] = settings[0]
+        email = student['students'].email
         get_exam = exam.objects.get(id=test_id)
         test_id = get_exam.test_id
         get_user_account = student_academic.objects.get(student_email = email)
         exp_branch = get_user_account.branch.split(":")
         count_qes = question.objects.filter(test_id=test_id).count()
-        
-        
         
         
         try:

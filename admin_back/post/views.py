@@ -265,7 +265,6 @@ def post_edit(request, post_id):
                     except:
                         pass
 
-                    print(scp)
                     if title!='' and desc!='' and content!='' and category!='' and sub_category!='':
                         start_insert = True
                         if scp == True:
@@ -375,7 +374,7 @@ def upload_file(request, ses_id):
         if request.method == 'POST' and request.FILES['file']:
             myfile = request.FILES['file']
             ran = randomString(10)
-            support_ext = ['jpg', 'jpeg']
+            support_ext = ['jpg', 'jpeg', 'pdf', 'cpp']
             
             folder = "templates/media/upload_attachment/"
             SITE_ROOT = os.path.dirname(os.path.realpath(__name__))

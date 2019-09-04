@@ -26,9 +26,9 @@
     <div class="be-wrapper be-offcanvas-menu be-fixed-sidebar">
       <nav class="navbar navbar-expand fixed-top be-top-header">
         <div class="container-fluid">
-            <div class="be-navbar-header"><a class="nav-link be-toggle-left-sidebar" href="#"><span class="icon mdi mdi-menu"></span></a><a class="navbar-brand" href="index-2.html"></a>
-            </div>
+          <a class="nav-link be-toggle-left-sidebar" href="#"><span class="icon mdi mdi-menu"></span></a>
           
+          <div class="page-title">{% if setting_obj.logo != ''%} <img style="height:30px;" src="{{setting_obj.logo}}"> {% else %}  <span><i>Top Academy</i></span>  {% endif %}</div>
           <div class="be-right-navbar">
             <ul class="nav navbar-nav float-right be-user-nav">
               <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false"><img src="{% static "admin/assets/img/avatar.png"%}"" alt="Avatar"><span class="user-name">{{user_login.first_name}}</span></a>

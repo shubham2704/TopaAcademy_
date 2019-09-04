@@ -1,6 +1,6 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, HttpResponse, redirect
 from ..signup.models import student_user, student_academic, student_dashboard_metrices
-from ..GlobalModels.main import login, send_sms, email_connect, check_account, settings
+from ..GlobalModels.main import login, send_sms, email_connect, check_account, settings, getUser
 from admin_back.admin_main.models import test_data, test_details_advanced, test_details, exam
 from admin_back.admin_main.models import exam
 from admin_back.branch.models import branchs
@@ -19,7 +19,10 @@ from datetime import datetime
 def email_verification(request):
 
     check_login = login(request)
+    
     response_data = {}
+    
+
     if check_login == True:
 
         email = check_account(request,settings[0].salt)
@@ -92,6 +95,8 @@ def index(request):
     branch_array = {}
     get_branch = branchs.objects.all()
     
+    if check_login == False:
+        return redirect('/student/login')
 
     #print(get_branch)
     
@@ -109,6 +114,10 @@ def index(request):
        
        get_user = student_user.objects.get(email=email)
        get_user_aca = student_academic.objects.get(student_id_id=get_user.id)
+       student = getUser(request,setting_obj[0].salt)
+
+       pass_args['student'] = student
+       pass_args['setting_obj'] = settings[0]
        
        count= 1 
        if count==1:
@@ -271,8 +280,6 @@ def index(request):
 
         
 
-
-       
        return render(request, "student_html/index.html", pass_args)
     
 

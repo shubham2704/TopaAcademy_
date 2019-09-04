@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect
 from admin_back.steam.models import Steam, Steam_Data
 import json
 from admin_back.AdminPackage.querystring_parser import parser
-from ..GlobalModels.main import login, check_account
+
+from ..GlobalModels.main import login, send_sms, email_connect, check_account, settings, getUser
 from django.contrib import messages
-from admin_back.websettings.models import settings
 from django.db.models import Q
 from django.core.signing import Signer
 from ..signup.models import student_academic
@@ -12,9 +12,17 @@ from ..signup.models import student_academic
 
 def preference(request):
 
+    check_login = login(request)
+    if  check_login == False:
+        return redirect("/student/login")
+    param = {}
     if login(request) == True:
-        setting_obj = settings.objects.get(~Q(timezone=''))
-        email = check_account(request,setting_obj.salt)
+        setting_obj = settings
+        #print()
+        student = getUser(request,setting_obj[0].salt)
+        param['student'] = student
+        param['setting_obj'] = settings[0]
+        email = student['students'].email
         
         
     else:
@@ -35,7 +43,7 @@ def preference(request):
             messages.error(request, "Please select atleast one topic.")
     
     i = 0
-    param = {}
+    
     param['steam_d'] = {}
     for steam in get_steam:
         param['steam_d'][i] = {}
