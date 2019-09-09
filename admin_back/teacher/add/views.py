@@ -1,8 +1,10 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.db import connections
+from django.db.models import Q
 from django.core.signing import Signer
-from ...AdminPackage.AdminController import CheckLogin
+from ...websettings.models import settings as web_s
+from ...AdminPackage.AdminController import CheckLogin, getUser, websettings
 from django.core.signing import Signer
 from django.contrib import messages
 from .models import add as add_stuff
@@ -17,7 +19,10 @@ def edit_saff(request, staff_id):
         params = {"edit":True}
         get_current_saff = add_stuff.objects.filter(id=staff_id)
         select_all = add_stuff.objects.all()
+
         params['users'] = select_all
+        params['user_login'] = getUser(request)
+        params['setting_obj'] = websettings()
         
 
         if get_current_saff.count() == 1:
@@ -74,6 +79,8 @@ def add(request):
 
     if checklogin == True:
          params = {}
+         params['user_login'] = getUser(request)
+         params['setting_obj'] = websettings()
 
          select_all = add_stuff.objects.all()
          params['users'] = select_all
@@ -115,6 +122,10 @@ def add(request):
                      select = True
 
                  if select == True:
+                     setting_obj = web_s.objects.get(~Q(timezone=''))
+                     print(setting_obj)
+                     signer = Signer(setting_obj.salt)
+                     password = signer.sign(password)
                      insert = add_stuff.objects.create(
 
                          prefix = prefix,

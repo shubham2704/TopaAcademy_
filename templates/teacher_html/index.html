@@ -50,29 +50,7 @@
   
     <div class="be-wrapper be-fixed-sidebar   {% if email == False %} be-color-header   {% endif %}">
     
-       <nav class="navbar navbar-expand fixed-top be-top-header">
-        <div class="container-fluid">
-          <div class="be-navbar-header"><a class="navbar-brand" href="/student/"></a>
-          </div>
-         
-         {% if email == False %}  <div class="page-title"><span style="font-size:13px;">Email verification is pending please verify your email address or resend verification <a href="#" onclick="send_email()" class="btn btn-warning btn-xs">email</a>.</span></div>
-            {% endif %}
-         
-          <div class="be-right-navbar">
-            <ul class="nav navbar-nav float-right be-user-nav">
-              <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button" aria-expanded="false"><img src="assets/img/avatar.png" alt="Avatar"><span class="user-name">{{user_login.first_name}}</span></a>
-                <div class="dropdown-menu" role="menu">     
-                  <div class="user-info">
-                    <div class="user-name">{{user_login.first_name}}</div>
-                    <div class="user-position online">Available</div>
-                  </div><a class="dropdown-item" href="/admin-panel/account"><span class="icon mdi mdi-face"></span>My Account</a><a class="dropdown-item" href="/admin-panel/settings"><span class="icon mdi mdi-settings"></span>Settings</a><a class="dropdown-item" href="/admin-panel/logout"><span class="icon mdi mdi-power"></span>Logout</a>
-                </div>
-              </li>
-            </ul>
-            
-          </div>
-        </div>
-      </nav>
+     {% include 'teacher_html/navbar.html' %}
       <div class="be-left-sidebar">
         <div class="left-sidebar-wrapper"><a class="left-sidebar-toggle" href="/admin-panel/">Dashboard</a>
           <div class="left-sidebar-spacer">
@@ -82,57 +60,53 @@
                   <li class="divider">Menu</li>
                   <li class="active"><a href="/student/"><i class="icon mdi mdi-home"></i><span>Dashboard</span></a>
                   </li>
-                  <li class="parent"><a href="#"><i class="icon mdi mdi-edit"></i><span>Question Bank</span></a>
+                  <li class="parent"><a href="#"><i class="icon mdi mdi-edit"></i><span>Test Manager</span></a>
                     <ul class="sub-menu">
-                      <li ><a href="ui-alerts.html">New Question Bank</a>
-                      </li>
-                      <li><a href="ui-alerts.html">My Question Bank</a>
-                      </li>
-                     
-                     
+
+                      <li ><a href="/teacher/new-test">Create new Test</a></li>
+                      <li><a href="/teacher/test">Manage Tests</a></li>
+                      <li><a href="/teacher/exam">Conduct Exam</a></li>
+
                     </ul>
                   </li>
                   
-                  <li class="parent"><a href="#"><i class="icon mdi mdi-blogger"></i><span>Learning</span></a>
+                  <li class="parent"><a href="#"><i class="icon mdi mdi-blogger"></i><span>Learning Resources </span></a>
                     <ul class="sub-menu">
-                      <li ><a href="ui-alerts.html">New Post</a>
+                      <li ><a href="/teacher/new-post">Write new Post</a>
                       </li>
-                      <li><a href="ui-alerts.html">My Posts</a>
+                      <li><a href="/teacher/posts">Manage Posts</a>
                       </li>
                      
                      
                     </ul>
                   </li>
 
-                  <li class="parent"><a href="#"><i class="icon mdi mdi-layers"></i><span>History</span></a>
+                  <li class="parent"><a href="#"><i class="icon mdi mdi-layers"></i><span>Reporting</span></a>
                     <ul class="sub-menu">
-                      <li ><a href="ui-alerts.html">QB Timeline</a>
-                      </li>
-                      <li><a href="ui-alerts.html">Test Appreance</a>
-                      </li>
+                      <li ><a href="/teacher/report/test">Test Reports</a></li>
+                      <li><a href="/teacher/report/exam">Exam Reports</a> </li>
                      
                      
                     </ul>
                   </li>
                   <li class="parent"><a href="#"><i class="icon mdi mdi-account"></i><span>My Account</span></a>
                     <ul class="sub-menu">
-                      <li><a href="form-elements.html">Personal Info</a>
+                      <li><a href="/teacher/account">Account</a>
                       </li>
-                      <li><a href="form-validation.html">Acadamic Info</a>
+                      <li><a href="/teacher/account/profile">Profile</a>
                       </li>
                       
                       
                     </ul>
                   </li>
-                   <li><a href="#"><i class="icon mdi mdi-notifications-add"></i><span>Notifications </span></li>
+                   <li><a href="/teacher/notification"><i class="icon mdi mdi-notifications-add"></i><span>Notifications</span></li>
 
-                  <li class="divider">CLASS TEACHER</li>
+                  <li class="divider">CLASS TEACHER OPT.</li>
 
-                  <li><a href="#"><i class="icon mdi mdi-graduation-cap"></i><span>Student Activities </span></li>
-                    <li><a href="#"><i class="icon mdi mdi-format-list-bulleted"></i><span>Time Table </span></li>
+                  <li><a href="#"><i class="icon mdi mdi-graduation-cap"></i><span>Students </span></li>
+                  <li><a href="#"><i class="icon mdi mdi-format-list-bulleted"></i><span>Class Time Table </span></li>
                   <li><a href="#"><i class="icon mdi mdi-input-antenna"></i><span>Announcement </span></li>
-                
-
+            
 
                 </ul>
               </div>

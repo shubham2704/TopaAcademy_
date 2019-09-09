@@ -11,4 +11,5 @@ class add(models.Model):
     email = models.CharField(max_length=100)
     status = models.CharField(max_length=75)
     phone = models.CharField(max_length=75)
+    avatar = models.ImageField(max_length=100,default="/static/teacher/assets/img/avatar.png")
     password = models.CharField(max_length=250)

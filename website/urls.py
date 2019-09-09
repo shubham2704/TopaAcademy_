@@ -44,6 +44,7 @@ urlpatterns = [
     path('', include('student_back.start_test.urls')),
     path('', include('student_back.signup.urls')),
     path('', include('teacher_back.index.urls')),
+    path('', include('teacher_back.login.urls')),
     
 ]
 
